@@ -1,11 +1,12 @@
 package com.poker.tests;
 
+import com.poker.dto.payment.EServices;
 import com.poker.dto.payment.ServicesAdapter;
 import com.poker.dto.payment.Paypal;
 
 public class ServicesTest {
     public static void main(String[] args) {
-        ServicesAdapter Services = new ServicesAdapter(new Paypal());
+        ServicesAdapter Services = new ServicesAdapter(EServices.PAYPAL);
         WalletServiceTest wt = new WalletServiceTest(245.34, 0);
         try {
             System.out.println("Tenho " + wt.money + " EUR na carteira.");

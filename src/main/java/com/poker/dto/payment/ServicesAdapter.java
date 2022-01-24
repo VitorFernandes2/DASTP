@@ -5,17 +5,21 @@ import com.poker.tests.WalletServiceTest;
 
 public class ServicesAdapter implements IServicesAdapter {
 
-    private final IServices paypal;
+    private IServices services;
 
-    public ServicesAdapter(IServices paypal) {
-        this.paypal = paypal;
+    public ServicesAdapter(EServices service) {
+        switch (service) {
+            case PAYPAL:
+                services = new Paypal();
+                break;
+        }
     }
 
     @Override
     public void buy(double money, WalletServiceTest wt) {
         double pokerChipsMoney;
 
-        if ((pokerChipsMoney = paypal.buy(money)) < 0.0) {
+        if ((pokerChipsMoney = services.buy(money)) < 0.0) {
             return;
         }
 
@@ -28,7 +32,7 @@ public class ServicesAdapter implements IServicesAdapter {
     public void transfer(WalletServiceTest wt) {
         int returnedPokerChips = returnedPokerChips(wt);
 
-        if (!paypal.transfer(pokerChipsToMoney(returnedPokerChips))) {
+        if (!services.transfer(pokerChipsToMoney(returnedPokerChips))) {
             return;
         }
 
