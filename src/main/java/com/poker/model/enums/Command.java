@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 public enum Command {
     // Common commands
     LOGIN("login", "lin"),
+    REGISTER("register", "reg"),
+    SHUTDOWN("shutdown", "std"),
     LOGOUT("logout", "lout"),
     UNDO("undo", "u"),
     REDO("redo", "r"),

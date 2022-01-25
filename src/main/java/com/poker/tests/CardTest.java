@@ -1,6 +1,6 @@
 package com.poker.tests;
 
-import com.poker.dto.card.ICard;
+import com.poker.model.card.ICard;
 import com.poker.factory.card.CardFactory;
 
 public class CardTest {

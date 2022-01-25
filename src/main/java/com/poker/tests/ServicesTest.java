@@ -1,8 +1,8 @@
 package com.poker.tests;
 
-import com.poker.dto.payment.EServices;
-import com.poker.dto.payment.ServiceAdapter;
-import com.poker.dto.wallet.Wallet;
+import com.poker.model.payment.EServices;
+import com.poker.model.payment.ServiceAdapter;
+import com.poker.model.wallet.Wallet;
 
 public class ServicesTest {
     public static void main(String[] args) {
