@@ -13,30 +13,30 @@ __Git behaviours:__
 
 ____
 
-# Regras de Jogo - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)
+# Game Rules - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)
 
-#### Notas Importantes:
-- Uma aplicação gráfica com uma linha de comandos que gere todas as ações dos utilizadores
-- Parte gráfica apenas reflete o estado / ação concretizada pontualmente (__não__ é necessário a apresentação de múltiplas interfaces no mesmo plano)
+#### Important Notes:
+- A graphical application with a command line that manages all user actions.
+- Graphical part only reflects the state / action implemented punctually (it is __not__ necessary to present multiple interfaces on the same plane).
 
 ____
 
-# Sequências de Cartas (genéricas):
+# Card Sequences (generic):
 
-| Regras | Exemplo |
+| Rules | Example |
 | --- |  ---  |
-| Royal Flush — cinco cartas do mesmo naipe, de ás a dez. | __[A♥] [K♥] [Q♥] [J♥] [10♥]__ |
-| Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente. | __[9♣] [8♣] [7♣] [6♣] [5♣]__ |
-| Four of a Kind — quatro cartas do mesmo valor. | __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ |
-| Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor. | __[J♣] [J♥] [J♠] [8♦] [8♥]__ |
-| Flush — quaisquer cinco cartas do mesmo naipe. | __[A♠] [J♠] [8♠] [5♠] [2♠]__ |
-| Straight — quaisquer cinco cartas classificadas consecutivamente. | __[Q♣] [J♦] [10♥] [9♠] [8♦]__ |
-| Three of a Kind — três cartas do mesmo valor. | __[8♣] [8♠] [8♦] [K♣] [4♥]__ |
-| Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor. | __[A♠] [A♣] [J♦] [J♣] [7♠]__ |
-| One Pair — duas cartas do mesmo valor. | __[10♥] [10♣] [9♥] [4♦] [2♦]__ |
-| High Card — cinco cartas incomparáveis. | __[A♣] [J♦] [10♠] [5♣] [2♥]__ |
+| Royal Flush — five cards of the same suit, from ace to ten. | __[A♥] [K♥] [Q♥] [J♥] [10♥]__ |
+| Straight Flush — five cards of the same suit and ranked consecutively. | __[9♣] [8♣] [7♣] [6♣] [5♣]__ |
+| Four of a Kind — four cards of the same rank. | __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ |
+| Full House — three cards of the same rank and two more cards of the same rank. | __[J♣] [J♥] [J♠] [8♦] [8♥]__ |
+| Flush — any five cards of the same suit. | __[A♠] [J♠] [8♠] [5♠] [2♠]__ |
+| Straight — any five consecutively sorted cards. | __[Q♣] [J♦] [10♥] [9♠] [8♦]__ |
+| Three of a Kind — three cards of the same rank. | __[8♣] [8♠] [8♦] [K♣] [4♥]__ |
+| Two Pair — two cards of the same rank and two more cards of the same rank. | __[A♠] [A♣] [J♦] [J♣] [7♠]__ |
+| One Pair — two cards of the same rank. | __[10♥] [10♣] [9♥] [4♦] [2♦]__ |
+| High Card — five incomparable cards. | __[A♣] [J♦] [10♠] [5♣] [2♥]__ |
 
-<details><summary>Regras Implementadas</summary>
+<details><summary>Implemented Rules [PT]</summary>
 <p>
 
 - [ ] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__
@@ -55,95 +55,95 @@ ____
 
 ____
 
-# Funcionalidades:
+# Functionalities:
 
-### Sistema de Jogos:
-- [ ] Utilizador indica ao sistema que quer juntar-se àquele jogo
-- [ ] Aloca o Utilizador ao jogo selecionado (só se possuir PCs suficientes para o depósito inicial)
-- [ ] Um utilizador == um jogo
-- [ ] Criação do Baralho de Cartas
+### Games System:
+- [ ] User tells the system that he wants to join that game
+- [ ] Allocate the User to the selected game (only if you have enough PCs for the initial deposit)
+- [ ] One user == one game
+- [x] ~~Creating the Deck of Cards~~
 			
 
 ### Jogadores:
 
-  - [ ] Cliente (__normal__)
-    - [ ] Registo do utilizador
-    - [ ] Criar Jogos Amigáveis
-    - [ ] Lista de Jogos (só aparecem aqueles que consegue participar)
+  - [ ] Client (__normal user__)
+    - [ ] User registration
+    - [ ] Create Friendly Games
+    - [ ] List of Games (only those games that the user can participate should appear)
 
-  - [ ] Cliente (__pago__)(todas as funcionalidades do normal + extras)
-    - [ ] Serviços do Sistema [^2]
+  - [ ] Client (__paid out user__)(all normal user features + extras)
+    - [ ] System Services [^2]
 
 		
-### Dinheiro Virtual (Poker-Chips == PCs | Poker-Chips-Jogos == PCJs):
+### Virtual Money (Poker-Chips == PCs | Poker-Chips-Jogos == PCJs):
 
-  - [ ] Aquisição:
+  - [ ] __Acquisition:__
     - [ ] Compra no Sistema
     - [ ] Ganho em Jogos / Torneios
 
-  - [ ] Utilização:
-    - [ ] Aquisição de Serviços (ex: criação de jogos)
-    - [ ] Apostas em Jogos
-    - [ ] Conversão em Dinheiro
-    - [ ] (Nós) Definimos o rate de conversão
+  - [ ] __Utilization:__
+    - [ ] Purchase of Services (ex: paid games creation)
+    - [ ] Games betting
+    - [x] ~~Cash Conversion~~
+    - [ ] (We) Set the conversion rate in the competitive game
 
 	
-### Jogos (definições dependem do cenário do jogo __(Tipo de Jogo e Configuração)__):
+### Games (settings depend on game scenario __(Game Type and Configuration)__):
 
-  - [ ] (dependente do montante de PCs do utilizador)
-  - [ ] Começam todos com o mesmo montante de PCJs
-  - [ ] PCJs são obtidos após o pagamento de um montante de PCs (taxa de conversão A)
-  - [ ] PCJs são convertidos em PCs após a finalização do jogo (taxa de conversão A)
-  - [ ] Amigáveis (0 PCs == 50 PCJs) não têm retorno de PCJs
-  - [ ] Métodos de pagamento / transferência
-  - [ ] (5% do valor de compra das PCs são adquiridas pela empresa)
-  - [ ] Após Min jogadores presentes, host pode dar inicio ao jogo
-    - [ ] Após inicio do jogo, depósito especificado é cobrado
+  - [ ] (dependent on the amount of user PCs)
+  - [ ] They all start with the same amount of PCJs
+  - [x] ~~PCJs are obtained after paying an amount of PCs (conversion rate A)~~
+  - [x] ~~PCJs are converted to PCs after game completion (A conversion rate)~~
+  - [ ] Friendly Games (0 PCs == 50 PCJs) they have no return from PCJs to PCs at the end of the game
+  - [x] ~~Payment / transfer methods~~
+  - [x] ~~(5% of the purchase price of PCs is acquired by the company)~~
+  - [ ] After Min players present, host can start the game
+    - [ ] After the game starts, specified deposit is charged
 
-  - [ ] Jogos Amigáveis __(Não configuráveis)__:
+  - [ ] Friendly Games __(not configurable)__:
     - [ ] 0 PCs == 50 PCJs
-    - [ ] 3 jogadores (Max)
-    - [ ] Apostas de 4 PCJs (Fixo)
+    - [ ] 3 players (Max)
+    - [ ] Bets of 4 PCJs (Fixed)
 
-  - [ ] Jogos Competitivos __(Configuráveis)__:
-    - [ ] Host tem de possuir 50 PCs (Min)
-    - [ ] Depósito de 10 PCs (Min)
-    - [ ] Número de jogadores (Min)
-    - [ ] Valor de Apostas (Min)
-    - [ ] Rate de conversão dos PCs
+  - [ ] Competitive Games __(configurable)__:
+    - [ ] Host must own 50 PCs (Min)
+    - [ ] Deposit of 10 PCs (Min)
+    - [ ] Number of players (Min)
+    - [ ] Amount of Bets (Min)
+    - [ ] PC conversion rate for this game
 
-  - [ ] Torneios __(O seu formato)__[^2]
+  - [ ] Tournaments __(their format)__[^2]
 
 
-### Comunicação entre Jogadores
+### Communication between Players
 
-  - [ ] A identificação dos jogadores actualmente online
-  - [ ] Envio de mensagens entre jogadores
-  - [ ] __(Opcional)__
-    - [ ] Lista de Amigos
-    - [ ] Bloquear de Jogador
+  - [ ] The identification of players currently online
+  - [ ] Sending messages between players
+  - [ ] __(Optional)__
+    - [ ] Friend's list
+    - [ ] Block a Player
 
 		
-### Criação de Jogos
+### Game Creation
 
-  - [ ] Depósito Min e Max
-  - [ ] Valor inicial de PCJs (poderá definir o rate de conversão)
-  - [ ] Número de Jogadores (Min)
-  - [ ] Criador com 50 PCs ou mais -> jogo competitivo
+  - [ ] Min and Max deposit
+  - [ ] Initial value of PCJs (you can set the conversion rate at the start)
+  - [ ] Number of Players (Min)
+  - [ ] Creator with 50 PCs or more -> competitive play
 
 
-### Operações de Gestão
+### Management Operations
 
   - [ ] BackEnd:
-    - [ ] CRUD, Log de ações e outras funcionalidades de utilizadores
-    - [ ] Criação / Remoção / Info de jogos
+    - [ ] CRUD, Action Log and other user features
+    - [ ] Creation / Removal / Game Info
 
 
-### Interface de Utilizador
+### User Interface
 
-  - [ ] Aplicação CLI
-    - [ ] Funcionalidades de simulação de ações de utilizadores e administradores
-    - [ ] Registo e Log das ações dos utilizadores
+  - [ ] CLI application
+    - [ ] Functions to simulate user and administrator actions
+    - [ ] Registration and Log of user actions
       - [ ] __Sintaxe:__[^1]
         - [ ] `criaTreino nomeJogo=jogo1 criador=joao`
         - [ ] `compraCreditos nome=ana valor=1000 pagamento=paypal`
@@ -167,17 +167,18 @@ ____
         - [ ] `mostraDados`
         - [ ] `verificaLog utilizador=joao nomeJogo=jogo1`
 
-    - [ ] "Mockups" (ex: estrutura e simulação do lançamento do serviço de pagamento) -> __não__ é necessário a criação de estruturas visuais nem documentação
+    - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation
 
 
-### Restrições de Implementação[^3]
+### Implementation Restrictions[^3]
+<!-- Esta parte não foi traduzida por conveniencia atual de trabalho -->
 
-  - [ ] Padrão de Adaptadores -> __Ligação com os Sistemas "Externos" de Pagamento__
+  - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__
   - [ ] Padrão Comando -> __Comandos da "Aplicação" CLI__
   - [x] ~~Fábrica de Objetos~~ -> __[CRUD do Baralho de Cartas](src/main/java/com/poker/factory/card/CardFactory.java)__
   - [ ] Padrão Builders -> __Criação de Jogos__
   - [ ] Estratégias + Padrão Máquina de Estados -> __Regras do Jogo__
-  - [ ] A utilização de uma ou mais fachadas para acesso à lógica -> __Facedes__
+  - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__
   - [ ] __Utilização de Padrões de Persistência:__
     - [ ] Padrão de Registo Ativo
   - [ ] Padrão de Decoradores -> __Filtragem de acesso ao logs || Políticas de Criação de Jogos__
@@ -185,7 +186,7 @@ ____
 
 ____
 
-[^1]: Poderá sofrer mudanças.
-[^2]: Por definir.
-[^3]: Implementação dos Padrões Lecionados!
+[^1]: It may undergo changes.
+[^2]: To be defined.
+[^3]: Implementation of the Taught Standards!
 
