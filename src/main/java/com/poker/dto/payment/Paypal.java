@@ -2,28 +2,21 @@ package com.poker.dto.payment;
 
 import com.poker.constants.Constants;
 
-public class Paypal implements IServices {
-    private double CompanyGains = 0;
+public class Paypal implements IService {
+    private double companyGains = 0;
 
     public Paypal() {
     }
 
-    public Paypal(String path) {
-    }
-
-    public double profit() {
-        return getCompanyGains();
-    }
-
-    private double getCompanyGains() {
-        return CompanyGains;
+    public double getCompanyGains() {
+        return companyGains;
     }
 
     @Override
     public double buy(double money) {
         double gained = money * Constants.PAYPAL_INTEREST_RATE;
         money -= gained;
-        CompanyGains = getCompanyGains() + gained;
+        companyGains = getCompanyGains() + gained;
         return money;
     }
 

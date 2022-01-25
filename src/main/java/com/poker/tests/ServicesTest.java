@@ -1,22 +1,20 @@
 package com.poker.tests;
 
 import com.poker.dto.payment.EServices;
-import com.poker.dto.payment.ServicesAdapter;
-import com.poker.dto.payment.Paypal;
+import com.poker.dto.payment.ServiceAdapter;
 
 public class ServicesTest {
     public static void main(String[] args) {
-        ServicesAdapter Services = new ServicesAdapter(EServices.PAYPAL);
-        WalletServiceTest wt = new WalletServiceTest(245.34, 0);
-        try {
-            System.out.println("Tenho " + wt.money + " EUR na carteira.");
-            System.out.println("Comprar 132 EUR em pokerChips.");
-            Services.buy(132.0, wt);
-            System.out.println("pokerChips compradas: " + wt.pokerChips);
-            Services.transfer(wt);
-            System.out.println("Fiquei com " + wt.money + " EUR na carteira!");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        ServiceAdapter serviceAdapter = new ServiceAdapter(EServices.PAYPAL);
+        WalletServiceTest walletServiceTest = new WalletServiceTest(245.34, 0);
+        System.out.println("I have " + walletServiceTest.money + " EUR on my wallet.");
+        System.out.println("I have " + walletServiceTest.pokerChips + " in game currency (PC)");
+        System.out.println("I will buy 132.00 EUR in game currency (PC).");
+        serviceAdapter.buy(132.00, walletServiceTest);
+        System.out.println("I now have " + walletServiceTest.money + " EUR on my wallet.");
+        System.out.println("I now have " + walletServiceTest.pokerChips + " in game currency (PC)");
+        serviceAdapter.transfer(walletServiceTest);
+        System.out.println("After converting my game currency back into money, I end up with " + walletServiceTest.money + " EUR on my wallet!");
+        System.out.println("After converting my game currency back into money, I end up with " + walletServiceTest.pokerChips + " in game currency (PC) on my wallet!");
     }
 }
