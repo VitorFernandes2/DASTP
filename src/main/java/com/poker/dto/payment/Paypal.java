@@ -13,15 +13,15 @@ public class Paypal implements IService {
     }
 
     @Override
-    public double buy(double money) {
-        double gained = money * Constants.PAYPAL_INTEREST_RATE;
-        money -= gained;
+    public double buy(double amount) {
+        double gained = amount * Constants.PAYPAL_INTEREST_RATE;
+        amount -= gained;
         companyGains = getCompanyGains() + gained;
-        return money;
+        return amount;
     }
 
     @Override
-    public boolean transfer(double money) {
+    public boolean transfer(double amount) {
         return true;
     }
 }

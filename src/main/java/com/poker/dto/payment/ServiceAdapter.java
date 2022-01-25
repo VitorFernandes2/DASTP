@@ -1,17 +1,15 @@
 package com.poker.dto.payment;
 
 import com.poker.constants.Constants;
-import com.poker.tests.WalletServiceTest;
+import com.poker.dto.wallet.Wallet;
 
+/**
+ * Class for adapting in-game currency conversion and payment services.
+ */
 public class ServiceAdapter implements IServiceAdapter {
 
     private IService service;
 
-    /**
-     * Class for adapting in-game currency conversion and payment services.
-     *
-     * @param service {@link EServices} - Payment Service type.
-     */
     public ServiceAdapter(EServices service) {
         switch (service) {
             case PAYPAL:
@@ -21,53 +19,53 @@ public class ServiceAdapter implements IServiceAdapter {
     }
 
     @Override
-    public void buy(double money, WalletServiceTest walletServiceTest) {
+    public void buy(double amount, Wallet wallet) {
         double pokerChipsMoney;
 
-        if ((pokerChipsMoney = service.buy(money)) < 0.0) {
+        if ((pokerChipsMoney = service.buy(amount)) < 0.0) {
             return;
         }
 
-        walletServiceTest.money -= money;
+        wallet.removeAmount(amount);
 
-        walletServiceTest.pokerChips += moneyToPokerChips(pokerChipsMoney);
+        wallet.addPokerChips(moneyToPokerChips(pokerChipsMoney));
     }
 
     @Override
-    public void transfer(WalletServiceTest walletServiceTest) {
-        int returnedPokerChips = returnedPokerChips(walletServiceTest);
+    public void transfer(Wallet wallet) {
+        int returnedPokerChips = returnedPokerChips(wallet);
 
         if (!service.transfer(pokerChipsToMoney(returnedPokerChips))) {
             return;
         }
 
-        walletServiceTest.pokerChips -= returnedPokerChips;
+        wallet.removePokerChips(returnedPokerChips);
 
-        walletServiceTest.money += pokerChipsToMoney(returnedPokerChips);
+        wallet.addAmount(pokerChipsToMoney(returnedPokerChips));
     }
 
     /**
      * Function to return the value of game coins to be withdrawn from the Player's game wallet.
      *
-     * @param walletServiceTest {@link WalletServiceTest} - Player's wallet.
+     * @param wallet {@link Wallet} - Player's wallet.
      * @return int - Amount in game coins to be withdrawn from the wallet.
      */
-    private int returnedPokerChips(WalletServiceTest walletServiceTest) {
-        if (walletServiceTest.pokerChips < Constants.MONEY_CONVERSION_RATE) {
+    private int returnedPokerChips(Wallet wallet) {
+        if (wallet.getPokerChips() < Constants.MONEY_CONVERSION_RATE) {
             return 0;
         }
 
-        return ((walletServiceTest.pokerChips / Constants.MONEY_CONVERSION_RATE) * Constants.MONEY_CONVERSION_RATE);
+        return ((wallet.getPokerChips() / Constants.MONEY_CONVERSION_RATE) * Constants.MONEY_CONVERSION_RATE);
     }
 
     /**
      * Money to game currency conversion rate function.
      *
-     * @param money double - Monetary value to be converted into game coins.
+     * @param amount double - Monetary value to be converted into game coins.
      * @return int - Amount of game coins converted.
      */
-    private int moneyToPokerChips(double money) {
-        return (int) (money * Constants.MONEY_CONVERSION_RATE);
+    private int moneyToPokerChips(double amount) {
+        return (int) (amount * Constants.MONEY_CONVERSION_RATE);
     }
 
     /**

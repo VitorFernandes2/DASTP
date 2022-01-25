@@ -1,22 +1,22 @@
 package com.poker.dto.payment;
 
-import com.poker.tests.WalletServiceTest;
+import com.poker.dto.wallet.Wallet;
 
 public interface IServiceAdapter {
     /**
      * Function to adapt the simulation of the purchase of in-game currency with money from a Service.
      *
-     * @param money             double - Purchase monetary value.
-     * @param walletServiceTest {@link WalletServiceTest} - Player's wallet.
+     * @param amount double - Purchase monetary value.
+     * @param wallet {@link Wallet} - Player's wallet.
      */
-    void buy(double money, WalletServiceTest walletServiceTest);
+    void buy(double amount, Wallet wallet);
 
     /**
      * Function to simulate the transfer and transformation of in-game currency into cash from a Service.
      *
-     * @param walletServiceTest {@link WalletServiceTest} - Player's wallet.
+     * @param wallet {@link Wallet} - Player's wallet.
      */
-    void transfer(WalletServiceTest walletServiceTest);
+    void transfer(Wallet wallet);
 
     /**
      * Function to turn game coins into poker chips.
