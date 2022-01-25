@@ -3,12 +3,19 @@ package com.poker.dto.player;
 import com.poker.dto.wallet.Wallet;
 import com.poker.model.game.Game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
     private final String name;
     private List<Game> currentGames;
     private Wallet wallet;
+
+    public Player(String name) {
+        this.name = name;
+        this.currentGames = new ArrayList<>();
+        this.wallet = new Wallet(0);
+    }
 
     public Player(String name, List<Game> currentGames, Wallet wallet) {
         this.name = name;

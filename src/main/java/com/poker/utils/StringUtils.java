@@ -17,7 +17,11 @@ public class StringUtils {
      * Convert a string into a string array regarding the space character
      */
     public static String[] tokenizeString(String str) {
-        return str.split(" ");
+        return tokenizeString(str, " ");
+    }
+
+    public static String[] tokenizeString(String str, String regex) {
+        return str.split(regex);
     }
 
     public static ArrayList<Integer> findStringIndex(String[] strArr, String str) {
