@@ -1,4 +1,4 @@
-package com.poker.constants;
+package com.poker.model.constants;
 
 public class Constants {
     public static final Integer MAXIMUM_NUMBER_CARD = 13;

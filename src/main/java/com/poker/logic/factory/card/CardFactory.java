@@ -1,6 +1,6 @@
-package com.poker.factory.card;
+package com.poker.logic.factory.card;
 
-import com.poker.constants.Constants;
+import com.poker.model.constants.Constants;
 import com.poker.model.card.*;
 import com.poker.utils.IntegerUtils;
 

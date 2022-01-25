@@ -1,12 +1,12 @@
-package com.poker;
+package com.poker.ui;
 
 import com.poker.logic.ApplicationData;
-import com.poker.service.command.CommandAdapter;
+import com.poker.logic.command.CommandAdapter;
 import com.poker.model.enums.Command;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-public class Application {
+public class TextUI {
 
     private static final ApplicationData appData = ApplicationData.getInstance();
 

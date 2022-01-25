@@ -1,4 +1,4 @@
-package com.poker.factory.card;
+package com.poker.logic.factory.card;
 
 import com.poker.model.card.ICard;
 
