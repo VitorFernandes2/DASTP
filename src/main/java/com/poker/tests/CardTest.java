@@ -1,7 +1,7 @@
 package com.poker.tests;
 
 import com.poker.model.card.ICard;
-import com.poker.factory.card.CardFactory;
+import com.poker.logic.factory.card.CardFactory;
 
 public class CardTest {
     public static void main(String[] args) {

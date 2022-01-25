@@ -1,6 +1,6 @@
 package com.poker.model.payment;
 
-import com.poker.constants.Constants;
+import com.poker.model.constants.Constants;
 
 public class Paypal implements IService {
     private double companyGains = 0;

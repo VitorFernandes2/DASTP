@@ -1,4 +1,4 @@
-package com.poker.service.command;
+package com.poker.logic.command;
 
 import com.poker.model.player.Player;
 import com.poker.utils.DatabaseUtils;

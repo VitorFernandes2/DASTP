@@ -1,4 +1,4 @@
-package com.poker.service.game.state;
+package com.poker.logic.game.state;
 
 public interface IGameState {
     IGameState buyCoins();
