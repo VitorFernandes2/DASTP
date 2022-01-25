@@ -1,53 +1,53 @@
 package com.poker.model.game.state;
 
-public class StateAdapter implements IGameStates {
+public class StateAdapter implements IGameState {
     @Override
-    public IGameStates buyCoins() {
+    public IGameState buyCoins() {
         return this;
     }
 
     @Override
-    public IGameStates selectDealer() {
+    public IGameState selectDealer() {
         return null;
     }
 
     @Override
-    public IGameStates beginTurn() {
+    public IGameState beginTurn() {
         return this;
     }
 
     @Override
-    public IGameStates bet() {
+    public IGameState bet() {
         return this;
     }
 
     @Override
-    public IGameStates check() {
+    public IGameState check() {
         return this;
     }
 
     @Override
-    public IGameStates fold() {
+    public IGameState fold() {
         return this;
     }
 
     @Override
-    public IGameStates turnCards() {
+    public IGameState turnCards() {
         return this;
     }
 
     @Override
-    public IGameStates showdown() {
+    public IGameState showdown() {
         return this;
     }
 
     @Override
-    public IGameStates endGame() {
+    public IGameState endGame() {
         return this;
     }
 
     @Override
-    public IGameStates newTurn() {
+    public IGameState newTurn() {
         return this;
     }
 }

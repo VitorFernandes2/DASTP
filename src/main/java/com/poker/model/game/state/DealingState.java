@@ -2,27 +2,27 @@ package com.poker.model.game.state;
 
 public class DealingState extends StateAdapter {
     @Override
-    public IGameStates bet() {
+    public IGameState bet() {
         return this;
     }
 
     @Override
-    public IGameStates check() {
+    public IGameState check() {
         return this;
     }
 
     @Override
-    public IGameStates fold() {
+    public IGameState fold() {
         return this;
     }
 
     @Override
-    public IGameStates showdown() {
+    public IGameState showdown() {
         return super.showdown();
     }
 
     @Override
-    public IGameStates turnCards() {
+    public IGameState turnCards() {
         return super.turnCards();
     }
 }
