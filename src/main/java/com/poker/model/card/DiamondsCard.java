@@ -1,4 +1,4 @@
-package com.poker.dto.card;
+package com.poker.model.card;
 
 public class DiamondsCard extends Card {
     public DiamondsCard(Integer cardValue) {

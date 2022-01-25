@@ -1,6 +1,6 @@
 package com.poker.tests;
 
-import com.poker.model.enums.Command;
+import com.poker.service.enums.Command;
 
 import java.util.Scanner;
 

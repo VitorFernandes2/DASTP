@@ -1,7 +1,7 @@
-package com.poker.dto.player;
+package com.poker.model.player;
 
-import com.poker.dto.wallet.Wallet;
-import com.poker.model.game.Game;
+import com.poker.model.wallet.Wallet;
+import com.poker.service.game.Game;
 
 import java.util.ArrayList;
 import java.util.List;

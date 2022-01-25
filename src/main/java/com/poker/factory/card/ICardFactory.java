@@ -1,6 +1,6 @@
 package com.poker.factory.card;
 
-import com.poker.dto.card.ICard;
+import com.poker.model.card.ICard;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.poker.model.command;
+package com.poker.service.command;
 
-import com.poker.dto.player.Player;
+import com.poker.model.player.Player;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 

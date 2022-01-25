@@ -1,7 +1,7 @@
 package com.poker.factory.card;
 
 import com.poker.constants.Constants;
-import com.poker.dto.card.*;
+import com.poker.model.card.*;
 import com.poker.utils.IntegerUtils;
 
 import java.util.*;

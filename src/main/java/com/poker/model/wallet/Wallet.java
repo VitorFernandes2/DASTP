@@ -1,4 +1,4 @@
-package com.poker.dto.wallet;
+package com.poker.model.wallet;
 
 public class Wallet {
     private double amount;

@@ -1,8 +1,8 @@
-package com.poker.model.game;
+package com.poker.service.game;
 
-import com.poker.dto.player.Player;
-import com.poker.model.game.logic.LogicFacade;
-import com.poker.model.game.state.IGameState;
+import com.poker.model.player.Player;
+import com.poker.service.game.logic.LogicFacade;
+import com.poker.service.game.state.IGameState;
 
 import java.util.List;
 

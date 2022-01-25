@@ -1,8 +1,8 @@
 package com.poker;
 
-import com.poker.dto.player.Player;
-import com.poker.model.command.CommandAdapter;
-import com.poker.model.enums.Command;
+import com.poker.model.player.Player;
+import com.poker.service.command.CommandAdapter;
+import com.poker.service.enums.Command;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 

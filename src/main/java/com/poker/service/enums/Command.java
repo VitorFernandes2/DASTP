@@ -1,4 +1,4 @@
-package com.poker.model.enums;
+package com.poker.service.enums;
 
 import java.util.Arrays;
 import java.util.Map;

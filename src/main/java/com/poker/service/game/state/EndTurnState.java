@@ -1,4 +1,4 @@
-package com.poker.model.game.state;
+package com.poker.service.game.state;
 
 public class EndTurnState extends StateAdapter {
     @Override
