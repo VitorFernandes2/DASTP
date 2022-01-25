@@ -14,7 +14,7 @@ public class Player {
     public Player(String name) {
         this.name = name;
         this.currentGames = new ArrayList<>();
-        this.wallet = new Wallet(0);
+        this.wallet = new Wallet(0, 0, 0);
     }
 
     public Player(String name, List<Game> currentGames, Wallet wallet) {

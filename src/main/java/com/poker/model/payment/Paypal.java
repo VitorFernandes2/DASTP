@@ -1,4 +1,4 @@
-package com.poker.dto.payment;
+package com.poker.model.payment;
 
 import com.poker.constants.Constants;
 

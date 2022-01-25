@@ -1,17 +1,14 @@
 package com.poker;
 
-import com.poker.model.player.Player;
+import com.poker.logic.ApplicationData;
 import com.poker.service.command.CommandAdapter;
-import com.poker.service.enums.Command;
+import com.poker.model.enums.Command;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Application {
 
-    private static final List<Player> onlinePlayers = new ArrayList<>();;
+    private static final ApplicationData appData = ApplicationData.getInstance();
 
     public static void start() {
         boolean running = true;
@@ -33,11 +30,11 @@ public class Application {
 
                 switch (command) {
                     case REGISTER:
-                        boolean added = CommandAdapter.addUser(commandLine, onlinePlayers);
+                        boolean added = CommandAdapter.addUser(commandLine, appData.getOnlinePlayers());
                         System.out.println(added ? "User added with success" : "Error adding the user");
                         break;
                     case LOGIN:
-                        boolean loggedIn = CommandAdapter.loginUser(commandLine, onlinePlayers);
+                        boolean loggedIn = CommandAdapter.loginUser(commandLine, appData.getOnlinePlayers());
                         System.out.println(loggedIn ? "User logged in with success" : "Something went wrong or user does not exist!");
                         break;
                     case SHUTDOWN:

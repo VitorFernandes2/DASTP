@@ -1,7 +1,7 @@
-package com.poker.dto.payment;
+package com.poker.model.payment;
 
 import com.poker.constants.Constants;
-import com.poker.dto.wallet.Wallet;
+import com.poker.model.wallet.Wallet;
 
 /**
  * Class for adapting in-game currency conversion and payment services.
