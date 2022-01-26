@@ -1,6 +1,7 @@
 package com.poker.ui;
 
 import com.poker.logic.ApplicationData;
+import com.poker.logic.ApplicationFacade;
 import com.poker.logic.command.BetCommand;
 import com.poker.logic.command.CommandAction;
 import com.poker.logic.command.CommandAdapter;
@@ -11,10 +12,13 @@ import com.poker.utils.StringUtils;
 
 public class TextUI {
 
-    private static final ApplicationData appData = ApplicationData.getInstance();
-    private static final CommandManager commandManager = new CommandManager(appData);
+    private ApplicationFacade logic;
 
-    public static void start() {
+    public TextUI(ApplicationData data) {
+        this.logic = new ApplicationFacade(data);
+    }
+
+    public void start() {
         boolean running = true;
 
         try {
@@ -34,11 +38,11 @@ public class TextUI {
 
                 switch (command) {
                     case REGISTER:
-                        boolean added = CommandAdapter.addUser(commandLine, appData.getOnlinePlayers());
+                        boolean added = logic.addUser(commandLine);
                         System.out.println(added ? "User added with success" : "Error adding the user");
                         break;
                     case LOGIN:
-                        boolean loggedIn = CommandAdapter.loginUser(commandLine, appData.getOnlinePlayers());
+                        boolean loggedIn = logic.loginUser(commandLine);
                         System.out.println(loggedIn ? "User logged in with success" : "Something went wrong or user does not exist!");
                         break;
                     case SHUTDOWN:
