@@ -10,7 +10,6 @@ import java.util.Objects;
 
 public class Game {
     private final String gameName;
-    private final Map<String, Player> players;
     private final Player creator;
     private final int minimumPlayers;
     private final int minimumAmount;
@@ -18,7 +17,6 @@ public class Game {
 
     private Game(String gameName, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, IGameState state) {
         this.gameName = gameName;
-        this.players = players;
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
@@ -72,13 +70,13 @@ public class Game {
         return gameName;
     }
 
-    public boolean userInGame(String username) {
-        return !Objects.isNull(this.players.get(username));
+    public boolean addUserToGame(Player player) {
+        return this.logicFacade.addUserToGame(player);
     }
 
-    public boolean addUserToGame(Player player) {
-        if (!this.userInGame(player.getName())) {
-            this.players.put(player.getName(),player);
+    public boolean startGame(Player player) {
+        if (creator.equals(player)) {
+            this.logicFacade.startGame(this);
             return true;
         }
         return false;

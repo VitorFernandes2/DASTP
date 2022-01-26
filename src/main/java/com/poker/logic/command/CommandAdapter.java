@@ -214,4 +214,36 @@ public class CommandAdapter {
         }
         return false;
     }
+
+    public static boolean startGame(String commandLine, ApplicationData data) {
+        String[] tokens = StringUtils.tokenizeString(commandLine);
+        Map<String, Player> playerList = data.getOnlinePlayers();
+        Map<String, Game> gameList = data.getGamesList();
+
+        if (tokens.length > 1) {
+            String gameName = "";
+            String playerName = "";
+
+            for (int i = 1; i < tokens.length; i++) {
+                if (tokens[i].contains("name=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
+                    gameName = parameters[1];
+                } else if (tokens[i].contains("player=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "player=");
+                    playerName = parameters[1];
+                }
+            }
+
+            if (!gameName.equals("")) {
+                Game game = gameList.get(gameName);
+                if (!Objects.isNull(game) && !playerName.equals("")) {
+                    Player player = playerList.get(playerName);
+                    if (!Objects.isNull(player)) {
+                        return game.startGame(player);
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

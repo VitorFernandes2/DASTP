@@ -55,6 +55,10 @@ public class TextUI {
                         boolean joinedGame = logic.joinGame(commandLine);
                         System.out.println(joinedGame ? "User joined the game" : "User couldn't join the game!");
                         break;
+                    case START_GAME:
+                        boolean gameStarted = logic.startGame(commandLine);
+                        System.out.println(gameStarted ? "Game started" : "Game could not be started");
+                        break;
                     case SHUTDOWN:
                         running = false;
                         break;

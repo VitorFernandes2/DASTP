@@ -32,6 +32,10 @@ public class ApplicationFacade {
         return CommandAdapter.joinGame(commandLine, data);
     }
 
+    public boolean startGame(String commandLine) {
+        return CommandAdapter.startGame(commandLine, data);
+    }
+
     public void sendMessage(String commandLine) {
         CommandAdapter.sendMessage(commandLine, data.getOnlinePlayers());
     }
