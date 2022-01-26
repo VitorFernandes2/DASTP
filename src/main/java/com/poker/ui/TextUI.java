@@ -1,14 +1,18 @@
 package com.poker.ui;
 
 import com.poker.logic.ApplicationData;
+import com.poker.logic.command.BetCommand;
+import com.poker.logic.command.CommandAction;
 import com.poker.logic.command.CommandAdapter;
-import com.poker.model.enums.Command;
+import com.poker.logic.command.CommandManager;
+import com.poker.model.enums.ECommand;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
 public class TextUI {
 
     private static final ApplicationData appData = ApplicationData.getInstance();
+    private static final CommandManager commandManager = new CommandManager(appData);
 
     public static void start() {
         boolean running = true;
@@ -26,7 +30,7 @@ public class TextUI {
             String[] tokens = StringUtils.tokenizeString(commandLine);
 
             if (tokens.length > 0) {
-                Command command = Command.fromString(tokens[0]);
+                ECommand command = ECommand.fromString(tokens[0]);
 
                 switch (command) {
                     case REGISTER:

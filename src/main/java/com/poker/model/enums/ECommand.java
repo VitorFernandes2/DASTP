@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public enum Command {
+public enum ECommand {
     // Common commands
     LOGIN("login", "lin"),
     REGISTER("register", "reg"),
@@ -49,25 +49,25 @@ public enum Command {
     // default value
     UNKNOWN("Comando desconhecido ... tente outra vez", "UNKNOWN");
 
-    private static final Map<String, Command> ENUM_COMMANDS;
-    private static final Map<String, Command> ENUM_SHORTCUTS;
+    private static final Map<String, ECommand> ENUM_COMMANDS;
+    private static final Map<String, ECommand> ENUM_SHORTCUTS;
 
     static {
-        ENUM_COMMANDS = Arrays.stream(Command.values())
-                .collect(Collectors.toMap(Command::getCommand, Function.identity()));
-        ENUM_SHORTCUTS = Arrays.stream(Command.values())
-                .collect(Collectors.toMap(Command::getShortCut, Function.identity()));
+        ENUM_COMMANDS = Arrays.stream(ECommand.values())
+                .collect(Collectors.toMap(ECommand::getCommand, Function.identity()));
+        ENUM_SHORTCUTS = Arrays.stream(ECommand.values())
+                .collect(Collectors.toMap(ECommand::getShortCut, Function.identity()));
     }
 
     private final String command;
     private final String shortCut;
 
-    Command(String command, String shortCut) {
+    ECommand(String command, String shortCut) {
         this.command = command;
         this.shortCut = shortCut;
     }
 
-    public static Command fromString(String command) {
+    public static ECommand fromString(String command) {
         return ENUM_COMMANDS.containsKey(command) ?
                 ENUM_COMMANDS.get(command) :
                 ENUM_SHORTCUTS.getOrDefault(command, UNKNOWN);
