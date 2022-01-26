@@ -23,4 +23,16 @@ public class Player {
     public Wallet getWallet() {
         return wallet;
     }
+
+    public void setAmount(double amount) {
+        this.getWallet().setAmount(amount);
+    }
+
+    public void setPokerChips(int pokerChips) {
+        this.getWallet().setPokerChips(pokerChips);
+    }
+
+    public void setPokerGameChips(int pokerGameChips) {
+        this.getWallet().setPokerGameChips(pokerGameChips);
+    }
 }

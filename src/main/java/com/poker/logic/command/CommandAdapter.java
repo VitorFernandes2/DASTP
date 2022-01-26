@@ -1,14 +1,18 @@
 package com.poker.logic.command;
 
+import com.poker.model.payment.EServices;
+import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.Player;
+import com.poker.model.wallet.Wallet;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class CommandAdapter {
 
-    public static boolean addUser(String commandLine, List<Player> playerList) {
+    public static boolean addUser(String commandLine, Map<String, Player> playerList) {
         String[] tokens = StringUtils.tokenizeString(commandLine);
 
         if (tokens.length > 1) {
@@ -21,7 +25,7 @@ public class CommandAdapter {
 
                         boolean userExists;
                         try {
-                            userExists = DatabaseUtils.getPlayerByName(name);
+                            userExists = DatabaseUtils.playerExistsByName(name);
                         } catch (Exception e) {
                             return false;
                         }
@@ -35,7 +39,7 @@ public class CommandAdapter {
                             }
 
                             if (userCreated) {
-                                playerList.add(new Player(name));
+                                playerList.put(name, new Player(name));
                             } else {
                                 return false;
                             }
@@ -48,7 +52,7 @@ public class CommandAdapter {
         return false;
     }
 
-    public static boolean loginUser(String commandLine, List<Player> playerList) {
+    public static boolean loginUser(String commandLine, Map<String, Player> playerList) {
         String[] tokens = StringUtils.tokenizeString(commandLine);
 
         if (tokens.length > 1) {
@@ -60,16 +64,17 @@ public class CommandAdapter {
                         String name = parameters[1];
 
                         boolean userExists;
+                        Player player = null;
                         try {
-                            userExists = DatabaseUtils.getPlayerByName(name);
+                            player = DatabaseUtils.getPlayerByName(name);
                         } catch (Exception e) {
                             return false;
                         }
 
-                        if (userExists && !inPlayersArray(playerList, name)) {
-                            playerList.add(new Player(name));
+                        if (!Objects.isNull(player) && !inPlayersArray(playerList, name)) {
+                            playerList.put(name, player);
                         }
-                        return userExists;
+                        return !Objects.isNull(player);
                     }
                 }
             }
@@ -77,12 +82,47 @@ public class CommandAdapter {
         return false;
     }
 
-    private static boolean inPlayersArray(List<Player> playerList, String name) {
-        for (var player : playerList) {
-            if (player.getName().equals(name)) {
-                return true;
+    private static boolean inPlayersArray(Map<String, Player> playerList, String name) {
+        return playerList.get(name) != null;
+    }
+
+    public static void buyChips(String commandLine, Map<String, Player> playerList) {
+        String[] tokens = StringUtils.tokenizeString(commandLine);
+        String username = "";
+        double value = 0;
+        String method = "";
+
+        if (tokens.length > 1) {
+            for (int i = 1; i < tokens.length; i++) {
+                if (tokens[i].contains("name=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
+                    username = parameters[1];
+                } else if (tokens[i].contains("value=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "value=");
+                    String valueStr = parameters[1];
+                    value = Double.parseDouble(valueStr);
+                } else if (tokens[i].contains("payment=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "payment=");
+                    method = parameters[1];
+                }
+            }
+
+            if (value != 0 && !username.equals("") && !method.equals("")) {
+                Player player = playerList.get(username);
+                if (player != null) {
+                    EServices service = EServices.fromString(method);
+                    if (!service.equals(EServices.UNKNOWN)) {
+                        ServiceAdapter serviceAdapter = new ServiceAdapter(service);
+                        Wallet playerWallet = player.getWallet();
+                        serviceAdapter.buy(value, playerWallet);
+                        try {
+                            DatabaseUtils.updateWallet(username, playerWallet);
+                        } catch (Exception e) {
+                            return;
+                        }
+                    }
+                }
             }
         }
-        return false;
     }
 }
