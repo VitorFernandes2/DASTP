@@ -38,11 +38,11 @@ public class FilterTest {
                 "bet gameName=game1 user=joao value=20",
                 "bet gameName=game1 user=ana value=40",
                 "quit gameName=game1 user=joao"));
-        FilterDecorator search1 = new UserFilter(new BetFilter(new Log(logs), 10), "ana");
-        FilterDecorator search2 = new UserFilter(new GameFilter(new Log(logs), "game56"), "manuel");
-        FilterDecorator search3 = new JoinGameFilter(new GameFilter(new Log(logs), "game56"));
-        System.out.println("Searches for bets made by the user ana with the value of 10 PCJs inside the logs: " + search1.filter());
-        System.out.println("Searches for actions made by the user manuel in the game game56 inside the logs: " + search2.filter());
-        System.out.println("Searches for users that joined in the game game56 inside the logs: " + search3.filter());
+        //FilterDecorator search1 = new UserFilter(new BetFilter(new Log(logs), 10), "ana");
+        //FilterDecorator search2 = new UserFilter(new GameFilter(new Log(), "game56"), "manuel");
+        //FilterDecorator search3 = new JoinGameFilter(new GameFilter(new Log(), "game56"));
+        //System.out.println("Searches for bets made by the user ana with the value of 10 PCJs inside the logs: " + search1.filter());
+        //System.out.println("Searches for actions made by the user manuel in the game game56 inside the logs: " + search2.filter());
+        //System.out.println("Searches for users that joined in the game game56 inside the logs: " + search3.filter());
     }
 }

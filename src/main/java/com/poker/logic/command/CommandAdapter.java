@@ -1,5 +1,6 @@
 package com.poker.logic.command;
 
+import com.poker.model.filter.Log;
 import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.Player;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class CommandAdapter {
+    private static final Log LOG = Log.getInstance();
 
     public static boolean addUser(String commandLine, Map<String, Player> playerList) {
         String[] tokens = StringUtils.tokenizeString(commandLine);
@@ -40,6 +42,7 @@ public class CommandAdapter {
 
                             if (userCreated) {
                                 playerList.put(name, new Player(name));
+                                LOG.addLog(commandLine);
                             } else {
                                 return false;
                             }
@@ -73,6 +76,7 @@ public class CommandAdapter {
 
                         if (!Objects.isNull(player) && !inPlayersArray(playerList, name)) {
                             playerList.put(name, player);
+                            LOG.addLog(commandLine);
                         }
                         return !Objects.isNull(player);
                     }
@@ -117,6 +121,7 @@ public class CommandAdapter {
                         serviceAdapter.buy(value, playerWallet);
                         try {
                             DatabaseUtils.updateWallet(username, playerWallet);
+                            LOG.addLog(commandLine);
                         } catch (Exception e) {
                             return;
                         }
