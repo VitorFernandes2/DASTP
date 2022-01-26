@@ -27,4 +27,8 @@ public class ApplicationFacade {
     public boolean createFriendlyGame(String commandLine) {
         return CommandAdapter.createFriendlyGame(commandLine, data);
     }
+
+    public boolean joinGame(String commandLine) {
+        return CommandAdapter.joinGame(commandLine, data);
+    }
 }

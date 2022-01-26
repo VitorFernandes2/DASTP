@@ -3,7 +3,7 @@ package com.poker.logic.game.state;
 import com.poker.logic.game.Game;
 
 public interface IGameState {
-    IGameState buyCoins(Game game);
+    IGameState startGame(Game game);
     IGameState selectDealer();
     IGameState beginTurn();
     IGameState bet();

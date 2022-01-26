@@ -71,4 +71,16 @@ public class Game {
     public String getGameName() {
         return gameName;
     }
+
+    public boolean userInGame(String username) {
+        return !Objects.isNull(this.players.get(username));
+    }
+
+    public boolean addUserToGame(Player player) {
+        if (!this.userInGame(player.getName())) {
+            this.players.put(player.getName(),player);
+            return true;
+        }
+        return false;
+    }
 }

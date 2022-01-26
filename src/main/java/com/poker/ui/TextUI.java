@@ -2,10 +2,6 @@ package com.poker.ui;
 
 import com.poker.logic.ApplicationData;
 import com.poker.logic.ApplicationFacade;
-import com.poker.logic.command.BetCommand;
-import com.poker.logic.command.CommandAction;
-import com.poker.logic.command.CommandAdapter;
-import com.poker.logic.command.CommandManager;
 import com.poker.model.enums.ECommand;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
@@ -51,6 +47,10 @@ public class TextUI {
                     case CREATE_FRIENDLY_GAME:
                         boolean gameCreated = logic.createFriendlyGame(commandLine);
                         System.out.println(gameCreated ? "Game created with success" : "Game was not created!");
+                        break;
+                    case JOIN_GAME:
+                        boolean joinedGame = logic.joinGame(commandLine);
+                        System.out.println(joinedGame ? "User joined the game" : "User couldn't join the game!");
                         break;
                     case SHUTDOWN:
                         running = false;
