@@ -8,7 +8,7 @@ import com.poker.utils.StringUtils;
 
 public class TextUI {
 
-    private ApplicationFacade logic;
+    private final ApplicationFacade logic;
 
     public TextUI(ApplicationData data) {
         this.logic = new ApplicationFacade(data);
@@ -46,6 +46,10 @@ public class TextUI {
                         break;
                     case SEND_MESSAGE:
                         logic.sendMessage(commandLine);
+                        break;
+                    case CREATE_FRIENDLY_GAME:
+                        boolean gameCreated = logic.createFriendlyGame(commandLine);
+                        System.out.println(gameCreated ? "Game created with success" : "Game was not created!");
                         break;
                     case SHUTDOWN:
                         running = false;

@@ -24,6 +24,10 @@ public class ApplicationFacade {
         CommandAdapter.buyChips(commandLine, data.getOnlinePlayers());
     }
 
+    public boolean createFriendlyGame(String commandLine) {
+        return CommandAdapter.createFriendlyGame(commandLine, data);
+    }
+
     public void sendMessage(String commandLine) {
         CommandAdapter.sendMessage(commandLine, data.getOnlinePlayers());
     }

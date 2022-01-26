@@ -4,7 +4,7 @@ import com.poker.logic.ApplicationData;
 
 public class CheckCommand implements ICommand {
 
-    private CommandAction commandAction;
+    private final CommandAction commandAction;
 
     public CheckCommand(CommandAction commandAction) {
         this.commandAction = commandAction;

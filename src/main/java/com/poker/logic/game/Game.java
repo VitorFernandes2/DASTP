@@ -5,38 +5,44 @@ import com.poker.logic.game.state.BuyInState;
 import com.poker.logic.game.state.IGameState;
 import com.poker.model.player.Player;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Game {
     private final String gameName;
-    private final List<Player> players;
+    private final Map<String, Player> players;
+    private final Player creator;
     private final int minimumPlayers;
     private final int minimumAmount;
     private final LogicFacade logicFacade;
 
-    private Game(String gameName, List<Player> players, int minimumPlayers, int minimumAmount, int bigBlind, int smallBlind, IGameState state) {
+    private Game(String gameName, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, IGameState state) {
         this.gameName = gameName;
         this.players = players;
+        this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
-        this.logicFacade = new LogicFacade(players, bigBlind, smallBlind, state);
+        this.logicFacade = new LogicFacade(players, state);
     }
 
     public static class Builder {
         private final String gameName;
-        private List<Player> players;
+        private Map<String, Player> players;
+        private Player creator;
         private int minimumPlayers;
         private int minimumAmount;
-        private int smallBlind;
-        private int bigBlind;
 
         public Builder(String gameName) {
             this.gameName = gameName;
         }
 
-        public Builder setPlayers(List<Player> players) {
+        public Builder setPlayers(Map<String, Player> players) {
             this.players = players;
+            return this;
+        }
+
+        public Builder setCreator(Player creator) {
+            this.creator = creator;
             return this;
         }
 
@@ -50,27 +56,19 @@ public class Game {
             return this;
         }
 
-        public Builder setSmallBlind(int smallBlind) {
-            this.smallBlind = smallBlind;
-            return this;
-        }
-
-        public Builder setBigBlind(int bigBlind) {
-            this.bigBlind = bigBlind;
-            return this;
-        }
-
         private boolean isValid() {
-            return (Objects.isNull(this.gameName) || Objects.isNull(this.players)) && minimumPlayers > 2 && minimumAmount > 0 && bigBlind > smallBlind && bigBlind > 0 && smallBlind > 0;
+            return (Objects.isNull(this.gameName) || Objects.isNull(this.players) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
         }
 
         public Game build() {
-            if (!isValid()) {
+            if (isValid()) {
                 return null;
             }
-            return new Game(this.gameName, this.players, this.minimumPlayers, this.minimumAmount, this.bigBlind, this.smallBlind, new BuyInState());
+            return new Game(this.gameName, this.players, this.creator, this.minimumPlayers, this.minimumAmount, new BuyInState());
         }
     }
 
-    //TODO: function area - it will be removed once the logic is implemented
+    public String getGameName() {
+        return gameName;
+    }
 }
