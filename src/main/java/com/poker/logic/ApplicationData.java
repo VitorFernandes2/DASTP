@@ -29,13 +29,18 @@ public class ApplicationData {
         return gamesList;
     }
 
+    private boolean gameExists(String gameName) {
+        return !Objects.isNull(gamesList.get(gameName));
+    }
+
     public boolean addGame(Game game) {
         String gameName = game.getGameName();
-        boolean exists = !Objects.isNull(gamesList.get(gameName));
+        boolean exists = gameExists(gameName);
 
         if (!exists) {
             gamesList.put(gameName, game);
         }
+
         return !exists;
     }
 }

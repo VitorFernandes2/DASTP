@@ -28,6 +28,10 @@ public class ApplicationFacade {
         return CommandAdapter.createFriendlyGame(commandLine, data);
     }
 
+    public boolean joinGame(String commandLine) {
+        return CommandAdapter.joinGame(commandLine, data);
+    }
+
     public void sendMessage(String commandLine) {
         CommandAdapter.sendMessage(commandLine, data.getOnlinePlayers());
     }

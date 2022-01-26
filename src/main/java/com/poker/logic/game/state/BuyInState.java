@@ -4,7 +4,7 @@ import com.poker.logic.game.Game;
 
 public class BuyInState extends StateAdapter {
     @Override
-    public IGameState buyCoins(Game game) {
+    public IGameState startGame(Game game) {
         return new DealerButtonState();
     }
 }

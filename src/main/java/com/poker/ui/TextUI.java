@@ -51,6 +51,10 @@ public class TextUI {
                         boolean gameCreated = logic.createFriendlyGame(commandLine);
                         System.out.println(gameCreated ? "Game created with success" : "Game was not created!");
                         break;
+                    case JOIN_GAME:
+                        boolean joinedGame = logic.joinGame(commandLine);
+                        System.out.println(joinedGame ? "User joined the game" : "User couldn't join the game!");
+                        break;
                     case SHUTDOWN:
                         running = false;
                         break;
