@@ -4,7 +4,7 @@ import com.poker.logic.ApplicationData;
 
 public class BetCommand implements ICommand {
 
-    private CommandAction commandAction;
+    private final CommandAction commandAction;
 
     public BetCommand(CommandAction commandAction) {
         this.commandAction = commandAction;

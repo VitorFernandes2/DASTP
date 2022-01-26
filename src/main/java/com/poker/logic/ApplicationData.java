@@ -3,9 +3,9 @@ package com.poker.logic;
 import com.poker.logic.game.Game;
 import com.poker.model.player.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ApplicationData {
     private static final ApplicationData applicationData = new ApplicationData();
@@ -27,5 +27,15 @@ public class ApplicationData {
 
     public Map<String, Game> getGamesList() {
         return gamesList;
+    }
+
+    public boolean addGame(Game game) {
+        String gameName = game.getGameName();
+        boolean exists = !Objects.isNull(gamesList.get(gameName));
+
+        if (!exists) {
+            gamesList.put(gameName, game);
+        }
+        return !exists;
     }
 }

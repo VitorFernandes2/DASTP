@@ -1,8 +1,10 @@
 package com.poker.logic.game.state;
 
+import com.poker.logic.game.Game;
+
 public class StateAdapter implements IGameState {
     @Override
-    public IGameState buyCoins() {
+    public IGameState buyCoins(Game game) {
         return this;
     }
 
