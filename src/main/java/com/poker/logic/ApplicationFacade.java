@@ -19,4 +19,8 @@ public class ApplicationFacade {
     public boolean loginUser(String commandLine) {
         return CommandAdapter.loginUser(commandLine, data.getOnlinePlayers());
     }
+
+    public void buyChips(String commandLine) {
+        CommandAdapter.buyChips(commandLine, data.getOnlinePlayers());
+    }
 }

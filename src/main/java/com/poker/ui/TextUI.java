@@ -45,6 +45,9 @@ public class TextUI {
                         boolean loggedIn = logic.loginUser(commandLine);
                         System.out.println(loggedIn ? "User logged in with success" : "Something went wrong or user does not exist!");
                         break;
+                    case BUY_POKER_CHIPS:
+                        logic.buyChips(commandLine);
+                        break;
                     case SHUTDOWN:
                         running = false;
                         break;
