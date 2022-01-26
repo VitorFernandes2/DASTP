@@ -1,6 +1,6 @@
 package com.poker.tests;
 
-import com.poker.model.enums.Command;
+import com.poker.model.enums.ECommand;
 
 import java.util.Scanner;
 
@@ -8,13 +8,13 @@ public class CommandsTest {
     public static void main(String[] args) {
 
         // List commands
-        System.out.println(Command.commandsToString());
+        System.out.println(ECommand.commandsToString());
 
         // Test commands for an specific state
         do {
             System.out.print("Command: ");
             Scanner s = new Scanner(System.in);
-            Command x = Command.fromString(s.nextLine());
+            ECommand x = ECommand.fromString(s.nextLine());
 
             switch (x) {
                 case LIST_FRIENDS:
@@ -30,7 +30,7 @@ public class CommandsTest {
                     System.out.println(x.getCommand());
                     break;
                 default:
-                    System.out.println(Command.UNKNOWN.getCommand());
+                    System.out.println(ECommand.UNKNOWN.getCommand());
             }
         } while (true);
     }
