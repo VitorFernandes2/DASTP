@@ -172,18 +172,41 @@ ____
 
 ### Implementation Restrictions[^3]
 <!-- Esta parte não foi traduzida por conveniencia atual de trabalho -->
+##### __Padrão Comando__
+  - [x] ~~Padrão Comando~~ -> __Comandos da "Aplicação" CLI__
 
-  - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__
-  - [ ] Padrão Comando -> __Comandos da "Aplicação" CLI__
+##### __Padrões Creacionais__
   - [x] ~~Fábrica de Objetos~~ -> __[CRUD do Baralho de Cartas](src/main/java/com/poker/factory/card/CardFactory.java)__
-  - [ ] Padrão Builders -> __Criação de Jogos__
-  - [ ] Estratégias + Padrão Máquina de Estados -> __Regras do Jogo__
+  - [ ] Padrão Protótipo -> fazer clonning
+  - [x] ~~Singleton~~ -> Logs e Application Data
+  - [ ] Object Poll -> ...
+  - [x] ~~Padrão Builders~~ -> __Criação de Jogos__
+
+##### __Padrões de Persistência__
+  - [ ] Padrão de Registo Ativo
+  - [ ] Unit of Work
+  - [ ] Identity Map
+
+##### __Padrões de Desenho__
+  - [ ] ~~Estratégias~~ + Padrão Máquina de Estados -> __Regras do Jogo__ [WIP]
+  - [x] ~~Padrão de Decoradores~~ -> __Filtragem de acesso ao logs__
+  - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__
   - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__
-  - [ ] __Utilização de Padrões de Persistência:__
-    - [ ] Padrão de Registo Ativo
-  - [ ] Padrão de Decoradores -> __Filtragem de acesso ao logs || Políticas de Criação de Jogos__
   - [ ] Padrão Template -> __Implementação de Torneios__
 
+____
+
+### GRASP
+##### __Padrões GRASP__
+  - [x] ~~Perito (de Informação)~~
+  - [x] ~~Criador~~ - Filtro
+  - [x] ~~Baixo Acoplamento~~
+  - [x] ~~Controlador~~ - Facede
+  - [x] ~~Alta Coesão~~
+  - [x] ~~Polimorfismo~~ - Filtro + Estados + Logs + ...
+  - [x] ~~Invenção (Artifício)~~ - Facede
+  - [x] ~~Indirecção~~ - CommandManager + Facede + CommandAdapter
+  - [x] ~~Variação Protegida~~ - CommandManager
 ____
 
 [^1]: It may undergo changes.
