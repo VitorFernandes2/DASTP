@@ -23,4 +23,8 @@ public class ApplicationFacade {
     public void buyChips(String commandLine) {
         CommandAdapter.buyChips(commandLine, data.getOnlinePlayers());
     }
+
+    public void sendMessage(String commandLine) {
+        CommandAdapter.sendMessage(commandLine, data.getOnlinePlayers());
+    }
 }
