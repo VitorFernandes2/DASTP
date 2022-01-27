@@ -2,10 +2,6 @@ package com.poker.ui;
 
 import com.poker.logic.ApplicationData;
 import com.poker.logic.ApplicationFacade;
-import com.poker.logic.command.BetCommand;
-import com.poker.logic.command.CommandAction;
-import com.poker.logic.command.CommandAdapter;
-import com.poker.logic.command.CommandManager;
 import com.poker.model.enums.ECommand;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
@@ -47,6 +43,9 @@ public class TextUI {
                         break;
                     case BUY_POKER_CHIPS:
                         logic.buyChips(commandLine);
+                        break;
+                    case SEND_MESSAGE:
+                        logic.sendMessage(commandLine);
                         break;
                     case SHUTDOWN:
                         running = false;

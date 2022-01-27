@@ -1,5 +1,6 @@
 package com.poker.logic.command;
 
+import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
 import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
@@ -129,5 +130,16 @@ public class CommandAdapter {
                 }
             }
         }
+    }
+
+    public static void sendMessage(String commandLine, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
+        Map<String,String> command = StringUtils.mapCommand(commandLine);
+        if(!inPlayersArray(onlinePlayers, command.get("from")))
+            System.out.println("[System] " + command.get("from") + " is offline!");
+        System.out.println(inPlayersArray(onlinePlayers, command.get("to")) ?
+                "[From:" + command.get("from") + "][To:" + command.get("to") + "] "
+                        + command.get(Constants.COMMAND_LAST_DIVISION) :
+                "[System] " + command.get("to") + " is offline!");
     }
 }
