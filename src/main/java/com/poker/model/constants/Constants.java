@@ -9,6 +9,7 @@ public class Constants {
     public static final Integer MONEY_CONVERSION_RATE = 100;
     public static final Integer PC_CONVERSION_RATE = 50;
     public static final Double PAYPAL_INTEREST_RATE = 0.05;
+    public static final Integer FRIENDLY_GAME_MINIMUM_PLAYERS = 3;
 
     // Commands
     public static final String COMMAND = "command";

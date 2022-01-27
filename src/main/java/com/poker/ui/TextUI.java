@@ -59,6 +59,21 @@ public class TextUI {
                         boolean gameStarted = logic.startGame(commandLine);
                         System.out.println(gameStarted ? "Game started" : "Game could not be started");
                         break;
+                    case BET:
+                        boolean betted = logic.bet(commandLine);
+                        System.out.println(betted ? "Bet correctly made" : "Can't perform bet");
+                        break;
+                    case CHECK:
+                        boolean skipped = logic.check(commandLine);
+                        System.out.println(skipped ? "Skip correctly made" : "Can't perform skip");
+                        break;
+                    case FOLD:
+                        boolean gaveUp = logic.fold(commandLine);
+                        System.out.println(gaveUp ? "User gave up" : "Can't perform gave up for the selected user");
+                        break;
+                    case SHOW_GAME_INFO:
+                        logic.showGameInfo(commandLine);
+                        break;
                     case SHUTDOWN:
                         running = false;
                         break;

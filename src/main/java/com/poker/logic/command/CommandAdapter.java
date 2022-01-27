@@ -1,6 +1,7 @@
 package com.poker.logic.command;
 
 import com.poker.logic.ApplicationData;
+import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
@@ -11,7 +12,7 @@ import com.poker.model.wallet.Wallet;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -70,7 +71,7 @@ public class CommandAdapter {
                     if (parameters.length > 0) {
                         String name = parameters[1];
 
-                        Player player = null;
+                        Player player;
                         try {
                             player = DatabaseUtils.getPlayerByName(name);
                         } catch (Exception e) {
@@ -136,8 +137,8 @@ public class CommandAdapter {
 
     public static void sendMessage(String commandLine, Map<String, Player> onlinePlayers) {
         LOG.addLog(commandLine);
-        Map<String,String> command = StringUtils.mapCommand(commandLine);
-        if(!inPlayersArray(onlinePlayers, command.get("from")))
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        if (!inPlayersArray(onlinePlayers, command.get("from")))
             System.out.println("[System] " + command.get("from") + " is offline!");
         System.out.println(inPlayersArray(onlinePlayers, command.get("to")) ?
                 "[From:" + command.get("from") + "][To:" + command.get("to") + "] "
@@ -166,13 +167,14 @@ public class CommandAdapter {
             if (!gameName.equals("") && !creator.equals("")) {
                 Player player = playerList.get(creator);
                 if (!Objects.isNull(player)) {
-                    Map<String, Player> players = new HashMap<>();
+                    Map<String, Player> players = new LinkedHashMap<>();
                     players.put(creator, player);
 
                     Game game = new Game.Builder(gameName)
-                            .setMinimumPlayers(2)
+                            .setMinimumPlayers(Constants.FRIENDLY_GAME_MINIMUM_PLAYERS)
                             .setMinimumAmount(0)
                             .setPlayers(players)
+                            .setTypeOfGame(ETypeOfGame.FRIENDLY)
                             .setCreator(player)
                             .build();
 

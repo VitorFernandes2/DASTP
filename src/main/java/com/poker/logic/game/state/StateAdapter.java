@@ -1,20 +1,13 @@
 package com.poker.logic.game.state;
 
-import com.poker.logic.game.Game;
-
 public class StateAdapter implements IGameState {
     @Override
-    public IGameState startGame(Game game) {
+    public IGameState startGame() {
         return this;
     }
 
     @Override
-    public IGameState selectDealer() {
-        return null;
-    }
-
-    @Override
-    public IGameState beginTurn() {
+    public IGameState startTurn() {
         return this;
     }
 
@@ -45,11 +38,6 @@ public class StateAdapter implements IGameState {
 
     @Override
     public IGameState endGame() {
-        return this;
-    }
-
-    @Override
-    public IGameState newTurn() {
         return this;
     }
 }
