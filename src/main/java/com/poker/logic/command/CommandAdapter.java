@@ -79,6 +79,9 @@ public class CommandAdapter {
                         }
 
                         if (!Objects.isNull(player) && !inPlayersArray(playerList, name)) {
+                            // Notify other players
+                            notifyNewLogin(playerList, name);
+
                             playerList.put(name, player);
                             LOG.addLog(commandLine);
                         }
@@ -88,6 +91,14 @@ public class CommandAdapter {
             }
         }
         return false;
+    }
+
+    private static void notifyNewLogin(Map<String, Player> onlinePlayers, String name) {
+        // notify each online player if some of is friends logged in
+        onlinePlayers.forEach((s, player) -> player.getFriends().forEach(friendName -> {
+            if(name.equals(friendName))
+                System.out.println("[System][To:" + player.getName() + "] The player " + name + " logged in!");
+        }));
     }
 
     private static boolean inPlayersArray(Map<String, Player> playerList, String name) {
@@ -138,12 +149,33 @@ public class CommandAdapter {
     public static void sendMessage(String commandLine, Map<String, Player> onlinePlayers) {
         LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
-        if (!inPlayersArray(onlinePlayers, command.get("from")))
-            System.out.println("[System] " + command.get("from") + " is offline!");
-        System.out.println(inPlayersArray(onlinePlayers, command.get("to")) ?
-                "[From:" + command.get("from") + "][To:" + command.get("to") + "] "
-                        + command.get(Constants.COMMAND_LAST_DIVISION) :
-                "[System] " + command.get("to") + " is offline!");
+        String senderName = command.get("from");
+        String receiverName = command.get("to");
+
+        try {
+            if(!DatabaseUtils.playerExistsByName(senderName)) {
+                System.out.println("[System] " + senderName + " doesn't exist!");
+                return;
+            } else if(!DatabaseUtils.playerExistsByName(receiverName)) {
+                System.out.println("[System] " + receiverName + " doesn't exist!");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("Error trying to get players name!");
+            return;
+        }
+
+        if (!inPlayersArray(onlinePlayers, senderName)) {
+            System.out.println("[System] " + senderName + " is offline!");
+            return;
+        }
+
+        System.out.println(!inPlayersArray(onlinePlayers, receiverName) ?
+                        "[System] " + receiverName + " is offline!" :
+                onlinePlayers.get(receiverName).getPlayersBlocked().contains(senderName) ?
+                       "[System] You can't send messages to this user!" :
+                "[From:" + senderName + "][To:" + receiverName + "] "
+                        + command.get(Constants.COMMAND_LAST_DIVISION));
     }
 
     public static boolean createFriendlyGame(String commandLine, ApplicationData data) {
@@ -247,5 +279,29 @@ public class CommandAdapter {
             }
         }
         return false;
+    }
+
+    public static void getOnlinePlayersToString(Map<String, Player> onlinePlayers) {
+        StringBuilder str = new StringBuilder("# Online players:");
+        onlinePlayers.forEach((s, player) -> str.append("\n ").append(s));
+        System.out.println(str);
+    }
+
+    public static void addFriend(String commandLine, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        Player player = onlinePlayers.get(command.get("player"));
+        player.addFriend(command.get("add"));
+        player.removeBlockedPlayer(command.get("add"));
+        System.out.println("Player added with success");
+    }
+
+    public static void blockPlayer(String commandLine, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        Player player = onlinePlayers.get(command.get("player"));
+        player.blockPlayer(command.get("block"));
+        player.removeFriend(command.get("block"));
+        System.out.println("Player blocked with success");
     }
 }

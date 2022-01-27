@@ -70,4 +70,16 @@ public class ApplicationFacade {
     public void sendMessage(String commandLine) {
         commandManager.sendMessage(commandLine);
     }
+
+    public void getOnlinePlayersToString(String commandLine) {
+        commandManager.getOnlinePlayersToString();
+    }
+
+    public void addFriend(String commandLine) {
+        commandManager.addFriend(commandLine);
+    }
+
+    public void blockPlayer(String commandLine) {
+        commandManager.blockPlayer(commandLine);
+    }
 }

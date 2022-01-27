@@ -41,11 +41,25 @@ public class TextUI {
                         boolean loggedIn = logic.loginUser(commandLine);
                         System.out.println(loggedIn ? "User logged in with success" : "Something went wrong or user does not exist!");
                         break;
-                    case BUY_POKER_CHIPS:
-                        logic.buyChips(commandLine);
+
+                    // $$ Chat Functionalities $$
+                    case LIST_PLAYERS:
+                        logic.getOnlinePlayersToString(commandLine);
                         break;
+                    case ADD_FRIEND:
+                        logic.addFriend(commandLine);
+                        break;
+                    case BLOCK_PLAYER:
+                        logic.blockPlayer(commandLine);
+                        break;
+                        //FIXME: remove blocked and added players or not
                     case SEND_MESSAGE:
                         logic.sendMessage(commandLine);
+                        break;
+
+                    // $$ Virtual Money $$
+                    case BUY_POKER_CHIPS:
+                        logic.buyChips(commandLine);
                         break;
                     case CREATE_FRIENDLY_GAME:
                         boolean gameCreated = logic.createFriendlyGame(commandLine);
@@ -77,6 +91,7 @@ public class TextUI {
                     case SHUTDOWN:
                         running = false;
                         break;
+                    default: ECommand.getCommandsExample();
                 }
             }
         }
