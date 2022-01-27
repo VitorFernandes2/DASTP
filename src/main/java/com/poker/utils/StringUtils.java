@@ -1,7 +1,8 @@
 package com.poker.utils;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import com.poker.model.constants.Constants;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,6 +23,45 @@ public class StringUtils {
 
     public static String[] tokenizeString(String str, String regex) {
         return str.split(regex);
+    }
+
+    // FIXME: clean me later xD
+//    public static String[] commandSplit(String str) {
+//        List<String> originalSplit = new ArrayList<>((List.of(tokenizeString(str, "?<==| "))));
+//        originalSplit.removeIf(s -> s.contains("="));
+//        return originalSplit.toArray(String[]::new);
+//    }
+
+    /**
+     * This method will map all command line to a Map<String,String>.
+     * <p><p>
+     * Example of use:<p>
+     * Command: "sendMessage from=leandro to=andre Hello my name is Leandro!"<p>
+     * commandMapped.get(Constants.COMMAND) = sendMessage<p>
+     * commandMapped.get("from") = leandro<p>
+     * commandMapped.get("to") = andre<p>
+     * // this one will provide the text message<p>
+     * commandMapped.get(Constants.COMMAND_LAST_DIVISION) = "Hello my name is Leandro!"<p><p>
+     *
+     * @param commandLine
+     * @return
+     */
+    public static Map<String, String> mapCommand(String commandLine) {
+        List<String> originalSplit = new ArrayList<>((List.of(tokenizeString(commandLine, " "))));
+        Map<String, String> commandMapped = new HashMap<>();
+        StringBuilder aux = new StringBuilder();
+        commandMapped.put(Constants.COMMAND, originalSplit.remove(0));
+        originalSplit.stream()
+                .map(s -> tokenizeString(s, "="))
+                .forEach(tokens -> {
+                    if (tokens.length > 1) {
+                        commandMapped.put(tokens[0], tokens[1]);
+                    } else {
+                        aux.append(tokens[0]).append(" ");
+                    }
+                });
+        commandMapped.put(Constants.COMMAND_LAST_DIVISION, aux.toString());
+        return commandMapped;
     }
 
     public static ArrayList<Integer> findStringIndex(String[] strArr, String str) {
