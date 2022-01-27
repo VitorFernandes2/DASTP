@@ -33,29 +33,16 @@ public class ServiceAdapter implements IServiceAdapter {
 
     @Override
     public void transfer(Wallet wallet) {
-        int returnedPokerChips = returnedPokerChips(wallet);
+        int returnedPokerChips = wallet.getPokerChips();
+        double returnedMoney = pokerChipsToMoney(returnedPokerChips);
 
-        if (!service.transfer(pokerChipsToMoney(returnedPokerChips))) {
+        if (!service.transfer(returnedMoney)) {
             return;
         }
 
         wallet.removePokerChips(returnedPokerChips);
 
-        wallet.addAmount(pokerChipsToMoney(returnedPokerChips));
-    }
-
-    /**
-     * Function to return the value of game coins to be withdrawn from the Player's game wallet.
-     *
-     * @param wallet {@link Wallet} - Player's wallet.
-     * @return int - Amount in game coins to be withdrawn from the wallet.
-     */
-    private int returnedPokerChips(Wallet wallet) {
-        if (wallet.getPokerChips() < Constants.MONEY_CONVERSION_RATE) {
-            return 0;
-        }
-
-        return ((wallet.getPokerChips() / Constants.MONEY_CONVERSION_RATE) * Constants.MONEY_CONVERSION_RATE);
+        wallet.addAmount(returnedMoney);
     }
 
     /**
