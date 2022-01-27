@@ -1,14 +1,19 @@
 package com.poker.logic.game.state;
 
 public interface IGameState {
-    IGameState buyCoins();
-    IGameState selectDealer();
-    IGameState beginTurn();
+    IGameState startGame();
+
+    IGameState startTurn();
+
     IGameState bet();
+
     IGameState check();
+
     IGameState fold();
+
     IGameState turnCards();
+
     IGameState showdown();
+
     IGameState endGame();
-    IGameState newTurn();
 }

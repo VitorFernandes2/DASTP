@@ -29,6 +29,7 @@ public enum ECommand {
     CREATE_FRIENDLY_GAME("criarJogoAmigável", "cja"),
     CREATE_COMPETITIVE_GAME("criarJogoCompetitivo", "cjc"),
     START_GAME("iniciarJogo", "ij"),
+    START_TURN("iniciarTurno", "it"),
     JOIN_GAME("juntarJogo", "jj"),
 
     // Admin commands
@@ -42,8 +43,8 @@ public enum ECommand {
 
     // Game commands
     BET("apostar", "a"),
-    SKIP("passar", "p"),
-    GIVE_UP("desistir", "d"),
+    CHECK("passar", "p"),
+    FOLD("desistir", "d"),
     SHOW_GAME_INFO("mostrarDados", "md"),
 
     // default value

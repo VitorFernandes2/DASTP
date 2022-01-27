@@ -1,5 +1,8 @@
 package com.poker.logic.command;
 
+import com.poker.logic.ApplicationData;
+import com.poker.logic.game.ETypeOfGame;
+import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
 import com.poker.model.payment.EServices;
@@ -9,6 +12,7 @@ import com.poker.model.wallet.Wallet;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -67,8 +71,7 @@ public class CommandAdapter {
                     if (parameters.length > 0) {
                         String name = parameters[1];
 
-                        boolean userExists;
-                        Player player = null;
+                        Player player;
                         try {
                             player = DatabaseUtils.getPlayerByName(name);
                         } catch (Exception e) {
@@ -134,12 +137,115 @@ public class CommandAdapter {
 
     public static void sendMessage(String commandLine, Map<String, Player> onlinePlayers) {
         LOG.addLog(commandLine);
-        Map<String,String> command = StringUtils.mapCommand(commandLine);
-        if(!inPlayersArray(onlinePlayers, command.get("from")))
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        if (!inPlayersArray(onlinePlayers, command.get("from")))
             System.out.println("[System] " + command.get("from") + " is offline!");
         System.out.println(inPlayersArray(onlinePlayers, command.get("to")) ?
                 "[From:" + command.get("from") + "][To:" + command.get("to") + "] "
                         + command.get(Constants.COMMAND_LAST_DIVISION) :
                 "[System] " + command.get("to") + " is offline!");
+    }
+
+    public static boolean createFriendlyGame(String commandLine, ApplicationData data) {
+        String[] tokens = StringUtils.tokenizeString(commandLine);
+        Map<String, Player> playerList = data.getOnlinePlayers();
+
+        if (tokens.length > 1) {
+            String gameName = "";
+            String creator = "";
+
+            for (int i = 1; i < tokens.length; i++) {
+                if (tokens[i].contains("name=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
+                    gameName = parameters[1];
+                } else if (tokens[i].contains("creator=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "creator=");
+                    creator = parameters[1];
+                }
+            }
+
+            if (!gameName.equals("") && !creator.equals("")) {
+                Player player = playerList.get(creator);
+                if (!Objects.isNull(player)) {
+                    Map<String, Player> players = new LinkedHashMap<>();
+                    players.put(creator, player);
+
+                    Game game = new Game.Builder(gameName)
+                            .setMinimumPlayers(Constants.FRIENDLY_GAME_MINIMUM_PLAYERS)
+                            .setMinimumAmount(0)
+                            .setPlayers(players)
+                            .setTypeOfGame(ETypeOfGame.FRIENDLY)
+                            .setCreator(player)
+                            .build();
+
+                    return data.addGame(game);
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean joinGame(String commandLine, ApplicationData data) {
+        String[] tokens = StringUtils.tokenizeString(commandLine);
+        Map<String, Player> playerList = data.getOnlinePlayers();
+        Map<String, Game> gameList = data.getGamesList();
+
+        if (tokens.length > 1) {
+            String gameName = "";
+            String playerName = "";
+
+            for (int i = 1; i < tokens.length; i++) {
+                if (tokens[i].contains("name=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
+                    gameName = parameters[1];
+                } else if (tokens[i].contains("player=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "player=");
+                    playerName = parameters[1];
+                }
+            }
+
+            if (!gameName.equals("")) {
+                Game game = gameList.get(gameName);
+                if (!Objects.isNull(game) && !playerName.equals("")) {
+                    Player player = playerList.get(playerName);
+                    if (!Objects.isNull(player)) {
+                        return game.addUserToGame(player);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean startGame(String commandLine, ApplicationData data) {
+        String[] tokens = StringUtils.tokenizeString(commandLine);
+        Map<String, Player> playerList = data.getOnlinePlayers();
+        Map<String, Game> gameList = data.getGamesList();
+
+        if (tokens.length > 1) {
+            String gameName = "";
+            String playerName = "";
+
+            for (int i = 1; i < tokens.length; i++) {
+                if (tokens[i].contains("name=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
+                    gameName = parameters[1];
+                } else if (tokens[i].contains("player=")) {
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "player=");
+                    playerName = parameters[1];
+                }
+            }
+
+            if (!gameName.equals("")) {
+                Game game = gameList.get(gameName);
+                if (!Objects.isNull(game) && !playerName.equals("")) {
+                    Player player = playerList.get(playerName);
+                    if (!Objects.isNull(player)) {
+                        return game.startGame(player);
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

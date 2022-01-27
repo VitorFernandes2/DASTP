@@ -35,4 +35,8 @@ public class Player {
     public void setPokerGameChips(int pokerGameChips) {
         this.getWallet().setPokerGameChips(pokerGameChips);
     }
+
+    public boolean equals(Player obj) {
+        return obj.getName().equals(this.getName());
+    }
 }

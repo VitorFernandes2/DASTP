@@ -8,7 +8,7 @@ import com.poker.utils.StringUtils;
 
 public class TextUI {
 
-    private ApplicationFacade logic;
+    private final ApplicationFacade logic;
 
     public TextUI(ApplicationData data) {
         this.logic = new ApplicationFacade(data);
@@ -46,6 +46,33 @@ public class TextUI {
                         break;
                     case SEND_MESSAGE:
                         logic.sendMessage(commandLine);
+                        break;
+                    case CREATE_FRIENDLY_GAME:
+                        boolean gameCreated = logic.createFriendlyGame(commandLine);
+                        System.out.println(gameCreated ? "Game created with success" : "Game was not created!");
+                        break;
+                    case JOIN_GAME:
+                        boolean joinedGame = logic.joinGame(commandLine);
+                        System.out.println(joinedGame ? "User joined the game" : "User couldn't join the game!");
+                        break;
+                    case START_GAME:
+                        boolean gameStarted = logic.startGame(commandLine);
+                        System.out.println(gameStarted ? "Game started" : "Game could not be started");
+                        break;
+                    case BET:
+                        boolean betted = logic.bet(commandLine);
+                        System.out.println(betted ? "Bet correctly made" : "Can't perform bet");
+                        break;
+                    case CHECK:
+                        boolean skipped = logic.check(commandLine);
+                        System.out.println(skipped ? "Skip correctly made" : "Can't perform skip");
+                        break;
+                    case FOLD:
+                        boolean gaveUp = logic.fold(commandLine);
+                        System.out.println(gaveUp ? "User gave up" : "Can't perform gave up for the selected user");
+                        break;
+                    case SHOW_GAME_INFO:
+                        logic.showGameInfo(commandLine);
                         break;
                     case SHUTDOWN:
                         running = false;
