@@ -1,71 +1,79 @@
 package com.poker.model.enums;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public enum ECommand {
     // Common commands
-    LOGIN("login", "lin"),
-    REGISTER("register", "reg"),
-    SHUTDOWN("shutdown", "std"),
-    LOGOUT("logout", "lout"),
-    UNDO("undo", "u"),
-    REDO("redo", "r"),
+    LOGIN("login", "log", ""),
+    REGISTER("register", "reg", ""),
+    SHUTDOWN("shutdown", "std", ""),
+    LOGOUT("logout", "lout", ""),
+    UNDO("undo", "u", ""),
+    REDO("redo", "r", ""),
 
     // User commands
-    SEND_MESSAGE("enviarMensagem", "em"),
-    ADD_FRIEND("adicionarAmigo", "aa"),
-    BLOCK_FRIEND("bloquearAmigo", "ba"),
-    BUY_POKER_CHIPS("comprarPokerChips", "cpc"),
-    LIST_PLAYERS("listarJogadores", "lj"),
-    LIST_FRIENDS("listarAmigos", "la"),
-    LIST_BLOCKED("listarBloqueados", "lb"),
-    LIST_FRIENDLY_GAMES("listarJogosAmigáveis", "lja"),
-    LIST_COMPETITIVE_GAMES("listarJogosCompetitivos", "ljc"),
-    LIST_CHAMPIONSHIPS("listarCampeonatos", "lc"),
-    LIST_RANKING("listarPontuações", "lp"),
-    CREATE_FRIENDLY_GAME("criarJogoAmigável", "cja"),
-    CREATE_COMPETITIVE_GAME("criarJogoCompetitivo", "cjc"),
-    START_GAME("iniciarJogo", "ij"),
-    START_TURN("iniciarTurno", "it"),
-    JOIN_GAME("juntarJogo", "jj"),
+    SEND_MESSAGE("sendMessage", "sm", "sendMessage from=joaquim to=ana Olá, o meu nome é joaquim!"),
+    ADD_FRIEND("addFriend", "af", "addFriend player=joaquim add=antonio"),
+    BLOCK_PLAYER("blockPlayer", "bp", "blockPlayer player=joaquim block=antonio"),
+    BUY_POKER_CHIPS("comprarPokerChips", "cpc", ""),
+    LIST_PLAYERS("listarJogadores", "lj", ""),
+    LIST_FRIENDS("listFriend", "lf", "listFriend"),
+    LIST_BLOCKED("listBlocked", "lb", "listBlocked"),
+    LIST_FRIENDLY_GAMES("listarJogosAmigáveis", "lja", ""),
+    LIST_COMPETITIVE_GAMES("listarJogosCompetitivos", "ljc", ""),
+    LIST_CHAMPIONSHIPS("listarCampeonatos", "lc", ""),
+    LIST_RANKING("listarPontuações", "lp", ""),
+    CREATE_FRIENDLY_GAME("criarJogoAmigável", "cja", ""),
+    CREATE_COMPETITIVE_GAME("criarJogoCompetitivo", "cjc", ""),
+    START_GAME("iniciarJogo", "ij", ""),
+    START_TURN("iniciarTurno", "it", ""),
+    JOIN_GAME("juntarJogo", "jj", ""),
 
     // Admin commands
-    CREATE_USER("criarJogador", "cj"),
-    EDIT_USER("editarJogador", "ej"),
-    KICK_USER("expulsarJogador", "exj"),
-    CHECK_USER_ACTIVITIES("verificarAtividadesJogador", "vaj"),
-    SEE_GAME("verJogo", "vj"),
-    ADD_GAME("adicionarJogo", "aj"),
-    REMOVE_GAME("removerJogo", "rj"),
+    CREATE_USER("criarJogador", "cj", ""),
+    EDIT_USER("editarJogador", "ej", ""),
+    KICK_USER("expulsarJogador", "exj", ""),
+    CHECK_USER_ACTIVITIES("verificarAtividadesJogador", "vaj", ""),
+    SEE_GAME("verJogo", "vj", ""),
+    ADD_GAME("adicionarJogo", "aj", ""),
+    REMOVE_GAME("removerJogo", "rj", ""),
 
     // Game commands
-    BET("apostar", "a"),
-    CHECK("passar", "p"),
-    FOLD("desistir", "d"),
-    SHOW_GAME_INFO("mostrarDados", "md"),
+    BET("apostar", "a", ""),
+    CHECK("passar", "p", ""),
+    FOLD("desistir", "d", ""),
+    SHOW_GAME_INFO("mostrarDados", "md", ""),
+
+    HELP("help", "h", "1"),
 
     // default value
-    UNKNOWN("Comando desconhecido ... tente outra vez", "UNKNOWN");
+    UNKNOWN("Comando desconhecido ... tente outra vez", "UNKNOWN", "2");
 
     private static final Map<String, ECommand> ENUM_COMMANDS;
     private static final Map<String, ECommand> ENUM_SHORTCUTS;
+    private static final List<String> COMMANDS_EXAMPLE;
 
     static {
         ENUM_COMMANDS = Arrays.stream(ECommand.values())
                 .collect(Collectors.toMap(ECommand::getCommand, Function.identity()));
         ENUM_SHORTCUTS = Arrays.stream(ECommand.values())
                 .collect(Collectors.toMap(ECommand::getShortCut, Function.identity()));
+        COMMANDS_EXAMPLE = Stream.of(ECommand.values())
+                .map(ECommand::getExample)
+                .collect(Collectors.toList());
     }
 
     private final String command;
     private final String shortCut;
+    private final String example;
 
-    ECommand(String command, String shortCut) {
+    ECommand(String command, String shortCut, String example) {
         this.command = command;
         this.shortCut = shortCut;
+        this.example = example;
     }
 
     public static ECommand fromString(String command) {
@@ -90,12 +98,23 @@ public enum ECommand {
         return commands.toString();
     }
 
+    public static void getCommandsExample() {
+        StringBuilder str = new StringBuilder("# Commands example:");
+        COMMANDS_EXAMPLE.forEach((s) -> str.append("\n ").append(s));
+        str.setLength(str.length() - 4); // remove the last 4 appends
+        System.out.println(str);
+    }
+
     public String getCommand() {
         return command;
     }
 
     public String getShortCut() {
         return shortCut;
+    }
+
+    public String getExample() {
+        return example;
     }
 
     @Override

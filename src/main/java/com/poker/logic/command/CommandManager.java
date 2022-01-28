@@ -38,6 +38,10 @@ public class CommandManager {
         return this.applicationData.getOnlinePlayers();
     }
 
+    public void getOnlinePlayersToString() {
+        CommandAdapter.getOnlinePlayersToString(this.getOnlinePlayers());
+    }
+
     public boolean loginUser(String commandLine) {
         return CommandAdapter.loginUser(commandLine, this.getOnlinePlayers());
     }
@@ -64,5 +68,13 @@ public class CommandManager {
 
     public void sendMessage(String commandLine) {
         CommandAdapter.sendMessage(commandLine, this.getOnlinePlayers());
+    }
+
+    public void addFriend(String commandLine) {
+        CommandAdapter.addFriend(commandLine, this.getOnlinePlayers());
+    }
+
+    public void blockPlayer(String commandLine) {
+        CommandAdapter.blockPlayer(commandLine, this.getOnlinePlayers());
     }
 }
