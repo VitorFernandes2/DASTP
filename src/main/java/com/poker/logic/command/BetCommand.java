@@ -3,6 +3,8 @@ package com.poker.logic.command;
 import com.poker.logic.ApplicationData;
 import com.poker.utils.StringUtils;
 
+import java.util.Map;
+
 public class BetCommand implements ICommand {
 
     private final CommandAction commandAction;
@@ -12,9 +14,15 @@ public class BetCommand implements ICommand {
     }
 
     public BetCommand(String commandLine) throws Exception {
-        this.commandAction = convertStringToCommandAction(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        if (command.size() < 5)
+            throw new Exception("Can't create Bet Command!");
+        else
+            this.commandAction = new CommandAction(command.get("game"), command.get("player"),
+                    Double.parseDouble(command.get("amount")));
     }
 
+    // TODO: to be removed (old version)
     private CommandAction convertStringToCommandAction(String commandLine) throws Exception {
         String[] tokens = StringUtils.tokenizeString(commandLine);
 

@@ -1,14 +1,10 @@
 package com.poker.logic.game;
 
-import com.poker.logic.factory.card.CardFactory;
 import com.poker.logic.game.logic.GameEngine;
 import com.poker.logic.game.state.BuyInState;
 import com.poker.logic.game.state.IGameState;
-import com.poker.model.card.ICard;
 import com.poker.model.player.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -16,60 +12,51 @@ public class Game {
     private final String gameName;
     private final Player creator;
     private final ETypeOfGame typeOfGame;
-    private Player dealer;
     private final int minimumPlayers;
     private final int minimumAmount;
     private final GameEngine gameEngine;
-    private final List<ICard> deck;
-    private final List<ICard> tableCards;
+    private IGameState state;
 
-    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, IGameState state) {
+    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount) {
         this.gameName = gameName;
         this.typeOfGame = typeOfGame;
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
-        this.gameEngine = new GameEngine(players, state);
-        CardFactory factory = new CardFactory();
-        this.dealer = null;
-        this.deck = factory.createDeck();
-        this.tableCards = new ArrayList<>();
+        this.gameEngine = new GameEngine(players);
+        this.state = new BuyInState(this.gameEngine);
     }
 
     public String getGameName() {
         return gameName;
     }
 
-    public Player getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(Player dealer) {
-        this.dealer = dealer;
-    }
-
     public boolean addUserToGame(Player player) {
         return this.gameEngine.addUserToGame(player);
     }
 
-    public boolean startGame(Player player) {
-        if (creator.equals(player)) {
-            this.gameEngine.startGame(this);
-            return true;
-        }
-        return false;
+    public void startGame(Player player) {
+        setState(this.state.startGame(player.getName(), creator.getName()));
+    }
+
+    public void startTurn() {
+        setState(this.state.startTurn());
     }
 
     public void bet(String playerName, Double amount) {
-        this.gameEngine.bet(this);
+        setState(this.state.bet(playerName, amount));
     }
 
     public void fold(String playerName, Double amount) {
-        this.gameEngine.fold(this);
+        setState(this.state.fold(playerName));
     }
 
     public void check(String playerName) {
-        this.gameEngine.check(this);
+        setState(this.state.check(playerName));
+    }
+
+    public void setState(IGameState state) {
+        this.state = state;
     }
 
     public static class Builder {
@@ -117,7 +104,7 @@ public class Game {
             if (isValid()) {
                 return null;
             }
-            return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount, new BuyInState());
+            return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount);
         }
     }
 }

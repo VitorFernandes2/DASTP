@@ -1,6 +1,8 @@
 package com.poker.model.enums;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,11 +28,17 @@ public enum ECommand {
     LIST_COMPETITIVE_GAMES("listarJogosCompetitivos", "ljc", ""),
     LIST_CHAMPIONSHIPS("listarCampeonatos", "lc", ""),
     LIST_RANKING("listarPontuações", "lp", ""),
-    CREATE_FRIENDLY_GAME("criarJogoAmigável", "cja", ""),
+    CREATE_FRIENDLY_GAME("createFriendlyGame", "cfg", "createFriendlyGame name=jogo1 creator=lj"),
     CREATE_COMPETITIVE_GAME("criarJogoCompetitivo", "cjc", ""),
-    START_GAME("iniciarJogo", "ij", ""),
+    START_GAME("startGame", "sg", "startGame name=jogo1 player=lj"),
     START_TURN("iniciarTurno", "it", ""),
-    JOIN_GAME("juntarJogo", "jj", ""),
+    JOIN_GAME("joinGame", "jg", "joinGame name=jogo1 player=ana"),
+
+    // In-Game commands
+    BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
+    CHECK("passar", "p", ""),
+    FOLD("desistir", "d", ""),
+    SHOW_GAME_INFO("mostrarDados", "md", ""),
 
     // Admin commands
     CREATE_USER("criarJogador", "cj", ""),
@@ -40,12 +48,6 @@ public enum ECommand {
     SEE_GAME("verJogo", "vj", ""),
     ADD_GAME("adicionarJogo", "aj", ""),
     REMOVE_GAME("removerJogo", "rj", ""),
-
-    // Game commands
-    BET("apostar", "a", ""),
-    CHECK("passar", "p", ""),
-    FOLD("desistir", "d", ""),
-    SHOW_GAME_INFO("mostrarDados", "md", ""),
 
     HELP("help", "h", "1"),
 
