@@ -6,6 +6,8 @@ import com.poker.model.enums.ECommand;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
+import static com.poker.tests.MockCommands.CREATE_GAME;
+
 public class TextUI {
 
     private final ApplicationFacade logic;
@@ -26,7 +28,12 @@ public class TextUI {
 
         while (running) {
             System.out.print("♠ POKER  $ ");
-            String commandLine = StringUtils.readString();
+            String commandLine;
+            if (CREATE_GAME.isEmpty()) {
+                commandLine = StringUtils.readString();
+            } else {
+                commandLine = CREATE_GAME.remove(0);
+            }
             String[] tokens = StringUtils.tokenizeString(commandLine);
 
             if (tokens.length > 0) {
@@ -52,7 +59,7 @@ public class TextUI {
                     case BLOCK_PLAYER:
                         logic.blockPlayer(commandLine);
                         break;
-                        //FIXME: remove blocked and added players or not
+                    //FIXME: remove blocked and added players or not
                     case SEND_MESSAGE:
                         logic.sendMessage(commandLine);
                         break;
@@ -70,20 +77,21 @@ public class TextUI {
                         System.out.println(joinedGame ? "User joined the game" : "User couldn't join the game!");
                         break;
                     case START_GAME:
-                        boolean gameStarted = logic.startGame(commandLine);
-                        System.out.println(gameStarted ? "Game started" : "Game could not be started");
+                        logic.startGame(commandLine);
+                        logic.startTurn(commandLine);
+//                        System.out.println(gameStarted ? "Game started" : "Game could not be started");
                         break;
                     case BET:
                         boolean betted = logic.bet(commandLine);
-                        System.out.println(betted ? "Bet correctly made" : "Can't perform bet");
+//                        System.out.println(betted ? "Bet correctly made" : "Can't perform bet");
                         break;
                     case CHECK:
                         boolean skipped = logic.check(commandLine);
-                        System.out.println(skipped ? "Skip correctly made" : "Can't perform skip");
+//                        System.out.println(skipped ? "Skip correctly made" : "Can't perform skip");
                         break;
                     case FOLD:
                         boolean gaveUp = logic.fold(commandLine);
-                        System.out.println(gaveUp ? "User gave up" : "Can't perform gave up for the selected user");
+//                        System.out.println(gaveUp ? "User gave up" : "Can't perform gave up for the selected user");
                         break;
                     case SHOW_GAME_INFO:
                         logic.showGameInfo(commandLine);
@@ -91,7 +99,11 @@ public class TextUI {
                     case SHUTDOWN:
                         running = false;
                         break;
-                    default: ECommand.getCommandsExample();
+                    case HELP:
+                        ECommand.getCommandsExample();
+                        break;
+                    default:
+                        System.out.println("Wrong command ... please try again! Insert 'h' or 'help' to check the commands list!");
                 }
             }
         }

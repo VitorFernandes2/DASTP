@@ -14,18 +14,19 @@ public class CommandManager {
 
     public CommandManager(ApplicationData applicationData) {
         this.applicationData = applicationData;
-        this.undoList= new ArrayList<>();
+        this.undoList = new ArrayList<>();
         this.redoList = new ArrayList<>();
     }
 
     public void apply(ICommand command) {
         command.execute(applicationData);
+        // TODO: only add if done with success
         undoList.add(command);
         redoList.clear();
     }
 
     public void undo() {
-        if(undoList.isEmpty()) {
+        if (undoList.isEmpty()) {
             return;
         }
 
@@ -58,8 +59,8 @@ public class CommandManager {
         return CommandAdapter.createFriendlyGame(commandLine, this.applicationData);
     }
 
-    public boolean startGame(String commandLine) {
-        return CommandAdapter.startGame(commandLine, this.applicationData);
+    public void startGame(String commandLine) {
+        CommandAdapter.startGame(commandLine, this.applicationData);
     }
 
     public boolean joinGame(String commandLine) {
@@ -76,5 +77,9 @@ public class CommandManager {
 
     public void blockPlayer(String commandLine) {
         CommandAdapter.blockPlayer(commandLine, this.getOnlinePlayers());
+    }
+
+    public void startTurn(String commandLine) {
+        CommandAdapter.startTurn(commandLine, applicationData);
     }
 }

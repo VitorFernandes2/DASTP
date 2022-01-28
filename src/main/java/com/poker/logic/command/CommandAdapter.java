@@ -22,6 +22,7 @@ public class CommandAdapter {
     public static boolean addUser(String commandLine, Map<String, Player> playerList) {
         String[] tokens = StringUtils.tokenizeString(commandLine);
 
+        // TODO: Optimize this code
         if (tokens.length > 1) {
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
@@ -63,6 +64,7 @@ public class CommandAdapter {
     public static boolean loginUser(String commandLine, Map<String, Player> playerList) {
         String[] tokens = StringUtils.tokenizeString(commandLine);
 
+        // TODO: Optimize this code
         if (tokens.length > 1) {
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
@@ -96,7 +98,7 @@ public class CommandAdapter {
     private static void notifyNewLogin(Map<String, Player> onlinePlayers, String name) {
         // notify each online player if some of is friends logged in
         onlinePlayers.forEach((s, player) -> player.getFriends().forEach(friendName -> {
-            if(name.equals(friendName))
+            if (name.equals(friendName))
                 System.out.println("[System][To:" + player.getName() + "] The player " + name + " logged in!");
         }));
     }
@@ -111,6 +113,7 @@ public class CommandAdapter {
         double value = 0;
         String method = "";
 
+        // TODO: Optimize this code
         if (tokens.length > 1) {
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
@@ -152,11 +155,12 @@ public class CommandAdapter {
         String senderName = command.get("from");
         String receiverName = command.get("to");
 
+        // check if the players exists on the BD
         try {
-            if(!DatabaseUtils.playerExistsByName(senderName)) {
+            if (!DatabaseUtils.playerExistsByName(senderName)) {
                 System.out.println("[System] " + senderName + " doesn't exist!");
                 return;
-            } else if(!DatabaseUtils.playerExistsByName(receiverName)) {
+            } else if (!DatabaseUtils.playerExistsByName(receiverName)) {
                 System.out.println("[System] " + receiverName + " doesn't exist!");
                 return;
             }
@@ -171,30 +175,21 @@ public class CommandAdapter {
         }
 
         System.out.println(!inPlayersArray(onlinePlayers, receiverName) ?
-                        "[System] " + receiverName + " is offline!" :
+                "[System] " + receiverName + " is offline!" :
                 onlinePlayers.get(receiverName).getPlayersBlocked().contains(senderName) ?
-                       "[System] You can't send messages to this user!" :
-                "[From:" + senderName + "][To:" + receiverName + "] "
-                        + command.get(Constants.COMMAND_LAST_DIVISION));
+                        "[System] You can't send messages to this user!" :
+                        "[From:" + senderName + "][To:" + receiverName + "] "
+                                + command.get(Constants.COMMAND_LAST_DIVISION));
     }
 
     public static boolean createFriendlyGame(String commandLine, ApplicationData data) {
-        String[] tokens = StringUtils.tokenizeString(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
         Map<String, Player> playerList = data.getOnlinePlayers();
 
-        if (tokens.length > 1) {
-            String gameName = "";
-            String creator = "";
-
-            for (int i = 1; i < tokens.length; i++) {
-                if (tokens[i].contains("name=")) {
-                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
-                    gameName = parameters[1];
-                } else if (tokens[i].contains("creator=")) {
-                    String[] parameters = StringUtils.tokenizeString(tokens[i], "creator=");
-                    creator = parameters[1];
-                }
-            }
+        // TODO: Optimize this code
+        if (command.size() > 3) {
+            String gameName = command.get("name");
+            String creator = command.get("creator");
 
             if (!gameName.equals("") && !creator.equals("")) {
                 Player player = playerList.get(creator);
@@ -222,6 +217,7 @@ public class CommandAdapter {
         Map<String, Player> playerList = data.getOnlinePlayers();
         Map<String, Game> gameList = data.getGamesList();
 
+        // TODO: Optimize this code
         if (tokens.length > 1) {
             String gameName = "";
             String playerName = "";
@@ -249,18 +245,19 @@ public class CommandAdapter {
         return false;
     }
 
-    public static boolean startGame(String commandLine, ApplicationData data) {
+    public static void startGame(String commandLine, ApplicationData data) {
         String[] tokens = StringUtils.tokenizeString(commandLine);
         Map<String, Player> playerList = data.getOnlinePlayers();
         Map<String, Game> gameList = data.getGamesList();
 
+        // TODO: Optimize this code
         if (tokens.length > 1) {
             String gameName = "";
             String playerName = "";
 
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
-                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name=");
+                    String[] parameters = StringUtils.tokenizeString(tokens[i], "name="); // TODO: change this to "game"
                     gameName = parameters[1];
                 } else if (tokens[i].contains("player=")) {
                     String[] parameters = StringUtils.tokenizeString(tokens[i], "player=");
@@ -273,12 +270,21 @@ public class CommandAdapter {
                 if (!Objects.isNull(game) && !playerName.equals("")) {
                     Player player = playerList.get(playerName);
                     if (!Objects.isNull(player)) {
-                        return game.startGame(player);
+                        game.startGame(player);
+                        System.out.println("Game started");
+                        return;
                     }
                 }
             }
         }
-        return false;
+        System.out.println("Game not started");
+    }
+
+    public static void startTurn(String commandLine, ApplicationData data) {
+        LOG.addLog(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String gameName = command.get("name"); // TODO: change this to "game"
+        data.getGamesList().get(gameName).startTurn();
     }
 
     public static void getOnlinePlayersToString(Map<String, Player> onlinePlayers) {

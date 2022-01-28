@@ -1,61 +1,68 @@
 package com.poker.logic.game.logic;
 
-import com.poker.logic.game.Game;
-import com.poker.logic.game.state.DealerButtonState;
+import com.poker.logic.factory.card.CardFactory;
+import com.poker.model.card.ICard;
 import com.poker.model.player.Player;
-import com.poker.logic.game.state.IGameState;
 import com.poker.utils.MapUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * In this class must be all the components that can simplify the logic functions
  */
 public class GameEngine {
-
     private final Map<String, Player> players;
-    private IGameState state;
+    private final Queue<String> queuePlayOrder;
+    private final List<ICard> deck;
+    private final List<ICard> tableCards;
+    private Player dealer;
 
-    public GameEngine(Map<String, Player> players, IGameState state) {
+    public GameEngine(Map<String, Player> players) {
         this.players = players;
-        this.state = state;
+        queuePlayOrder = new ArrayDeque<>();
+        this.dealer = null;
+        this.deck = new CardFactory().createDeck();
+        this.tableCards = new ArrayList<>();
     }
 
     public boolean userInGame(String username) {
         return !Objects.isNull(this.players.get(username));
     }
 
+    // TODO: remove player from this game or player leaving
+    // TODO: generalize this method for all games or validate in another place TBC
     public boolean addUserToGame(Player player) {
         if (!this.userInGame(player.getName())) {
             //TODO: remove game money
-            this.players.put(player.getName(),player);
+            this.players.put(player.getName(), player);
             return true;
         }
         return false;
     }
 
-    public void startGame(Game game) {
-        this.state = this.state.startGame();
-    }
-
-    public void startTurn(Game game) throws Exception {
-        if (this.state instanceof DealerButtonState) {
-            this.chooseDealer(game);
+    public boolean startGame(String playerName, String creatorName) {
+        // TODO: validate min numbers of players
+        if (creatorName.equals(playerName)) {
+            players.forEach((s, player) -> queuePlayOrder.add(s));
+            return true;
         }
-        this.state = this.state.startTurn();
+        return false;
     }
 
-    private void chooseDealer(Game game) throws Exception {
-        Player dealer = game.getDealer();
+    public void startTurn() throws Exception {
+        System.out.println("Start new turn!");
+        if (queuePlayOrder.size() == 0) fillQueue();
+        // TODO: check if is the last turn and return true
+        this.chooseDealer(dealer);
+    }
+
+    // TODO: maybe move this to a GameUtils
+    private void chooseDealer(Player dealer) throws Exception {
         if (Objects.isNull(dealer)) {
-            //TODO: use the correct implementation of dealer choose
+            //TODO: [IMPROVEMENT] use the correct implementation of dealer choose (witch one take a card and the higher one start the game and receive the dealer)
             if (this.players.size() > 0) {
                 Map.Entry<String, Player> newDealerSet = this.players.entrySet().iterator().next();
-                Player newDealer = newDealerSet.getValue();
-                game.setDealer(newDealer);
+                setDealer(newDealerSet.getValue());
             } else {
                 throw new Exception("No players found!");
             }
@@ -64,9 +71,9 @@ public class GameEngine {
                 MapUtils<String, Player> mapUtils = new MapUtils<>();
                 int position = mapUtils.getMapPosition(this.players, dealer.getName());
                 if (position >= 0) {
-                    int newDealerPosition = (position==(this.players.size()-1)) ? 0 : position + 1;
-                    Player value = (new ArrayList<Player>(((LinkedHashMap<String, Player>)this.players).values())).get(newDealerPosition);
-                    game.setDealer(value);
+                    int newDealerPosition = (position == (this.players.size() - 1)) ? 0 : position + 1;
+                    Player newDealer = (new ArrayList<>(this.players.values())).get(newDealerPosition);
+                    setDealer(newDealer);
                 }
             } else {
                 throw new Exception("No players found!");
@@ -74,15 +81,42 @@ public class GameEngine {
         }
     }
 
-    public void bet(Game game) {
-        this.state.bet();
+    public boolean bet(String playerName, double amount) {
+        if (!playerName.equals(queuePlayOrder.peek())) {
+            System.out.println(queuePlayOrder.peek() + " needs to bet first!");
+            return false;
+        }
+        System.out.println("Player: " + playerName + " made a bet of " + amount + " PCJs");
+        queuePlayOrder.remove(playerName);
+        // TODO: bet logic
+        return queuePlayOrder.size() == 0;
     }
 
-    public void fold(Game game) {
-        this.state.fold();
+    public void fold(String playerName) {
     }
 
-    public void check(Game game) {
-        this.state.check();
+    public void check(String playerName) {
     }
+
+    private void fillQueue() {
+        players.forEach((s, player) -> queuePlayOrder.add(s));
+    }
+
+    //<editor-fold defaultstate="collapsed" desc=" Gets and Sets ">
+    public List<ICard> getDeck() {
+        return deck;
+    }
+
+    public List<ICard> getTableCards() {
+        return tableCards;
+    }
+
+    public Player getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Player dealer) {
+        this.dealer = dealer;
+    }
+    //</editor-fold>
 }

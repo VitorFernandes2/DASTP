@@ -32,8 +32,8 @@ public class ApplicationFacade {
         return commandManager.joinGame(commandLine);
     }
 
-    public boolean startGame(String commandLine) {
-        return commandManager.startGame(commandLine);
+    public void startGame(String commandLine) {
+        commandManager.startGame(commandLine);
     }
 
     public boolean bet(String commandLine) {
@@ -81,5 +81,9 @@ public class ApplicationFacade {
 
     public void blockPlayer(String commandLine) {
         commandManager.blockPlayer(commandLine);
+    }
+
+    public void startTurn(String commandLine) {
+        commandManager.startTurn(commandLine);
     }
 }
