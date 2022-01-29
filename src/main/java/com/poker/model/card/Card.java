@@ -9,6 +9,7 @@ public class Card implements ICard {
         this.cardValue = cardValue;
     }
 
+    @Override
     public Integer getCardValue() {
         return cardValue;
     }
