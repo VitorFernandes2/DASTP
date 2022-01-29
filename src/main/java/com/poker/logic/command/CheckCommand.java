@@ -21,7 +21,6 @@ public class CheckCommand implements ICommand {
         if (tokens.length > 1) {
             String gameName = "";
             String playerName = "";
-            double value = 0;
 
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
@@ -32,7 +31,7 @@ public class CheckCommand implements ICommand {
                     playerName = parameters[1];
                 }
             }
-            return new CommandAction(gameName, playerName, value);
+            return new CommandAction(gameName, playerName, null);
         } else {
             throw new Exception("Can't create Bet Command!");
         }

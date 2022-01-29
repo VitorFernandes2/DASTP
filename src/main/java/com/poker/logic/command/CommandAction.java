@@ -3,9 +3,9 @@ package com.poker.logic.command;
 public class CommandAction {
     private final String game;
     private final String playerName;
-    private final Double amount;
+    private final Integer amount;
 
-    public CommandAction(String game, String playerName, Double amount) {
+    public CommandAction(String game, String playerName, Integer amount) {
         this.game = game;
         this.playerName = playerName;
         this.amount = amount;
@@ -19,7 +19,7 @@ public class CommandAction {
         return playerName;
     }
 
-    public Double getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 }

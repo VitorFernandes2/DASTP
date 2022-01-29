@@ -19,7 +19,7 @@ public class BetCommand implements ICommand {
             throw new Exception("Can't create Bet Command!");
         else
             this.commandAction = new CommandAction(command.get("game"), command.get("player"),
-                    Double.parseDouble(command.get("amount")));
+                    Integer.parseInt(command.get("amount")));
     }
 
     // TODO: to be removed (old version)
@@ -29,7 +29,7 @@ public class BetCommand implements ICommand {
         if (tokens.length > 1) {
             String gameName = "";
             String playerName = "";
-            double value = 0;
+            Integer value = 0;
 
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
@@ -41,7 +41,7 @@ public class BetCommand implements ICommand {
                 } else if (tokens[i].contains("value=")) {
                     String[] parameters = StringUtils.tokenizeString(tokens[i], "value=");
                     String valueStr = parameters[1];
-                    value = Double.parseDouble(valueStr);
+                    value = Integer.parseInt(valueStr);
                 }
             }
             return new CommandAction(gameName, playerName, value);

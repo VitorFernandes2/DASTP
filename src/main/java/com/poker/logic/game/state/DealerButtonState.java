@@ -9,9 +9,9 @@ public class DealerButtonState extends StateAdapter {
     }
 
     @Override
-    public IGameState startTurn() {
+    public IGameState startRound() {
         try {
-            getGameEngine().startTurn();
+            getGameEngine().startRound();
             return new DealingState(getGameEngine());
         } catch (Exception e) {
             e.printStackTrace();
