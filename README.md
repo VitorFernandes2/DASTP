@@ -13,7 +13,7 @@ __Git behaviours:__
 
 ____
 
-# Game Rules - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)
+# Game Rules - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)  | [link_3](https://pt.wikipedia.org/wiki/Texas_hold_%27em)
 
 #### Important Notes:
 - A graphical application with a command line that manages all user actions.
