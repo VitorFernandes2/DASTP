@@ -3,9 +3,9 @@ package com.poker.logic.game.state;
 public interface IGameState {
     IGameState startGame(String playerName, String creatorName);
 
-    IGameState startTurn();
+    IGameState startRound();
 
-    IGameState bet(String playerName, double amount);
+    IGameState bet(String playerName, Integer amount);
 
     IGameState check(String playerName);
 

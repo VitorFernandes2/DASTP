@@ -15,12 +15,12 @@ public class StateAdapter implements IGameState {
     }
 
     @Override
-    public IGameState startTurn() {
+    public IGameState startRound() {
         return this;
     }
 
     @Override
-    public IGameState bet(String playerName, double amount) {
+    public IGameState bet(String playerName, Integer amount) {
         return this;
     }
 

@@ -55,8 +55,12 @@ public class Wallet {
         this.pokerGameChips += pokerGameChips;
     }
 
-    public void removePokerGameChips(int pokerGameChips) {
-        this.pokerGameChips -= pokerGameChips;
+    public boolean removePokerGameChips(int pokerGameChips) {
+        if (this.pokerGameChips <= pokerGameChips) {
+            this.pokerGameChips -= pokerGameChips;
+            return true;
+        }
+        return false;
     }
 
     public void resetPokerGameChips() {

@@ -40,14 +40,14 @@ public class Game {
     }
 
     public void startTurn() {
-        setState(this.state.startTurn());
+        setState(this.state.startRound());
     }
 
-    public void bet(String playerName, Double amount) {
+    public void bet(String playerName, Integer amount) {
         setState(this.state.bet(playerName, amount));
     }
 
-    public void fold(String playerName, Double amount) {
+    public void fold(String playerName) {
         setState(this.state.fold(playerName));
     }
 

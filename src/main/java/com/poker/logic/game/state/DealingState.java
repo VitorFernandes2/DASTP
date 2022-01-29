@@ -9,9 +9,14 @@ public class DealingState extends StateAdapter {
     }
 
     @Override
-    public IGameState bet(String playerName, double amount) {
-        boolean endTurn = getGameEngine().bet(playerName, amount);
-        return endTurn ? new DealerButtonState(getGameEngine()) : this;
+    public IGameState bet(String playerName, Integer amount) {
+        boolean turnCard = getGameEngine().bet(playerName, amount);
+        // This will be true in the end of each round
+        if(turnCard) {
+            if(!getGameEngine().turnCard())
+                return new DealerButtonState(getGameEngine());
+        }
+        return this;
     }
 
     @Override
