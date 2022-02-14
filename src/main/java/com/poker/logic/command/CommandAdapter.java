@@ -1,6 +1,11 @@
 package com.poker.logic.command;
 
 import com.poker.logic.ApplicationData;
+import com.poker.logic.factory.EFactory;
+import com.poker.logic.factory.FactoryProvider;
+import com.poker.logic.factory.card.CardFactory;
+import com.poker.logic.factory.game.GameCreationData;
+import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
@@ -194,7 +199,7 @@ public class CommandAdapter {
                                 + command.get(Constants.COMMAND_LAST_DIVISION));
     }
 
-    public static boolean createFriendlyGame(String commandLine, ApplicationData data) {
+    public static boolean createGame(String commandLine, ApplicationData data, ETypeOfGame typeOfGame) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         Map<String, Player> playerList = data.getOnlinePlayers();
 
@@ -209,13 +214,14 @@ public class CommandAdapter {
                     Map<String, Player> players = new LinkedHashMap<>();
                     players.put(creator, player);
 
-                    Game game = new Game.Builder(gameName)
-                            .setMinimumPlayers(Constants.FRIENDLY_GAME_MINIMUM_PLAYERS)
-                            .setMinimumAmount(0)
-                            .setPlayers(players)
-                            .setTypeOfGame(ETypeOfGame.FRIENDLY)
-                            .setCreator(player)
-                            .build();
+                    GameFactory factory = (GameFactory) FactoryProvider.getFactory(EFactory.GAMES);
+
+                    if (factory == null) {
+                        return false;
+                    }
+
+                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, players, player);
+                    Game game = factory.createObject(gameCreationData);
 
                     return data.addGame(game);
                 }

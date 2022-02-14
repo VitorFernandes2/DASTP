@@ -1,5 +1,7 @@
 package com.poker.tests;
 
+import com.poker.logic.factory.EFactory;
+import com.poker.logic.factory.FactoryProvider;
 import com.poker.logic.factory.card.CardFactory;
 import com.poker.logic.game.logic.score.Score;
 import com.poker.model.card.ICard;
@@ -11,8 +13,8 @@ public class ScoreTest {
     private static final Score SCORE = Score.getInstance();
 
     public static void main(String[] args) {
-        var cardFactory = new CardFactory();
-        List<ICard> deck = cardFactory.createDeck();
+        CardFactory cardFactory = (CardFactory) FactoryProvider.getFactory(EFactory.CARDS);
+        List<ICard> deck = cardFactory.createObject(null);
         List<ICard> hand = new ArrayList<>();
         System.out.println("number of cards in the deck: " + deck.size());
         for (ICard card : deck) {

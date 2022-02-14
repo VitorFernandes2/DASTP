@@ -12,4 +12,13 @@ public class MockCommands {
             "joinGame name=jogo1 player=ana",
             "startGame name=jogo1 player=lj"
     ));
+
+    public static final List<String> CREATE_COMPETITIVE_GAME = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "cjc name=jogo1 creator=lj",
+            "log name=ana",
+            "joinGame name=jogo1 player=ana",
+            "startGame name=jogo1 player=lj"
+    ));
 }

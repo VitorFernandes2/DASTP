@@ -1,6 +1,7 @@
 package com.poker.logic.command;
 
 import com.poker.logic.ApplicationData;
+import com.poker.logic.game.ETypeOfGame;
 import com.poker.model.player.Player;
 
 import java.util.ArrayList;
@@ -60,7 +61,11 @@ public class CommandManager {
     }
 
     public boolean createFriendlyGame(String commandLine) {
-        return CommandAdapter.createFriendlyGame(commandLine, this.applicationData);
+        return CommandAdapter.createGame(commandLine, this.applicationData, ETypeOfGame.FRIENDLY);
+    }
+
+    public boolean createCompetitiveGame(String commandLine) {
+        return CommandAdapter.createGame(commandLine, this.applicationData, ETypeOfGame.COMPETITIVE);
     }
 
     public void startGame(String commandLine) {
