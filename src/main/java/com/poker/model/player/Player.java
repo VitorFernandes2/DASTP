@@ -1,5 +1,6 @@
 package com.poker.model.player;
 
+import com.poker.model.card.Card;
 import com.poker.model.wallet.Wallet;
 
 import java.util.ArrayList;
@@ -10,12 +11,14 @@ public class Player {
     private final Wallet wallet;
     private final List<String> friends;
     private final List<String> playersBlocked;
+    private Card[] gameCards;
 
     public Player(String name) {
         this.name = name;
         this.wallet = new Wallet(0, 0, 0);
         this.friends = new ArrayList<>();
         this.playersBlocked = new ArrayList<>();
+        this.gameCards = null;
     }
 
     public Player(String name, Wallet wallet) {
@@ -23,6 +26,7 @@ public class Player {
         this.wallet = wallet;
         this.friends = new ArrayList<>();
         this.playersBlocked = new ArrayList<>();
+        this.gameCards = null;
     }
 
     public String getName() {
@@ -71,5 +75,13 @@ public class Player {
 
     public void removeBlockedPlayer(String name) {
         playersBlocked.remove(name);
+    }
+
+    public Card[] getGameCards() {
+        return gameCards;
+    }
+
+    public void setGameCards(Card[] gameCards) {
+        this.gameCards = gameCards;
     }
 }
