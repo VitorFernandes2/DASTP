@@ -25,7 +25,7 @@ public class GameEngine {
         this.players = players;
         queuePlayOrder = new ArrayDeque<>();
         this.dealer = null;
-        this.deck = new CardFactory().createDeck();
+        this.deck = new CardFactory().createObject(null);
         this.tableCards = new ArrayList<>();
         this.pot = 0;
         roundState = RoundState.FIRST_STATE;

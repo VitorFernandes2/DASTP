@@ -32,6 +32,10 @@ public class ApplicationFacade {
         return commandManager.createFriendlyGame(commandLine);
     }
 
+    public boolean createCompetitiveGame(String commandLine) {
+        return commandManager.createCompetitiveGame(commandLine);
+    }
+
     public boolean joinGame(String commandLine) {
         return commandManager.joinGame(commandLine);
     }
