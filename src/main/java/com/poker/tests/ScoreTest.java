@@ -1,9 +1,8 @@
 package com.poker.tests;
 
 import com.poker.logic.factory.card.CardFactory;
-import com.poker.logic.score.Score;
+import com.poker.logic.game.logic.score.Score;
 import com.poker.model.card.ICard;
-import com.poker.model.filter.Log;
 
 import java.util.ArrayList;
 import java.util.List;

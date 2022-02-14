@@ -15,6 +15,9 @@ public class DealingState extends StateAdapter {
         if(turnCard) {
             if(!getGameEngine().turnCard())
                 return new DealerButtonState(getGameEngine());
+            else {
+                // TODO: Deal with end game ...
+            }
         }
         return this;
     }

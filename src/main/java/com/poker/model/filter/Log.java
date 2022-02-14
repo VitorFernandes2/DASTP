@@ -21,12 +21,22 @@ public class Log implements ILog {
     }
 
     /**
-     * Function to add new successful actions and system commands into log entries.
+     * Function to add and show the last action and system feedback into log entries.
      *
-     * @param command {@link String} - Command inputted into to the system's command line.
+     * @param log {@link String}
      */
-    public void addLog(String command) {
-        logs.add(command);
+    public void addAndShowLog(String log) {
+        System.out.println(log);
+        addLog(log);
+    }
+
+    /**
+     * Function to add the last action and system feedback into log entries.
+     *
+     * @param log {@link String}
+     */
+    public void addLog(String log) {
+        logs.add(log);
     }
 
     /**

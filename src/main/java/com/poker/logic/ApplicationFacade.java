@@ -20,6 +20,10 @@ public class ApplicationFacade {
         return commandManager.loginUser(commandLine);
     }
 
+    public void logoutUser(String commandLine) {
+        commandManager.logoutUser(commandLine);
+    }
+
     public void buyChips(String commandLine) {
         commandManager.buyChips(commandLine);
     }

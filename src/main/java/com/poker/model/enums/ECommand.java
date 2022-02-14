@@ -12,7 +12,7 @@ public enum ECommand {
     LOGIN("login", "log", ""),
     REGISTER("register", "reg", ""),
     SHUTDOWN("shutdown", "std", ""),
-    LOGOUT("logout", "lout", ""),
+    LOGOUT("logout", "lout", "logout name=joaquim"),
     UNDO("undo", "u", ""),
     REDO("redo", "r", ""),
 
