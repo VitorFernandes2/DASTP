@@ -62,9 +62,14 @@ public class CommandAdapter {
     }
 
     public static boolean loginUser(String commandLine, Map<String, Player> playerList) {
+        LOG.addLog(commandLine);
+
+//        Map<String, String> command = StringUtils.mapCommand(commandLine);
+//        String name = command.get("name");
+
+        // TODO: Optimize this code and replace with the code above
         String[] tokens = StringUtils.tokenizeString(commandLine);
 
-        // TODO: Optimize this code
         if (tokens.length > 1) {
             for (int i = 1; i < tokens.length; i++) {
                 if (tokens[i].contains("name=")) {
@@ -93,6 +98,13 @@ public class CommandAdapter {
             }
         }
         return false;
+    }
+
+    public static void logoutUser(String commandLine, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get("name");
+        onlinePlayers.remove(playerName);
     }
 
     private static void notifyNewLogin(Map<String, Player> onlinePlayers, String name) {

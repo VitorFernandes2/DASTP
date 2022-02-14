@@ -1,4 +1,4 @@
-package com.poker.logic.score;
+package com.poker.logic.game.logic.score;
 
 import com.poker.model.card.ICard;
 

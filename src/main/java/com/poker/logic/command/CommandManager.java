@@ -47,6 +47,10 @@ public class CommandManager {
         return CommandAdapter.loginUser(commandLine, this.getOnlinePlayers());
     }
 
+    public void logoutUser(String commandLine) {
+        CommandAdapter.logoutUser(commandLine, this.getOnlinePlayers());
+    }
+
     public boolean addUser(String commandLine) {
         return CommandAdapter.addUser(commandLine, this.getOnlinePlayers());
     }

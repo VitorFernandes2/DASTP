@@ -7,6 +7,9 @@ import com.poker.utils.IntegerUtils;
 import java.util.*;
 
 public class CardFactory implements ICardFactory {
+
+    // TODO: maybe apply the Object Pool Pattern in the cards
+
     @Override
     public ICard createCard() {
         Integer value = IntegerUtils.randomizeInteger(

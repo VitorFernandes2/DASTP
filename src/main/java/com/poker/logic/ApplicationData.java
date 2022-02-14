@@ -10,11 +10,13 @@ import java.util.Objects;
 public class ApplicationData {
     private static final ApplicationData applicationData = new ApplicationData();
     private final Map<String, Player> onlinePlayers;
+    private final Map<String, Player> registeredPlayers;
     private final Map<String, Game> gamesList;
 
     private ApplicationData() {
         this.onlinePlayers = new HashMap<>();
         this.gamesList = new HashMap<>();
+        registeredPlayers = new HashMap<>();
     }
 
     public static ApplicationData getInstance() {
@@ -23,6 +25,10 @@ public class ApplicationData {
 
     public Map<String, Player> getOnlinePlayers() {
         return onlinePlayers;
+    }
+
+    public Map<String, Player> getRegisteredPlayers() {
+        return registeredPlayers;
     }
 
     public Map<String, Game> getGamesList() {

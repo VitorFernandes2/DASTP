@@ -19,6 +19,7 @@ public class GameEngine {
     private Player dealer;
     private Integer pot;
     private RoundState roundState;
+    private Integer higherBet;
 
     public GameEngine(Map<String, Player> players) {
         this.players = players;
@@ -28,6 +29,7 @@ public class GameEngine {
         this.tableCards = new ArrayList<>();
         this.pot = 0;
         roundState = RoundState.FIRST_STATE;
+        this.higherBet = null;
     }
 
     public boolean userInGame(String username) {
@@ -98,10 +100,23 @@ public class GameEngine {
             return false;
         }
 
+        // TODO: [TBC] bet logic (check if the player needs to bet more, history if bets in that turn)
+        if(higherBet == null) {
+            higherBet = amount;
+        } else if(amount < higherBet) {
+            System.out.println("[Game] Player: " + playerName + " need to bet at least " + higherBet + " PCJs");
+            return false;
+        } else if(amount > higherBet) {
+            higherBet = amount;
+            players.forEach((s, player) -> {
+                if(s.equals(playerName)) return; // TODO: TBC
+                queuePlayOrder.add(playerName);
+            });
+        }
+
         addToPot(amount);
         System.out.println("[Game] Player: " + playerName + " made a bet of " + amount + " PCJs");
         queuePlayOrder.remove(playerName);
-        // TODO: bet logic (check if the player needs to bet more, history if bets in that turn)
         return queuePlayOrder.size() == 0;
     }
 
@@ -130,21 +145,34 @@ public class GameEngine {
     }
 
     public boolean turnCard() {
-        if (roundState.equals(RoundState.FOURTH_STATE)) {
-            // TODO: show all cards, calculate the winner and set new cards to the players
-            fillQueue();
-            roundState = RoundState.FIRST_STATE;
+        switch (roundState) {
+            case FIRST_STATE:
+                // TODO: turn Card
+                roundState = RoundState.SECOND_STATE;
+                break;
+            case SECOND_STATE:
+                // TODO: turn Card
+                roundState = RoundState.THIRD_STATE;
+                break;
+            case THIRD_STATE:
+                // TODO: turn Card
+                roundState = RoundState.FOURTH_STATE;
+                break;
+            case FOURTH_STATE:
+                // TODO: show all cards, calculate the winner and set new cards to the players
+                fillQueue();
+                roundState = RoundState.FIRST_STATE;
+                if(endgame()) return true;
+                break;
         }
 
-        if(roundState == RoundState.SECOND_STATE) {
-            // TODO: turn Card
-            roundState = RoundState.THIRD_STATE;
-        }
-        if(roundState == RoundState.THIRD_STATE) {
-            // TODO: turn Card
-            roundState = RoundState.FOURTH_STATE;
-        }
+        // Isn't the last round
         return false;
+    }
+
+    private boolean endgame() {
+        // TODO: check if is the endgame
+        return true;
     }
 
     private void fillQueue() {
