@@ -57,6 +57,9 @@ ____
 
 # Functionalities:
 
+### Game Scenarios:
+- [x] __CREATE_GAME__ -> ~~Login of two users, an user creates a game, an user joins in the game and the game starts~~
+
 ### Games System:
 - [ ] User tells the system that he wants to join that game
 - [ ] Allocate the User to the selected game (only if you have enough PCs for the initial deposit)
@@ -78,7 +81,7 @@ ____
 ### Virtual Money (Poker-Chips == PCs | Poker-Chips-Jogos == PCJs):
 
   - [ ] __Acquisition:__
-    - [ ] Compra no Sistema
+    - [x] ~~Compra no Sistema~~
     - [ ] Ganho em Jogos / Torneios
 
   - [ ] __Utilization:__
@@ -154,11 +157,11 @@ ____
         - [ ] `passa nomeJogo=jogo1 utilizador=ana`
         - [ ] `passa nomeJogo=jogo1 utilizador=joao`
         - [ ] `trocaCartas nomeJogo=jogo1 utilizador=ana quais=aleatório`
-        - [ ] `setCartas nomeJogo=jogo1 utilizador=mesa valor=10H, KH,KD,`
+        - [ ] `setCartas nomeJogo=jogo1 utilizador=mesa valor=10H,KH,KD,`
         - [ ] `setCartas nomeJogo=jogo1 utilizador=ana valor= KS,KC`
         - [ ] `setCartas nomeJogo=jogo1 utilizador=joao valor= 2S,2H`
         - [ ] `aposta nomeJogo=jogo1 utilizador=ana valor=10`
-        - [ ] `mensagem de=joao para=ana msg=boa!`
+        - [x] `mensagem de=joao para=ana msg=boa!`
         - [ ] `aposta nomeJogo=jogo1 utilizador=joao valor=20`
         - [ ] `aposta nomeJogo=jogo1 utilizador=ana valor=40`
         - [ ] `desiste nomeJogo=jogo1 utilizador=joao`
@@ -166,47 +169,54 @@ ____
         - [ ] `undo`
         - [ ] `mostraDados`
         - [ ] `verificaLog utilizador=joao nomeJogo=jogo1`
+        - [x] `logout name`
+        - [x] `cfg` -> create friendly game
 
     - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation
 
 
 ### Implementation Restrictions[^3]
 <!-- Esta parte não foi traduzida por conveniencia atual de trabalho -->
-##### __Padrão Comando__
-  - [x] ~~Padrão Comando~~ -> __Comandos da "Aplicação" CLI__
-
 ##### __Padrões Creacionais__
-  - [x] ~~Fábrica de Objetos~~ -> __[CRUD do Baralho de Cartas](src/main/java/com/poker/factory/card/CardFactory.java)__
-  - [ ] Padrão Protótipo -> fazer clonning
-  - [x] ~~Singleton~~ -> Logs e Application Data
-  - [ ] Object Poll -> ...
-  - [x] ~~Padrão Builders~~ -> __Criação de Jogos__
+  - [x] ~~Fábrica de Objetos~~ -> __[CRUD do Baralho de Cartas](src/main/java/com/poker/factory/card/CardFactory.java)__ [DONE]
+  - [ ] Fábrica de Fábricas de Objetos -> __Criação dos tipos de Jogos__ [WIP]
+  - [ ] Padrão Protótipo -> fazer clonning [WIP]
+  - [x] ~~Singleton~~ -> __Logs e Application Data__ [DONE]
+  - [ ] Object Poll -> ... [WIP]
+  - [x] ~~Padrão Builders~~ -> __Criação de Jogos__ [DONE / WIP]
 
 ##### __Padrões de Persistência__
-  - [ ] Padrão de Registo Ativo
   - [ ] Unit of Work
-  - [ ] Identity Map
+  - [x] Identity Map -> Application Data [DONE]
+
+##### __Padrões Arquiteturais de Persistência__
+  - [ ] Padrão de Registo Ativo / Active Record
+  - [ ] Padrão Table / Gateway
+  - [ ] Padrão Record Gateway
+  - [ ] Padrão Data Mapper
+  - [ ] Padrão Mapeamento
 
 ##### __Padrões de Desenho__
-  - [ ] ~~Estratégias~~ + Padrão Máquina de Estados -> __Regras do Jogo__ [WIP]
-  - [x] ~~Padrão de Decoradores~~ -> __Filtragem de acesso ao logs__
-  - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__
-  - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__
-  - [ ] Padrão Template -> __Implementação de Torneios__
+  - [x] ~~Estratégias~~ + ~~Padrão Máquina de Estados~~ -> __Regras do Jogo__ [WIP]
+  - [x] ~~Padrão de Decoradores~~ -> __Filtragem de acesso ao logs__ [DONE]
+  - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__ [DONE]
+  - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__ [DONE]
+  - [ ] Padrão Template -> __Implementação de ...__ [WIP]
+  - [x] ~~Padrão Comando~~ -> __Comandos da "Aplicação" CLI__ [DONE]
 
 ____
 
 ### GRASP
 ##### __Padrões GRASP__
-  - [x] ~~Perito (de Informação)~~
-  - [x] ~~Criador~~ - Filtro
-  - [x] ~~Baixo Acoplamento~~
-  - [x] ~~Controlador~~ - Facede
-  - [x] ~~Alta Coesão~~
-  - [x] ~~Polimorfismo~~ - Filtro + Estados + Logs + ...
-  - [x] ~~Invenção (Artifício)~~ - Facede
-  - [x] ~~Indirecção~~ - CommandManager + Facede + CommandAdapter
-  - [x] ~~Variação Protegida~~ - CommandManager
+  - [x] ~~Perito (de Informação)~~ -> [DONE]
+  - [x] ~~Criador~~ - Filtro -> [DONE]
+  - [x] ~~Baixo Acoplamento~~ -> [DONE]
+  - [x] ~~Controlador~~ - Facede -> [DONE]
+  - [x] ~~Alta Coesão~~ -> [DONE]
+  - [x] ~~Polimorfismo~~ - Filtro + Estados + Logs + ... -> [DONE]
+  - [x] ~~Invenção (Artifício)~~ - Facede -> [DONE]
+  - [x] ~~Indirecção~~ - CommandManager + Facede + CommandAdapter -> [DONE]
+  - [x] ~~Variação Protegida~~ - CommandManager -> [DONE]
 ____
 
 [^1]: It may undergo changes.
