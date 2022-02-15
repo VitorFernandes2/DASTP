@@ -2,8 +2,9 @@ package com.poker.tests;
 
 import com.poker.logic.factory.EFactory;
 import com.poker.logic.factory.FactoryProvider;
-import com.poker.model.card.ICard;
 import com.poker.logic.factory.card.CardFactory;
+import com.poker.model.card.*;
+import com.poker.utils.CardsUtils;
 
 import java.util.List;
 
@@ -15,5 +16,12 @@ public class CardTest {
         for (ICard card : deck) {
             System.out.println(card.getStringCardValue());
         }
+        System.out.println(CardsUtils.printCards(deck.toArray(ICard[]::new)));
+
+        System.out.println(CardsUtils.printCards(
+                new SpadesCard(11),
+                new HeartsCard(6),
+                new DiamondsCard(5),
+                new ClubsCard(4)));
     }
 }

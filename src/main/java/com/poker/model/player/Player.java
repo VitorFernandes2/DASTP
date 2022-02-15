@@ -1,6 +1,6 @@
 package com.poker.model.player;
 
-import com.poker.model.card.Card;
+import com.poker.model.card.ICard;
 import com.poker.model.wallet.Wallet;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class Player {
     private final Wallet wallet;
     private final List<String> friends;
     private final List<String> playersBlocked;
-    private Card[] gameCards;
+    private ICard[] gameCards;
 
     public Player(String name) {
         this.name = name;
@@ -77,11 +77,11 @@ public class Player {
         playersBlocked.remove(name);
     }
 
-    public Card[] getGameCards() {
+    public ICard[] getGameCards() {
         return gameCards;
     }
 
-    public void setGameCards(Card[] gameCards) {
+    public void setGameCards(ICard[] gameCards) {
         this.gameCards = gameCards;
     }
 }

@@ -3,7 +3,6 @@ package com.poker.logic.command;
 import com.poker.logic.ApplicationData;
 import com.poker.logic.factory.EFactory;
 import com.poker.logic.factory.FactoryProvider;
-import com.poker.logic.factory.card.CardFactory;
 import com.poker.logic.factory.game.GameCreationData;
 import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
@@ -255,7 +254,7 @@ public class CommandAdapter {
                 if (!Objects.isNull(game) && !playerName.equals("")) {
                     Player player = playerList.get(playerName);
                     if (!Objects.isNull(player)) {
-                        return game.addUserToGame(player);
+                        return game.addPlayer(player);
                     }
                 }
             }
@@ -289,13 +288,12 @@ public class CommandAdapter {
                     Player player = playerList.get(playerName);
                     if (!Objects.isNull(player)) {
                         game.startGame(player);
-                        System.out.println("Game started");
                         return;
                     }
                 }
             }
         }
-        System.out.println("Game not started");
+        System.out.println("[Game] Game not started");
     }
 
     public static void startTurn(String commandLine, ApplicationData data) {
@@ -327,5 +325,19 @@ public class CommandAdapter {
         player.blockPlayer(command.get("block"));
         player.removeFriend(command.get("block"));
         System.out.println("Player blocked with success");
+    }
+
+    public static void showGameInfo(String commandLine, Map<String, Game> games) {
+        LOG.addLog(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String gameName = command.get("game");
+        for (Map.Entry<String, Game> entry : games.entrySet()) {
+            String name = entry.getKey();
+            Game game = entry.getValue();
+            if (name.equals(gameName)) {
+                System.out.println(game.showGameInfo(name));
+                break;
+            }
+        }
     }
 }

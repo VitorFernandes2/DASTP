@@ -72,7 +72,7 @@ public class ApplicationFacade {
     }
 
     public void showGameInfo(String commandLine) {
-        //TODO: create implementation
+        commandManager.showGameInfo(commandLine);
     }
 
     public void sendMessage(String commandLine) {

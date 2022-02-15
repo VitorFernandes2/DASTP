@@ -1,9 +1,14 @@
 package com.poker.logic.game.logic;
 
 import com.poker.logic.factory.card.CardFactory;
+import com.poker.logic.game.ETypeOfGame;
 import com.poker.model.card.ICard;
 import com.poker.model.enums.RoundState;
+import com.poker.model.filter.Log;
+import com.poker.model.payment.EServices;
+import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.Player;
+import com.poker.utils.CardsUtils;
 import com.poker.utils.MapUtils;
 
 import java.util.*;
@@ -12,59 +17,92 @@ import java.util.*;
  * In this class must be all the components that can simplify the logic functions
  */
 public class GameEngine {
+    private static final Log LOG = Log.getInstance();
+
+    private final ServiceAdapter walletUtils = new ServiceAdapter(EServices.UNKNOWN);
     private final Map<String, Player> players;
     private final Queue<String> queuePlayOrder;
+    private final Map<String, Integer> playerBetsList;
+    private final List<String> playerFoldList;
     private final List<ICard> deck;
     private final List<ICard> tableCards;
     private Player dealer;
     private Integer pot;
     private RoundState roundState;
     private Integer higherBet;
+    private Integer smallBlind;
+    private Integer bigBlind;
 
-    public GameEngine(Map<String, Player> players) {
+    public GameEngine(Map<String, Player> players, Integer bigBlind) {
         this.players = players;
-        queuePlayOrder = new ArrayDeque<>();
+        this.queuePlayOrder = new ArrayDeque<>();
         this.dealer = null;
         this.deck = new CardFactory().createObject(null);
         this.tableCards = new ArrayList<>();
         this.pot = 0;
-        roundState = RoundState.FIRST_STATE;
+        this.roundState = RoundState.FIRST_STATE;
         this.higherBet = null;
+        this.bigBlind = bigBlind;
+        this.smallBlind = bigBlind / 2;
+        playerBetsList = new HashMap<>();
+        playerFoldList = new ArrayList<>();
     }
 
-    public boolean userInGame(String username) {
+    public boolean playerInGame(String username) {
         return !Objects.isNull(this.players.get(username));
     }
 
-    // TODO: remove player from this game or player leaving
     // TODO: generalize this method for all games or validate in another place TBC
-    public boolean addUserToGame(Player player) {
-        if (!this.userInGame(player.getName())) {
-            //TODO: remove game money
+    // Add player to the game and convert PCs into PCJs
+    public boolean addPlayer(Player player, int entryFee, ETypeOfGame typeOfGame) {
+        if (!this.playerInGame(player.getName())) {
+            //TODO: [TBC] convert PCs into PCJs in a competitive game
+            if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame) && player.getWallet().getPokerChips() >= entryFee) {
+                walletUtils.chipsToGame(entryFee);
+            }
             this.players.put(player.getName(), player);
             return true;
         }
         return false;
     }
 
-    public boolean startGame(String playerName, String creatorName) {
-        // TODO: validate min numbers of players
-        if (creatorName.equals(playerName)) {
+    // Remove player from the game and convert PCJs into PCs
+    public boolean removePlayer(String playerName, ETypeOfGame typeOfGame) {
+        if (this.playerInGame(playerName)) {
+            //TODO: [TBC] convert game money to wallet
+            // TODO: validate if is a friendly game
+            walletUtils.chipsToPocket(players.remove(playerName).getWallet().getPokerGameChips());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean startGame(String playerName, String creatorName, Integer minPlayers) {
+        // TODO: [TBC] validate min numbers of players
+        if (creatorName.equals(playerName) && minPlayers >= players.size()) {
             players.forEach((s, player) -> queuePlayOrder.add(s));
+            System.out.println("[Game] Let's Poker. Good luck!");
             return true;
         }
         return false;
     }
 
     public void startRound() throws Exception {
-        System.out.println("Start new turn!");
         this.chooseDealer(dealer);
-        // TODO: give each player cards
-        // TODO: three cards on the table face down
-        roundState = RoundState.SECOND_STATE;
+        // TODO: [TBC] give each player cards
+        CardsUtils.distributeCardsPerPlayer(players, deck);
+        roundState = RoundState.FIRST_STATE;
+        pot = 0;
+        reset();
     }
 
-    // TODO: maybe move this to a GameUtils
+    private void reset() {
+        higherBet = null;
+        playerBetsList.clear();
+        playerFoldList.clear();
+    }
+
+    // FIXME: maybe move this to a GameUtils
     private void chooseDealer(Player dealer) throws Exception {
         if (Objects.isNull(dealer)) {
             //TODO: [IMPROVEMENT] use the correct implementation of dealer choose (witch one take a card and the higher one start the game and receive the dealer)
@@ -90,8 +128,10 @@ public class GameEngine {
     }
 
     public boolean bet(String playerName, Integer amount) {
+        // Check if is the player turn
         if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println(queuePlayOrder.peek() + " needs to bet first!");
+            System.out.println();
+            LOG.addAndShowLog("[Game] " + queuePlayOrder.peek() + " needs to bet first!");
             return false;
         }
 
@@ -101,18 +141,21 @@ public class GameEngine {
         }
 
         // TODO: [TBC] bet logic (check if the player needs to bet more, history if bets in that turn)
-        if(higherBet == null) {
+        // Compare with the higher bet
+        if (higherBet == null) {
             higherBet = amount;
-        } else if(amount < higherBet) {
+        } else if (amount < higherBet) {
             System.out.println("[Game] Player: " + playerName + " need to bet at least " + higherBet + " PCJs");
             return false;
-        } else if(amount > higherBet) {
+        } else if (amount > higherBet) {
             higherBet = amount;
             players.forEach((s, player) -> {
-                if(s.equals(playerName)) return; // TODO: TBC
-                queuePlayOrder.add(playerName);
+                if (s.equals(playerName)) return;
+                queuePlayOrder.add(s);
             });
         }
+
+        playerBetsList.put(playerName, playerBetsList.containsKey(playerName) ? playerBetsList.get(playerName) + amount : amount);
 
         addToPot(amount);
         System.out.println("[Game] Player: " + playerName + " made a bet of " + amount + " PCJs");
@@ -122,11 +165,15 @@ public class GameEngine {
 
     public boolean check(String playerName) {
         if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println(queuePlayOrder.peek() + " needs to play first!");
+            System.out.println("[Game]" + queuePlayOrder.peek() + " needs to play first!");
             return false;
         }
 
         // TODO: check if the player can check or needs to bet
+        if (higherBet != 0) {
+            System.out.println("[Game] Player: " + playerName + " needs to bet or fold! Value to call: " + higherBet);
+            return false;
+        }
 
         System.out.println("[Game] Player: " + playerName + " Check!");
         queuePlayOrder.remove(playerName);
@@ -135,49 +182,83 @@ public class GameEngine {
 
     public boolean fold(String playerName) {
         if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println(queuePlayOrder.peek() + " needs to wait is turn to give up!");
+            System.out.println("[Game]" + queuePlayOrder.peek() + " needs to wait is turn to give up!");
             return false;
         }
+        // TODO: [TBC] remove from queue and save that he fold from this round
         queuePlayOrder.remove(playerName);
-        int amountInGame = players.remove(playerName).getWallet().getPokerGameChips();
-        // TODO: convert PCJs to PCs
+        playerFoldList.add(playerName);
         return true;
     }
 
     public boolean turnCard() {
         switch (roundState) {
-            case FIRST_STATE:
-                // TODO: turn Card
+            case FIRST_STATE: // 3 cards face down
                 roundState = RoundState.SECOND_STATE;
+                // TODO: show 3 cards face up
+                System.out.println("[Game] show 3 cards face up");
                 break;
-            case SECOND_STATE:
-                // TODO: turn Card
+            case SECOND_STATE: // 3 cards face up
                 roundState = RoundState.THIRD_STATE;
+                // TODO: show 4º card
+                System.out.println("[Game] show 4º card");
                 break;
-            case THIRD_STATE:
-                // TODO: turn Card
+            case THIRD_STATE: // 4º card
                 roundState = RoundState.FOURTH_STATE;
+                // TODO: show 5º card
+                System.out.println("[Game] show 5º card");
                 break;
-            case FOURTH_STATE:
-                // TODO: show all cards, calculate the winner and set new cards to the players
-                fillQueue();
+            case FOURTH_STATE: // show 5º card
                 roundState = RoundState.FIRST_STATE;
-                if(endgame()) return true;
+                // TODO: calculate the winner, info that and set new cards to the players
+                System.out.println("[Game] Winner winner chicken dinner");
+                if (endgame()) return true;
+                break;
+            case FIFTH_STATE:
+                // TODO:
+                System.out.println("Winner winner chicken dinner");
+                if (endgame()) return true;
                 break;
         }
-
+        fillQueue();
         // Isn't the last round
         return false;
     }
 
     private boolean endgame() {
-        // TODO: check if is the endgame
-        return true;
+        // TODO: check if is the endgame check the number of players and the minimum bet
+        // if true show the table winner
+        return false;
     }
 
     private void fillQueue() {
-        if (queuePlayOrder.size() == 0)
-            players.forEach((s, player) -> queuePlayOrder.add(s));
+        if (queuePlayOrder.size() == 0) {
+            players.forEach((s, player) -> {
+                        if (!playerGaveUp(player.getName())) {
+                            queuePlayOrder.add(s);
+                        }
+                    }
+            );
+        }
+    }
+
+    private boolean playerGaveUp(String playerName) {
+        return playerFoldList.contains(playerName);
+    }
+
+    public String showGameInfo(String gameName) {
+        StringBuilder str = new StringBuilder();
+        str.append("$$$$$ Game: ").append(gameName).append(" $$$$$");
+        str.append("\n## Players: [");
+        players.forEach((s, player) -> str.append(s).append(", "));
+        str.setLength(str.length() - 2); // remove the last 2 characters
+        str.append("]");
+        str.append("\n## Table cards: ").append(CardsUtils.printCards(tableCards.toArray(ICard[]::new)));
+        str.append("\n## Pot value: ").append(pot).append(" PCJs");
+        str.append("\n## Next turn: ").append(queuePlayOrder.peek());
+        str.append("\n## Blinds: ").append("S: ").append(smallBlind).append(" | B: ").append(bigBlind);
+        str.append("\n## Higher bet: ").append(higherBet == null ? 0 : higherBet);
+        return str.toString();
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Gets and Sets ">

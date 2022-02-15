@@ -65,11 +65,17 @@ public class ServiceAdapter implements IServiceAdapter {
         return pokerChips / Constants.MONEY_CONVERSION_RATE;
     }
 
+    /**
+     * Convert PCs to PCJs
+     */
     @Override
     public int chipsToGame(int pokerChips) {
         return pokerChips * Constants.PC_CONVERSION_RATE;
     }
 
+    /**
+     * Convert PCJs to PCs
+     */
     @Override
     public int chipsToPocket(int pokerChipsGame) {
         return pokerChipsGame / Constants.PC_CONVERSION_RATE;

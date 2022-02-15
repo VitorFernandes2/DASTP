@@ -10,7 +10,7 @@ public class StateAdapter implements IGameState {
     }
 
     @Override
-    public IGameState startGame(String playerName, String creatorName) {
+    public IGameState startGame(String playerName, String creatorName, int minimumAmount) {
         return this;
     }
 
