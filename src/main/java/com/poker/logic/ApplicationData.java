@@ -49,4 +49,8 @@ public class ApplicationData {
 
         return !exists;
     }
+
+    public Game getGame(String gameName) {
+        return gamesList.get(gameName);
+    }
 }

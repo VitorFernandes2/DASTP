@@ -67,7 +67,6 @@ public class TextUI {
                     case BLOCK_PLAYER:
                         appFacade.blockPlayer(commandLine);
                         break;
-                    //FIXME: remove blocked and added players or not
                     case SEND_MESSAGE:
                         appFacade.sendMessage(commandLine);
                         break;
@@ -107,6 +106,12 @@ public class TextUI {
                         break;
                     case SHOW_GAME_INFO:
                         appFacade.showGameInfo(commandLine);
+                        break;
+                    case UNDO:
+                        appFacade.undo();
+                        break;
+                    case REDO:
+                        appFacade.redo();
                         break;
                     case SHUTDOWN:
                         running = false;

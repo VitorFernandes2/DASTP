@@ -2,6 +2,7 @@ package com.poker.logic.command;
 
 import com.poker.logic.ApplicationData;
 import com.poker.logic.game.ETypeOfGame;
+import com.poker.logic.game.Game;
 import com.poker.model.player.Player;
 
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ import java.util.Map;
 
 public class CommandManager {
     private final ApplicationData applicationData;
-    private final List<ICommand> undoList;
-    private final List<ICommand> redoList;
+    private final List<Game> undoList;
+    private final List<Game> redoList;
 
     public CommandManager(ApplicationData applicationData) {
         this.applicationData = applicationData;
@@ -21,9 +22,25 @@ public class CommandManager {
 
     public void apply(ICommand command) {
         command.execute(applicationData);
-        // TODO: only add if done with success
-        undoList.add(command);
+        Game currentGameCopy;
+        try {
+            currentGameCopy = (Game) applicationData.getGame(command.getGameName()).clone();
+        } catch (CloneNotSupportedException e) {
+            return;
+        }
+        undoList.add(currentGameCopy);
         redoList.clear();
+    }
+
+    public void redo() {
+        if (redoList.isEmpty()) {
+            return;
+        }
+
+        Game nextGame = redoList.get(redoList.size() -1);
+        Game currentGame = applicationData.getGame(nextGame.getGameName());
+        applicationData.getGamesList().put(nextGame.getGameName(), nextGame);
+        undoList.add(currentGame);
     }
 
     public void undo() {
@@ -31,9 +48,10 @@ public class CommandManager {
             return;
         }
 
-        ICommand lastCommand = undoList.remove(undoList.size() - 1);
-        lastCommand.undo(applicationData);
-        redoList.add(lastCommand);
+        Game lastGame = undoList.remove(undoList.size() - 1);
+        Game currentGame = applicationData.getGame(lastGame.getGameName());
+        applicationData.getGamesList().put(lastGame.getGameName(), lastGame);
+        redoList.add(currentGame);
     }
 
     public Map<String, Player> getOnlinePlayers() {

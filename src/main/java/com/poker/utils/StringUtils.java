@@ -25,13 +25,6 @@ public class StringUtils {
         return str.split(regex);
     }
 
-    // FIXME: clean me later xD
-//    public static String[] commandSplit(String str) {
-//        List<String> originalSplit = new ArrayList<>((List.of(tokenizeString(str, "?<==| "))));
-//        originalSplit.removeIf(s -> s.contains("="));
-//        return originalSplit.toArray(String[]::new);
-//    }
-
     /**
      * This method will map all command line to a Map<String,String>.
      * <p><p>

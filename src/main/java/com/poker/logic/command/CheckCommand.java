@@ -39,14 +39,13 @@ public class CheckCommand implements ICommand {
 
     @Override
     public void execute(ApplicationData applicationData) {
-        //TODO: create implementation
         applicationData.getGamesList()
                 .get(commandAction.getGame())
                 .check(commandAction.getPlayerName());
     }
 
     @Override
-    public void undo(ApplicationData applicationData) {
-
+    public String getGameName() {
+        return commandAction.getGame();
     }
 }

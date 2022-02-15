@@ -21,4 +21,19 @@ public class MockCommands {
             "joinGame name=jogo1 player=ana",
             "startGame name=jogo1 player=lj"
     ));
+    public static final List<String> BET_IN_GAME = new ArrayList<>(Arrays.asList(
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "log name=ana",
+            "joinGame name=jogo1 player=ana",
+            "startGame name=jogo1 player=lj",
+            "bet game=jogo1 player=lj amount=5",
+            "undo",
+            "redo"
+    ));
+
+    public static final List<String> CREATE_PLAYER = new ArrayList<>(Arrays.asList(
+            "reg name=lj12",
+            "log name=lj"
+    ));
 }

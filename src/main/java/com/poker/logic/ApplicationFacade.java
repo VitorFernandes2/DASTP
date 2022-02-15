@@ -94,4 +94,12 @@ public class ApplicationFacade {
     public void startTurn(String commandLine) {
         commandManager.startTurn(commandLine);
     }
+
+    public void undo() {
+        commandManager.undo();
+    }
+
+    public void redo() {
+        commandManager.redo();
+    }
 }
