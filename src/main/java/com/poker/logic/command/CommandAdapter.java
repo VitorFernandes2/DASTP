@@ -281,4 +281,15 @@ public class CommandAdapter {
             }
         }
     }
+
+    public static void getGamesToString(Map<String, Game> gamesList, ETypeOfGame typeOfGame) {
+        StringBuilder str = new StringBuilder();
+        str.append("NAME\t\tCREATOR\n");
+        gamesList.forEach((s, game) -> {
+            if (game.getTypeOfGame().equals(typeOfGame)) {
+                str.append(game.getGameName()).append("\t\t").append(game.getCreatorName()).append("\n");
+            }
+        });
+        System.out.println(str);
+    }
 }

@@ -147,6 +147,14 @@ public class Game implements Serializable {
         return minimumAmount;
     }
 
+    public ETypeOfGame getTypeOfGame() {
+        return typeOfGame;
+    }
+
+    public String getCreatorName() {
+        return this.creator.getName();
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return new Game.Builder(this.gameName)

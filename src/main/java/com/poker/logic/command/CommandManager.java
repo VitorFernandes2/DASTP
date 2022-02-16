@@ -132,4 +132,8 @@ public class CommandManager {
     public void showGameInfo(String commandLine) {
         CommandAdapter.showGameInfo(commandLine, applicationData.getGamesList());
     }
+
+    public void listGames(ETypeOfGame typeOfGame) {
+        CommandAdapter.getGamesToString(applicationData.getGamesList(), typeOfGame);
+    }
 }
