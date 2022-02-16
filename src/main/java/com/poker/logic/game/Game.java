@@ -6,10 +6,13 @@ import com.poker.logic.game.state.IGameState;
 import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
-public class Game {
+public class Game implements Serializable {
+    private static final long serialVersionUID = -5860017999599725631L;
+
     private final String gameName;
     private final Player creator;
     private final ETypeOfGame typeOfGame;

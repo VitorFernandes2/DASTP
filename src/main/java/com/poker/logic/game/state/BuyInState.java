@@ -3,6 +3,8 @@ package com.poker.logic.game.state;
 import com.poker.logic.game.logic.GameEngine;
 
 public class BuyInState extends StateAdapter {
+    private static final long serialVersionUID = -4327170690261216747L;
+
     public BuyInState(GameEngine gameEngine) {
         super(gameEngine);
     }

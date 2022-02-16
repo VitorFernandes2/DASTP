@@ -2,7 +2,10 @@ package com.poker.logic.game.state;
 
 import com.poker.logic.game.logic.GameEngine;
 
-public class StateAdapter implements IGameState {
+import java.io.Serializable;
+
+public class StateAdapter implements IGameState, Serializable {
+    private static final long serialVersionUID = 455139798414883697L;
     private final GameEngine gameEngine;
 
     public StateAdapter(GameEngine gameEngine) {

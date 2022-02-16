@@ -10,7 +10,8 @@ public class MockCommands {
             "cfg name=jogo1 creator=lj",
             "log name=ana",
             "joinGame name=jogo1 player=ana",
-            "startGame name=jogo1 player=lj"
+            "startGame name=jogo1 player=lj",
+            "std"
     ));
 
     public static final List<String> CREATE_COMPETITIVE_GAME = new ArrayList<>(Arrays.asList(
@@ -34,6 +35,10 @@ public class MockCommands {
 
     public static final List<String> CREATE_PLAYER = new ArrayList<>(Arrays.asList(
             "reg name=lj12",
+            "log name=lj"
+    ));
+
+    public static final List<String> LOGIN_PLAYER = new ArrayList<>(Arrays.asList(
             "log name=lj"
     ));
 }

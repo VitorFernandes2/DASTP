@@ -3,6 +3,7 @@ package com.poker.logic;
 import com.poker.logic.game.Game;
 import com.poker.model.player.Player;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -11,7 +12,7 @@ public class ApplicationData {
     private static final ApplicationData applicationData = new ApplicationData();
     private final Map<String, Player> onlinePlayers;
     private final Map<String, Player> registeredPlayers;
-    private final Map<String, Game> gamesList;
+    private Map<String, Game> gamesList;
 
     private ApplicationData() {
         this.onlinePlayers = new HashMap<>();
@@ -52,5 +53,24 @@ public class ApplicationData {
 
     public Game getGame(String gameName) {
         return gamesList.get(gameName);
+    }
+
+    public void saveGames(String propertiesFilename) throws IOException {
+        try {
+            //test
+            FileOutputStream f = new FileOutputStream(new File(propertiesFilename));
+            ObjectOutputStream o = new ObjectOutputStream(f);
+            // Write objects to file
+            o.writeObject(this.gamesList);
+            o.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadGames(String gameName) throws IOException, ClassNotFoundException {
+        FileInputStream fi = new FileInputStream(new File(gameName));
+        ObjectInputStream oi = new ObjectInputStream(fi);
+        this.gamesList = (Map<String, Game>) oi.readObject();
     }
 }

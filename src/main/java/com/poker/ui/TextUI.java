@@ -28,10 +28,12 @@ public class TextUI {
             return;
         }
 
+        appFacade.loadGame();
+
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = CREATE_GAME; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = LOGIN_PLAYER; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
@@ -114,6 +116,7 @@ public class TextUI {
                         appFacade.redo();
                         break;
                     case SHUTDOWN:
+                        appFacade.save();
                         running = false;
                         break;
                     case HELP:

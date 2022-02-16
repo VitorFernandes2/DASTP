@@ -3,11 +3,14 @@ package com.poker.model.payment;
 import com.poker.model.constants.Constants;
 import com.poker.model.wallet.Wallet;
 
+import java.io.Serializable;
+
 /**
  * Class for adapting in-game currency conversion and payment services.
  */
-public class ServiceAdapter implements IServiceAdapter {
+public class ServiceAdapter implements IServiceAdapter, Serializable {
 
+    private static final long serialVersionUID = -1853709015333080685L;
     private IService service;
 
     public ServiceAdapter(EServices service) {

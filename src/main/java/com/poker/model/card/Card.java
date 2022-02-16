@@ -1,6 +1,10 @@
 package com.poker.model.card;
 
-public class Card implements ICard {
+import java.io.Serializable;
+
+public class Card implements ICard, Serializable {
+
+    private static final long serialVersionUID = -7925218915150511886L;
 
     //Card value is the numeric value of the card (1-13)
     private final Integer cardValue;

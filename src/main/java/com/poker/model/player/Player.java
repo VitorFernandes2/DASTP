@@ -3,10 +3,12 @@ package com.poker.model.player;
 import com.poker.model.card.ICard;
 import com.poker.model.wallet.Wallet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player implements Serializable {
+    private static final long serialVersionUID = 1503947119842473197L;
     private final String name;
     private final Wallet wallet;
     private final List<String> friends;
