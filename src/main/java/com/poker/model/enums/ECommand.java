@@ -24,7 +24,7 @@ public enum ECommand {
     LIST_PLAYERS("listarJogadores", "lj", ""),
     LIST_FRIENDS("listFriend", "lf", "listFriend"),
     LIST_BLOCKED("listBlocked", "lb", "listBlocked"),
-    LIST_FRIENDLY_GAMES("listarJogosAmigáveis", "lja", ""),
+    LIST_FRIENDLY_GAMES("listFriendlyGames", "lfg", "listFriendlyGames"),
     LIST_COMPETITIVE_GAMES("listarJogosCompetitivos", "ljc", ""),
     LIST_CHAMPIONSHIPS("listarCampeonatos", "lc", ""),
     LIST_RANKING("listarPontuações", "lp", ""),

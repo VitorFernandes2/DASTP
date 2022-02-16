@@ -33,7 +33,7 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = LOGIN_PLAYER; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = LIST_GAMES; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
@@ -62,6 +62,12 @@ public class TextUI {
                     // $$ Chat Functionalities $$
                     case LIST_PLAYERS:
                         appFacade.getOnlinePlayersToString(commandLine);
+                        break;
+                    case LIST_COMPETITIVE_GAMES:
+                        appFacade.listCompetitiveGames();
+                        break;
+                    case LIST_FRIENDLY_GAMES:
+                        appFacade.listFriendlyGames();
                         break;
                     case ADD_FRIEND:
                         appFacade.addFriend(commandLine);

@@ -4,6 +4,7 @@ import com.poker.logic.command.BetCommand;
 import com.poker.logic.command.CheckCommand;
 import com.poker.logic.command.CommandManager;
 import com.poker.logic.command.FoldCommand;
+import com.poker.logic.game.ETypeOfGame;
 
 public class ApplicationFacade {
     private final CommandManager commandManager;
@@ -109,5 +110,13 @@ public class ApplicationFacade {
 
     public void loadGame() {
         commandManager.loadGame();
+    }
+
+    public void listFriendlyGames() {
+        commandManager.listGames(ETypeOfGame.FRIENDLY);
+    }
+
+    public void listCompetitiveGames() {
+        commandManager.listGames(ETypeOfGame.COMPETITIVE);
     }
 }
