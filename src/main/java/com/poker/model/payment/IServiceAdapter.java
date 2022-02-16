@@ -27,10 +27,28 @@ public interface IServiceAdapter {
     int chipsToGame(int pokerChips);
 
     /**
+     * Function to turn game coins into poker chips.
+     *
+     * @param pokerChips int - Value of game coins to be converted into poker chips.
+     * @param conversionRate int - Conversion rate value.
+     * @return int - Number of converted poker chips.
+     */
+    int chipsToGame(int pokerChips, int conversionRate);
+
+    /**
      * Function to turn poker chips into game coins.
      *
      * @param pokerChipsGame int - Value of poker chips to be converted into game coins.
      * @return int - Amount of game coins converted.
      */
     int chipsToPocket(int pokerChipsGame);
+
+    /**
+     * Function to turn poker chips into game coins.
+     *
+     * @param pokerChipsGame int - Value of poker chips to be converted into game coins.
+     * @param conversionRate int - Conversion rate value.
+     * @return int - Amount of game coins converted.
+     */
+    int chipsToPocket(int pokerChipsGame, int conversionRate);
 }

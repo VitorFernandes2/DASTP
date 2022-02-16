@@ -15,10 +15,26 @@ public class Score implements IScore {
     }
 
     /**
+     * Function to clear the cards list.
+     */
+    public void clearCards() {
+        cards.clear();
+    }
+
+    /**
+     * Function to set the cards list with a list of cards.
+     *
+     * @param deckCards {@link List} - List of cards.
+     */
+    public void setCards(List<ICard> deckCards) {
+        cards = deckCards;
+    }
+
+    /**
      * Function to sort the table cards list to easier research sequence formations.
      */
     private void sortCards() {
-        Collections.sort(cards, (o1, o2) -> {
+        cards.sort((o1, o2) -> {
             if (o1.getCardValue() == 1) {
                 return 1;
             } else if (o2.getCardValue() == 1) {
@@ -35,7 +51,7 @@ public class Score implements IScore {
      * @return List - List of cards in sorted state.
      */
     private List<ICard> sortCards(List<ICard> newCards) {
-        Collections.sort(newCards, (o1, o2) -> {
+        newCards.sort((o1, o2) -> {
             if (o1.getCardValue() == 1) {
                 return 1;
             } else if (o2.getCardValue() == 1) {
@@ -76,7 +92,7 @@ public class Score implements IScore {
             lastValue = cardValue;
         }
 
-        return (oneSequence >= twoSequence ? oneSequence : twoSequence);
+        return Math.max(oneSequence, twoSequence);
     }
 
     /**
@@ -110,7 +126,7 @@ public class Score implements IScore {
             lastValue = cardValue;
         }
 
-        return (oneSequence >= twoSequence ? oneSequence : twoSequence);
+        return Math.max(oneSequence, twoSequence);
     }
 
     /**
@@ -187,7 +203,7 @@ public class Score implements IScore {
 
             lastValue = card.getCardValue();
         }
-        return pairTransformCount >= pairNormalCount ? pairTransformCount : pairNormalCount;
+        return Math.max(pairTransformCount, pairNormalCount);
     }
 
     /**
@@ -227,7 +243,7 @@ public class Score implements IScore {
 
             lastValue = card.getCardValue();
         }
-        return pairTransformCount >= pairNormalCount ? pairTransformCount : pairNormalCount;
+        return Math.max(pairTransformCount, pairNormalCount);
     }
 
     /**
@@ -428,7 +444,7 @@ public class Score implements IScore {
         // -400 score because it's the 4th highest score possible.
         if (pairValue() == 3 && pairsCounter.get(1) == 2) {
             int total = 0;
-            for (int i = 0, k = 0, cardsIndex = 0; i < pairsCounter.size(); i++) {
+            for (int i = 0, k = 0; i < pairsCounter.size(); i++) {
                 if (pairsCounter.get(i) >= 2 && total == 0) {
                     for (int j = 0; j < pairsCounter.get(i); j++) {
                         if (total == 0) {
@@ -537,8 +553,7 @@ public class Score implements IScore {
             return (highCard == 1 ? 14 : highCard) - 1000;
         }
 
-        // FIXME: Cut this part out. It's only for easier debugging visualization. Use log here?
-        System.out.println("\nERROR - Nothing detected!\n");
+        LOG.addAndShowLog("\nERROR - Nothing detected!\n");
         return 0;
     }
 
@@ -608,7 +623,7 @@ public class Score implements IScore {
         // -400 score because it's the 4th highest score possible.
         if (pairValue(cardsCopy) == 3 && pairsCounter.get(1) == 2) {
             int total = 0, score;
-            for (int i = 0, k = 0, cardsIndex = 0; i < pairsCounter.size(); i++) {
+            for (int i = 0, k = 0; i < pairsCounter.size(); i++) {
                 if (pairsCounter.get(i) >= 2 && total == 0) {
                     for (int j = 0; j < pairsCounter.get(i); j++) {
                         if (total == 0) {
