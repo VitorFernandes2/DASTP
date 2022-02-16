@@ -13,9 +13,9 @@ public class DealingState extends StateAdapter {
         boolean turnCard = getGameEngine().bet(playerName, amount);
         // This will be true in the end of each round
         if(turnCard) {
-            if(!getGameEngine().turnCard())
-                return new DealerButtonState(getGameEngine());
-            else {
+            if(!getGameEngine().turnCard()) {
+                return this;
+            } else {
                 // TODO: Deal with end game ...
             }
         }

@@ -1,7 +1,7 @@
 package com.poker.logic.game.state;
 
 public interface IGameState {
-    IGameState startGame(String playerName, String creatorName);
+    IGameState startGame(String playerName, String creatorName, int minimumAmount);
 
     IGameState startRound();
 

@@ -91,4 +91,8 @@ public class CommandManager {
     public void startTurn(String commandLine) {
         CommandAdapter.startTurn(commandLine, applicationData);
     }
+
+    public void showGameInfo(String commandLine) {
+        CommandAdapter.showGameInfo(commandLine, applicationData.getGamesList());
+    }
 }

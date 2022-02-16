@@ -3,6 +3,7 @@ package com.poker.logic.game;
 import com.poker.logic.game.logic.GameEngine;
 import com.poker.logic.game.state.BuyInState;
 import com.poker.logic.game.state.IGameState;
+import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
 
 import java.util.Map;
@@ -23,7 +24,7 @@ public class Game {
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
-        this.gameEngine = new GameEngine(players);
+        this.gameEngine = new GameEngine(players, Constants.PCJ_MINIMUM_BET);
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -31,12 +32,16 @@ public class Game {
         return gameName;
     }
 
-    public boolean addUserToGame(Player player) {
-        return this.gameEngine.addUserToGame(player);
+    public boolean addPlayer(Player player) {
+        return this.gameEngine.addPlayer(player, 1, typeOfGame); // TODO: get entry fee
+    }
+
+    public boolean removePlayer(String player) {
+        return this.gameEngine.removePlayer(player, typeOfGame);
     }
 
     public void startGame(Player player) {
-        setState(this.state.startGame(player.getName(), creator.getName()));
+        setState(this.state.startGame(player.getName(), creator.getName(), minimumPlayers));
     }
 
     public void startTurn() {
@@ -57,6 +62,10 @@ public class Game {
 
     public void setState(IGameState state) {
         this.state = state;
+    }
+
+    public String showGameInfo(String gameName) {
+        return gameEngine.showGameInfo(gameName);
     }
 
     public static class Builder {

@@ -38,7 +38,7 @@ public enum ECommand {
     BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
     CHECK("passar", "p", ""),
     FOLD("desistir", "d", ""),
-    SHOW_GAME_INFO("mostrarDados", "md", ""),
+    SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=jogo1"),
 
     // Admin commands
     CREATE_USER("criarJogador", "cj", ""),
@@ -103,7 +103,7 @@ public enum ECommand {
     public static void getCommandsExample() {
         StringBuilder str = new StringBuilder("# Commands example:");
         COMMANDS_EXAMPLE.forEach((s) -> str.append("\n ").append(s));
-        str.setLength(str.length() - 4); // remove the last 4 appends
+        str.setLength(str.length() - 4); // remove the last 4 characters
         System.out.println(str);
     }
 

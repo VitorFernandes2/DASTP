@@ -31,11 +31,12 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = CREATE_COMPETITIVE_GAME; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = CREATE_GAME; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
                 commandLine = commandsList.remove(0);
+                System.out.println(commandLine);
             }
             String[] tokens = StringUtils.tokenizeString(commandLine);
 
@@ -77,7 +78,7 @@ public class TextUI {
                         break;
                     case CREATE_FRIENDLY_GAME:
                         boolean gameCreated = appFacade.createFriendlyGame(commandLine);
-                        System.out.println(gameCreated ? "Game created with success" : "Game was not created!");
+                        System.out.println("[Game]" + (gameCreated ? "Game created with success" : "Game was not created!"));
                         break;
                     case CREATE_COMPETITIVE_GAME:
                         boolean competitiveGameCreated = appFacade.createCompetitiveGame(commandLine);
