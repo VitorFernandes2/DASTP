@@ -28,12 +28,22 @@ public class Game {
         this.state = new BuyInState(this.gameEngine);
     }
 
+    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine) {
+        this.gameName = gameName;
+        this.creator = creator;
+        this.typeOfGame = typeOfGame;
+        this.minimumPlayers = minimumPlayers;
+        this.minimumAmount = minimumAmount;
+        this.gameEngine = gameEngine;
+        this.state = new BuyInState(this.gameEngine);
+    }
+
     public String getGameName() {
         return gameName;
     }
 
-    public boolean addPlayer(Player player) {
-        return this.gameEngine.addPlayer(player, 1, typeOfGame); // TODO: get entry fee
+    public boolean addPlayer(Player player, int fee) {
+        return this.gameEngine.addPlayer(player, fee, typeOfGame);
     }
 
     public boolean removePlayer(String player) {
@@ -73,6 +83,7 @@ public class Game {
         private Map<String, Player> players;
         private Player creator;
         private ETypeOfGame typeOfGame;
+        private GameEngine gameEngine;
         private int minimumPlayers;
         private int minimumAmount;
 
@@ -95,6 +106,11 @@ public class Game {
             return this;
         }
 
+        public Builder setGameEngine(GameEngine gameEngine) {
+            this.gameEngine = gameEngine;
+            return this;
+        }
+
         public Builder setMinimumPlayers(int minimumPlayers) {
             this.minimumPlayers = minimumPlayers;
             return this;
@@ -106,14 +122,36 @@ public class Game {
         }
 
         private boolean isValid() {
-            return (Objects.isNull(this.gameName) || Objects.isNull(this.players) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
+            return (Objects.isNull(this.gameName) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
         }
 
         public Game build() {
             if (isValid()) {
                 return null;
             }
-            return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount);
+
+            if (gameEngine != null) {
+                return new Game(this.gameName, this.creator, this.typeOfGame, this.minimumPlayers, this.minimumAmount, this.gameEngine);
+            } else if (!Objects.isNull(this.players)) {
+                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount);
+            }
+
+            return null;
         }
+    }
+
+    public int getMinimumAmount() {
+        return minimumAmount;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Game.Builder(this.gameName)
+                .setMinimumPlayers(this.minimumPlayers)
+                .setMinimumAmount(this.minimumAmount)
+                .setGameEngine(this.gameEngine)
+                .setTypeOfGame(this.typeOfGame)
+                .setCreator(this.creator)
+                .build();
     }
 }

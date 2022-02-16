@@ -40,7 +40,7 @@ public class GameEngine {
         this.deck = new CardFactory().createObject(null);
         this.tableCards = new ArrayList<>();
         this.pot = 0;
-        this.roundState = RoundState.FIRST_STATE;
+        this.roundState = RoundState.SETUP;
         this.higherBet = null;
         this.bigBlind = bigBlind;
         this.smallBlind = bigBlind / 2;
@@ -91,7 +91,7 @@ public class GameEngine {
         this.chooseDealer(dealer);
         // TODO: [TBC] give each player cards
         CardsUtils.distributeCardsPerPlayer(players, deck);
-        roundState = RoundState.FIRST_STATE;
+        roundState = RoundState.SETUP;
         pot = 0;
         reset();
     }
@@ -193,28 +193,28 @@ public class GameEngine {
 
     public boolean turnCard() {
         switch (roundState) {
-            case FIRST_STATE: // 3 cards face down
-                roundState = RoundState.SECOND_STATE;
+            case SETUP: // 3 cards face down
+                roundState = RoundState.THE_FLOP;
                 // TODO: show 3 cards face up
                 System.out.println("[Game] show 3 cards face up");
                 break;
-            case SECOND_STATE: // 3 cards face up
-                roundState = RoundState.THIRD_STATE;
+            case THE_FLOP: // 3 cards face up
+                roundState = RoundState.THE_TURN;
                 // TODO: show 4º card
                 System.out.println("[Game] show 4º card");
                 break;
-            case THIRD_STATE: // 4º card
-                roundState = RoundState.FOURTH_STATE;
+            case THE_TURN: // 4º card
+                roundState = RoundState.THE_RIVER;
                 // TODO: show 5º card
                 System.out.println("[Game] show 5º card");
                 break;
-            case FOURTH_STATE: // show 5º card
-                roundState = RoundState.FIRST_STATE;
+            case THE_RIVER: // show 5º card
+                roundState = RoundState.SETUP;
                 // TODO: calculate the winner, info that and set new cards to the players
                 System.out.println("[Game] Winner winner chicken dinner");
                 if (endgame()) return true;
                 break;
-            case FIFTH_STATE:
+            case SHOWDOWN:
                 // TODO:
                 System.out.println("Winner winner chicken dinner");
                 if (endgame()) return true;
@@ -294,5 +294,10 @@ public class GameEngine {
 
         return false;
     }
+
+    public Map<String, Player> getPlayers() {
+        return players;
+    }
+
     //</editor-fold>
 }

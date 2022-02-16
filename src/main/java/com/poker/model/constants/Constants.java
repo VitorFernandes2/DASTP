@@ -19,4 +19,14 @@ public class Constants {
     // Commands
     public static final String COMMAND = "command";
     public static final String COMMAND_LAST_DIVISION = "lastDivision";
+    public static final String NAME_PARAMETER = "name";
+    public static final String VALUE_PARAMETER = "value";
+    public static final String METHOD_PARAMETER = "payment";
+    public static final String FROM_PARAMETER = "from";
+    public static final String TO_PARAMETER = "to";
+    public static final String CREATOR_PARAMETER = "creator";
+    public static final String PLAYER_PARAMETER = "player";
+    public static final String BLOCK_PARAMETER = "block";
+    public static final String ADD_PARAMETER = "add";
+
 }

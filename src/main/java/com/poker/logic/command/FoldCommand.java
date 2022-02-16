@@ -39,14 +39,13 @@ public class FoldCommand implements ICommand {
 
     @Override
     public void execute(ApplicationData applicationData) {
-        //TODO: Create implementation
         applicationData.getGamesList()
                 .get(commandAction.getGame())
                 .fold(commandAction.getPlayerName());
     }
 
     @Override
-    public void undo(ApplicationData applicationData) {
-
+    public String getGameName() {
+        return commandAction.getGame();
     }
 }
