@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreTest {
-    private static final Score SCORE = Score.getInstance();
+    private static final Score SCORE = new Score(new ArrayList<>());
 
     public static void main(String[] args) {
         CardFactory cardFactory = (CardFactory) FactoryProvider.getFactory(EFactory.CARDS);
@@ -33,6 +33,6 @@ public class ScoreTest {
         hand.add(deck.get(5));
         hand.add(deck.get(6));
 
-        SCORE.calculateWithHandScore(hand);
+        System.out.println("Table plus hand total score: " + SCORE.calculateWithHandScore(hand));
     }
 }
