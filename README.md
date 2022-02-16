@@ -39,16 +39,16 @@ ____
 <details><summary>Implemented Rules [PT]</summary>
 <p>
 
-- [ ] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__
-- [ ] Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente; Exemplo: __[9♣] [8♣] [7♣] [6♣] [5♣]__
-- [ ] Four of a Kind — quatro cartas do mesmo valor; Exemplo: __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__
-- [ ] Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[J♣] [J♥] [J♠] [8♦] [8♥]__
-- [ ] Flush — quaisquer cinco cartas do mesmo naipe; Exemplo: __[A♠] [J♠] [8♠] [5♠] [2♠]__
-- [ ] Straight — quaisquer cinco cartas classificadas consecutivamente; Exemplo: __[Q♣] [J♦] [10♥] [9♠] [8♦]__
-- [ ] Three of a Kind — três cartas do mesmo valor; Exemplo: __[8♣] [8♠] [8♦] [K♣] [4♥]__
-- [ ] Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[A♠] [A♣] [J♦] [J♣] [7♠]__
-- [ ] One Pair — duas cartas do mesmo valor; Exemplo: __[10♥] [10♣] [9♥] [4♦] [2♦]__
-- [ ] High Card — cinco cartas incomparáveis; Exemplo: __[A♣] [J♦] [10♠] [5♣] [2♥]__
+- [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [DONE]
+- [x] Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente; Exemplo: __[9♣] [8♣] [7♣] [6♣] [5♣]__ [DONE]
+- [x] Four of a Kind — quatro cartas do mesmo valor; Exemplo: __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ [DONE]
+- [x] Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[J♣] [J♥] [J♠] [8♦] [8♥]__ [DONE]
+- [x] Flush — quaisquer cinco cartas do mesmo naipe; Exemplo: __[A♠] [J♠] [8♠] [5♠] [2♠]__ [DONE]
+- [x] Straight — quaisquer cinco cartas classificadas consecutivamente; Exemplo: __[Q♣] [J♦] [10♥] [9♠] [8♦]__ [DONE]
+- [x] Three of a Kind — três cartas do mesmo valor; Exemplo: __[8♣] [8♠] [8♦] [K♣] [4♥]__ [DONE]
+- [x] Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[A♠] [A♣] [J♦] [J♣] [7♠]__ [DONE]
+- [x] One Pair — duas cartas do mesmo valor; Exemplo: __[10♥] [10♣] [9♥] [4♦] [2♦]__ [DONE]
+- [x] High Card — cinco cartas incomparáveis; Exemplo: __[A♣] [J♦] [10♠] [5♣] [2♥]__ [DONE]
 
 </p>
 </details>
@@ -61,46 +61,46 @@ ____
 - [x] __CREATE_GAME__ -> ~~Login of two users, an user creates a game, an user joins in the game and the game starts~~
 
 ### Games System:
-- [ ] User tells the system that he wants to join that game
-- [ ] Allocate the User to the selected game (only if you have enough PCs for the initial deposit)
-- [ ] One user == one game
-- [x] ~~Creating the Deck of Cards~~
+- [x] ~~User tells the system that he wants to join that game~~ [DONE]
+- [x] ~~Allocate the User to the selected game (only if you have enough PCs for the initial deposit)~~ [DONE]
+- [x] ~~One user == one game~~ [DONE]
+- [x] ~~Creating the Deck of Cards~~ [DONE]
 			
 
 ### Jogadores:
 
   - [ ] Client (__normal user__)
-    - [ ] User registration
-    - [ ] Create Friendly Games
+    - [x] ~~User registration~~ [DONE]
+    - [x] ~~Create Friendly Games~~ [DONE]
     - [ ] List of Games (only those games that the user can participate should appear)
 
   - [ ] Client (__paid out user__)(all normal user features + extras)
-    - [ ] System Services [^2]
+    - [x] ~~System Services~~ [DONE]
 
 		
 ### Virtual Money (Poker-Chips == PCs | Poker-Chips-Jogos == PCJs):
 
   - [ ] __Acquisition:__
-    - [x] ~~Compra no Sistema~~
+    - [x] ~~Compra no Sistema~~ [DONE]
     - [ ] Ganho em Jogos / Torneios
 
   - [ ] __Utilization:__
-    - [ ] Purchase of Services (ex: paid games creation)
-    - [ ] Games betting
-    - [x] ~~Cash Conversion~~
-    - [ ] (We) Set the conversion rate in the competitive game
+    - [x] ~~Purchase of Services (ex: paid games creation)~~ [DONE]
+    - [ ] Games betting [WIP]
+    - [x] ~~Cash Conversion~~ [DONE]
+    - [ ] (We) Set the conversion rate in the competitive game [WIP]
 
 	
 ### Games (settings depend on game scenario __(Game Type and Configuration)__):
 
   - [ ] (dependent on the amount of user PCs)
   - [ ] They all start with the same amount of PCJs
-  - [x] ~~PCJs are obtained after paying an amount of PCs (conversion rate A)~~
-  - [x] ~~PCJs are converted to PCs after game completion (A conversion rate)~~
+  - [x] ~~PCJs are obtained after paying an amount of PCs (conversion rate A)~~ [DONE]
+  - [x] ~~PCJs are converted to PCs after game completion (A conversion rate)~~ [DONE]
   - [ ] Friendly Games (0 PCs == 50 PCJs) they have no return from PCJs to PCs at the end of the game
-  - [x] ~~Payment / transfer methods~~
-  - [x] ~~(5% of the purchase price of PCs is acquired by the company)~~
-  - [ ] After Min players present, host can start the game
+  - [x] ~~Payment / transfer methods~~ [DONE]
+  - [x] ~~(5% of the purchase price of PCs is acquired by the company)~~ [DONE]
+  - [x] ~~After Min players present, host can start the game~~ [DONE]
     - [ ] After the game starts, specified deposit is charged
 
   - [ ] Friendly Games __(not configurable)__:
@@ -120,33 +120,33 @@ ____
 
 ### Communication between Players
 
-  - [ ] The identification of players currently online
-  - [ ] Sending messages between players
-  - [ ] __(Optional)__
-    - [ ] Friend's list
-    - [ ] Block a Player
+  - [x] ~~The identification of players currently online~~ [DONE]
+  - [x] ~~Sending messages between players~~ [DONE]
+  - [x] __(Optional)__
+    - [x] ~~Friend's list~~ [DONE]
+    - [x] ~~Block a Player~~ [DONE]
 
 		
 ### Game Creation
 
-  - [ ] Min and Max deposit
+  - [x] ~~Min deposit~~ [DONE]
   - [ ] Initial value of PCJs (you can set the conversion rate at the start)
-  - [ ] Number of Players (Min)
-  - [ ] Creator with 50 PCs or more -> competitive play
+  - [x] ~~Number of Players (Min)~~ [DONE]
+  - [x] ~~Creator with 50 PCs or more -> competitive play~~ [DONE]
 
 
 ### Management Operations
 
   - [ ] BackEnd:
-    - [ ] CRUD, Action Log and other user features
-    - [ ] Creation / Removal / Game Info
+    - [x] ~~CRUD, Action Log and other user features~~  [DONE]
+    - [ ] Creation / Removal / Game Info [WIP]
 
 
 ### User Interface
 
   - [ ] CLI application
     - [ ] Functions to simulate user and administrator actions
-    - [ ] Registration and Log of user actions
+    - [x] ~~Registration and Log of user actions~~ [DONE]
       - [ ] __Sintaxe:__[^1]
         - [ ] `criaTreino nomeJogo=jogo1 criador=joao`
         - [ ] `compraCreditos nome=ana valor=1000 pagamento=paypal`
@@ -172,22 +172,22 @@ ____
         - [x] `logout name`
         - [x] `cfg` -> create friendly game
 
-    - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation
+    - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation [DONE]
 
 
 ### Implementation Restrictions[^3]
 <!-- Esta parte não foi traduzida por conveniencia atual de trabalho -->
 ##### __Padrões Creacionais__
   - [x] ~~Fábrica de Objetos~~ -> __[CRUD do Baralho de Cartas](src/main/java/com/poker/factory/card/CardFactory.java)__ [DONE]
-  - [ ] Fábrica de Fábricas de Objetos -> __Criação dos tipos de Jogos__ [WIP]
-  - [ ] Padrão Protótipo -> fazer clonning [WIP]
+  - [x] ~~Fábrica de Fábricas de Objetos~~ -> __Criação dos tipos de Fábrica__ [DONE]
+  - [x] ~~Padrão Protótipo~~ -> __Jogos__ [DONE]
   - [x] ~~Singleton~~ -> __Logs e Application Data__ [DONE]
-  - [ ] Object Poll -> ... [WIP]
-  - [x] ~~Padrão Builders~~ -> __Criação de Jogos__ [DONE / WIP]
+  - [ ] Object Poll -> ... [WIP][^1]
+  - [x] ~~Padrão Builders~~ -> __Criação de Jogos__ [DONE]
 
 ##### __Padrões de Persistência__
-  - [ ] Unit of Work
-  - [x] Identity Map -> Application Data [DONE]
+  - [ ] Unit of Work [^1]
+  - [x] ~~Identity Map~~ -> __Application Data__ [DONE]
 
 ##### __Padrões Arquiteturais de Persistência__
   - [ ] Padrão de Registo Ativo / Active Record
@@ -197,11 +197,11 @@ ____
   - [ ] Padrão Mapeamento
 
 ##### __Padrões de Desenho__
-  - [x] ~~Estratégias~~ + ~~Padrão Máquina de Estados~~ -> __Regras do Jogo__ [WIP]
+  - [x] ~~Estratégias~~ + ~~Padrão Máquina de Estados~~ -> __Regras do Jogo__ [WIP][^1]
   - [x] ~~Padrão de Decoradores~~ -> __Filtragem de acesso ao logs__ [DONE]
   - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__ [DONE]
   - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__ [DONE]
-  - [ ] Padrão Template -> __Implementação de ...__ [WIP]
+  - [x] ~~Padrão Template~~ -> __Estados, ...__ [DONE]
   - [x] ~~Padrão Comando~~ -> __Comandos da "Aplicação" CLI__ [DONE]
 
 ____
