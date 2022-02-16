@@ -99,7 +99,15 @@ public class ApplicationFacade {
         commandManager.undo();
     }
 
+    public void save() {
+        commandManager.saveGame();
+    }
+
     public void redo() {
         commandManager.redo();
+    }
+
+    public void loadGame() {
+        commandManager.loadGame();
     }
 }

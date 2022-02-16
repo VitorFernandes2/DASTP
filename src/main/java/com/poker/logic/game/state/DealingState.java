@@ -4,6 +4,8 @@ import com.poker.logic.game.logic.GameEngine;
 
 public class DealingState extends StateAdapter {
 
+    private static final long serialVersionUID = -3438780049176281460L;
+
     public DealingState(GameEngine gameEngine) {
         super(gameEngine);
     }

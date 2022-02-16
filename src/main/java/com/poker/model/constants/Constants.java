@@ -10,6 +10,7 @@ public class Constants {
     public static final Integer GAME_MINIMUM_PLAYERS = 2;
     public static final Integer FRIENDLY_GAME_MAXIMUM_PLAYERS = 3;
     public static final Integer FRIENDLY_GAME_MINIMUM_PLAYERS = 2;
+    public static final String GAME_NAME = "savegame.txt";
 
     // Payments
     public static final Integer MONEY_CONVERSION_RATE = 100;

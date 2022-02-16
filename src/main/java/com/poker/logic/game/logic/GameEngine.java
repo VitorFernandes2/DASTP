@@ -11,13 +11,15 @@ import com.poker.model.player.Player;
 import com.poker.utils.CardsUtils;
 import com.poker.utils.MapUtils;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * In this class must be all the components that can simplify the logic functions
  */
-public class GameEngine {
+public class GameEngine implements Serializable {
     private static final Log LOG = Log.getInstance();
+    private static final long serialVersionUID = 2948663272030254773L;
 
     private final ServiceAdapter walletUtils = new ServiceAdapter(EServices.UNKNOWN);
     private final Map<String, Player> players;

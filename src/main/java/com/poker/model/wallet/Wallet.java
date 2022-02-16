@@ -1,6 +1,9 @@
 package com.poker.model.wallet;
 
-public class Wallet {
+import java.io.Serializable;
+
+public class Wallet implements Serializable {
+    private static final long serialVersionUID = -382569991422581949L;
     private double amount;
     private int pokerChips;
     private int pokerGameChips;

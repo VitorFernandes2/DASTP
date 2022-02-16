@@ -3,8 +3,11 @@ package com.poker.logic.command;
 import com.poker.logic.ApplicationData;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
+import com.poker.model.constants.Constants;
+import com.poker.model.filter.Log;
 import com.poker.model.player.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +55,22 @@ public class CommandManager {
         Game currentGame = applicationData.getGame(lastGame.getGameName());
         applicationData.getGamesList().put(lastGame.getGameName(), lastGame);
         redoList.add(currentGame);
+    }
+
+    public void saveGame() {
+        try {
+            applicationData.saveGames(Constants.GAME_NAME);
+        } catch (IOException e) {
+            Log.getInstance().addLog("Couldn't save the game " + e.getMessage());
+        }
+    }
+
+    public void loadGame() {
+        try {
+            applicationData.loadGames(Constants.GAME_NAME);
+        } catch (IOException | ClassNotFoundException e) {
+            Log.getInstance().addLog("Couldn't load the game " + e.getMessage());
+        }
     }
 
     public Map<String, Player> getOnlinePlayers() {
