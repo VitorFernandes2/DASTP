@@ -12,9 +12,8 @@ public class BuyInState extends StateAdapter {
     @Override
     public IGameState startGame(String playerName, String creatorName, int minimumAmount) {
         if (getGameEngine().startGame(playerName, creatorName, minimumAmount)) {
-            return new DealerButtonState(getGameEngine());
+            return new SetupState(getGameEngine());
         } else {
-            System.out.println("Game could not be started");
             return this;
         }
     }

@@ -2,6 +2,7 @@ package com.poker.logic.game.state;
 
 import com.poker.logic.game.logic.GameEngine;
 
+@Deprecated
 public class DealerButtonState extends StateAdapter {
 
     private static final long serialVersionUID = 506665112151015800L;
@@ -10,7 +11,7 @@ public class DealerButtonState extends StateAdapter {
         super(gameEngine);
     }
 
-    @Override
+//    @Override
     public IGameState startRound() {
         try {
             getGameEngine().startRound();
