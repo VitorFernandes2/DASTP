@@ -36,20 +36,18 @@ public class CardsUtils {
         return null;
     }
 
-    public static ICard[] distributeCardsPerPlayer(Map<String, Player> players, List<ICard> deck) {
+    public static void distributeCardsPerPlayer(Map<String, Player> players, List<ICard> deck) {
         if (players != null && players.size() > 0 && deck != null && deck.size() > 0) {
             for (Player player : players.values()) {
                 List<ICard> cardsFromTop = withdrawMoreThanOne(2, deck);
                 if (cardsFromTop == null) {
-                    return null;
+                    return;
                 }
 
                 ICard[] cards = new ICard[]{cardsFromTop.get(0), cardsFromTop.get(1)};
                 player.setGameCards(cards);
-                return cards;
             }
         }
-        return null;
     }
 
     public static String cardsToString(ICard ... cards) {
@@ -60,6 +58,15 @@ public class CardsUtils {
         if(cards.length > 0)
             str.setLength(str.length() - 2); // remove the last 2 characters
         str.append("]");
+        return str.toString();
+    }
+
+    public static String cardsPerPlayerToString(Map<String, Player> players) {
+        StringBuilder str = new StringBuilder();
+        str.append("## Player's cards:");
+        players.forEach((playerName, player) -> {
+            str.append("\n\tName: ").append(playerName).append(" | Cards: ").append(cardsToString(player.getGameCards()));
+        });
         return str.toString();
     }
 }

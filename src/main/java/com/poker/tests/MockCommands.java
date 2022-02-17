@@ -8,10 +8,15 @@ import static com.poker.model.enums.ECommand.LIST_FRIENDLY_GAMES;
 
 public class MockCommands {
     public static final List<String> CREATE_GAME = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
             "log name=lj",
             "cfg name=jogo1 creator=lj",
+            "reg name=ana",
             "log name=ana",
+            "reg name=manel",
+            "log name=manel",
             "joinGame name=jogo1 player=ana",
+            "joinGame name=jogo1 player=manel",
             "startGame name=jogo1 player=lj"
     ));
 

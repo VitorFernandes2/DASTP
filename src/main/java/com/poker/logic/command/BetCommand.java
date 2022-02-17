@@ -16,7 +16,7 @@ public class BetCommand implements ICommand {
     public BetCommand(String commandLine) throws Exception {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         if (command.size() < 5)
-            throw new Exception("Can't create Bet Command!");
+            throw new Exception("[Game] Invalid Bet Command!");
         else
             this.commandAction = new CommandAction(command.get("game"), command.get("player"),
                     Integer.parseInt(command.get("amount")));
