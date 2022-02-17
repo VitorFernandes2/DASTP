@@ -83,13 +83,15 @@ public class GameEngine implements Serializable {
         // TODO: [TBC] validate min numbers of players
         if (creatorName.equals(playerName) && minPlayers >= players.size()) {
             players.forEach((s, player) -> queuePlayOrder.add(s));
+            startRound();
             System.out.println("[Game] Let's Poker. Good luck!");
             return true;
         }
+        System.out.println("[Game] Game could not be started");
         return false;
     }
 
-    public void startRound() throws Exception {
+    public void startRound() {
         this.chooseDealer(dealer);
         // TODO: [TBC] give each player cards
         CardsUtils.distributeCardsPerPlayer(players, deck);
@@ -102,6 +104,8 @@ public class GameEngine implements Serializable {
         higherBet = null;
         playerBetsList.clear();
         playerFoldList.clear();
+        tableCards.clear();
+        fillQueue();
     }
 
     // FIXME: maybe move this to a GameUtils
@@ -193,43 +197,79 @@ public class GameEngine implements Serializable {
         return true;
     }
 
-    public boolean turnCard() {
-        switch (roundState) {
-            case SETUP: // 3 cards face down
-                roundState = RoundState.THE_FLOP;
-                // TODO: show 3 cards face up
-                System.out.println("[Game] show 3 cards face up");
-                break;
-            case THE_FLOP: // 3 cards face up
-                roundState = RoundState.THE_TURN;
-                // TODO: show 4º card
-                System.out.println("[Game] show 4º card");
-                break;
-            case THE_TURN: // 4º card
-                roundState = RoundState.THE_RIVER;
-                // TODO: show 5º card
-                System.out.println("[Game] show 5º card");
-                break;
-            case THE_RIVER: // show 5º card
-                roundState = RoundState.SETUP;
-                // TODO: calculate the winner, info that and set new cards to the players
-                System.out.println("[Game] Winner winner chicken dinner");
-                if (endgame()) return true;
-                break;
-            case SHOWDOWN:
-                // TODO:
-                System.out.println("Winner winner chicken dinner");
-                if (endgame()) return true;
-                break;
-        }
+    private void printDeck() {
+        System.out.println("## Table cards: " + CardsUtils.cardsToString(tableCards.toArray(ICard[]::new)));
+    }
+
+    public boolean triggerTheFlop() {
+        tableCards.addAll(Objects.requireNonNull(CardsUtils.withdrawMoreThanOne(3, deck)));
+        printDeck();
         fillQueue();
-        // Isn't the last round
+        return isRoundOver();
+    }
+
+    public boolean triggerNextCard() {
+        withdrawCardToTable();
+        printDeck();
+        fillQueue();
+        return isRoundOver();
+    }
+
+    public void triggerShowdown() {
+        // TODO: calculate the winner, info that and set new cards to the players
+        System.out.println("[Game] Winner winner chicken dinner"); // TODO: TBR
+        startRound();
+    }
+
+//    public boolean turnCard() {
+//        switch (roundState) {
+//            case SETUP: // 3 cards face down
+//                roundState = RoundState.THE_FLOP;
+//                tableCards.addAll(Objects.requireNonNull(CardsUtils.withdrawMoreThanOne(3, deck)));
+//                System.out.println("[Game] show 3 cards face up"); // TODO: TBR
+//                printDeck();
+//                break;
+//            case THE_FLOP: // 3 cards face up
+//                roundState = RoundState.THE_TURN;
+//                withdrawCardToTable();
+//                System.out.println("[Game] show 4º card"); // TODO: TBR
+//                printDeck();
+//                break;
+//            case THE_TURN: // 4º card
+//                roundState = RoundState.THE_RIVER;
+//                withdrawCardToTable();
+//                System.out.println("[Game] show 5º card"); // TODO: TBR
+//                printDeck();
+//                break;
+//            case THE_RIVER: // show 5º card
+//                roundState = RoundState.SETUP;
+//                // TODO: calculate the winner, info that and set new cards to the players
+//                System.out.println("[Game] Winner winner chicken dinner"); // TODO: TBR
+//                if (isRoundOver()) return true; // TODO: need to check for this every round (card turn)
+//                break;
+//            case SHOWDOWN:
+//                // TODO:
+//                System.out.println("Winner winner chicken dinner"); // TODO: TBR
+//                if (isRoundOver()) return true;
+//                break;
+//        }
+//        fillQueue();
+//        // Isn't the last round
+//        return false;
+//    }
+
+    private void withdrawCardToTable() {
+        tableCards.add(CardsUtils.withdrawFromTop(deck));
+    }
+
+    public boolean isRoundOver() {
+        // TODO: check if is the endRound check the number of players in the queue before fillQueue()
+        // if true show the table winner
         return false;
     }
 
-    private boolean endgame() {
+    public boolean isGameOver() {
         // TODO: check if is the endgame check the number of players and the minimum bet
-        // if true show the table winner
         return false;
     }
 

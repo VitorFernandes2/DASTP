@@ -18,11 +18,6 @@ public class StateAdapter implements IGameState, Serializable {
     }
 
     @Override
-    public IGameState startRound() {
-        return this;
-    }
-
-    @Override
     public IGameState bet(String playerName, Integer amount) {
         return this;
     }
@@ -37,22 +32,16 @@ public class StateAdapter implements IGameState, Serializable {
         return this;
     }
 
-    @Override
-    public IGameState turnCards() {
-        return this;
-    }
-
-    @Override
-    public IGameState showdown() {
-        return this;
-    }
-
-    @Override
-    public IGameState endGame() {
-        return this;
-    }
-
     public GameEngine getGameEngine() {
         return gameEngine;
+    }
+
+    protected IGameState isGameOver() {
+        getGameEngine().triggerShowdown();
+        if (getGameEngine().isGameOver()) {
+            return null;
+        } else {
+            return new SetupState(getGameEngine());
+        }
     }
 }
