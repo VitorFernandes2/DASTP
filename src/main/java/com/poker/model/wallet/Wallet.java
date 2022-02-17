@@ -66,7 +66,7 @@ public class Wallet implements Serializable {
         return false;
     }
 
-    public void resetPokerGameChips() {
-        this.pokerGameChips = 0;
+    public int resetPokerGameChips() {
+        return pokerGameChips = 0;
     }
 }

@@ -57,10 +57,6 @@ public class Game implements Serializable {
         setState(this.state.startGame(player.getName(), creator.getName(), minimumPlayers));
     }
 
-    public void startTurn() {
-        setState(this.state.startRound());
-    }
-
     public void bet(String playerName, Integer amount) {
         setState(this.state.bet(playerName, amount));
     }
@@ -79,6 +75,37 @@ public class Game implements Serializable {
 
     public String showGameInfo(String gameName) {
         return gameEngine.showGameInfo(gameName);
+    }
+
+    public int getMinimumAmount() {
+        return minimumAmount;
+    }
+
+    public ETypeOfGame getTypeOfGame() {
+        return typeOfGame;
+    }
+
+    public String getCreatorName() {
+        return this.creator.getName();
+    }
+
+    public IGameState getState() {
+        return state;
+    }
+
+    public boolean isNull() {
+        return getState() == null;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Game.Builder(this.gameName)
+                .setMinimumPlayers(this.minimumPlayers)
+                .setMinimumAmount(this.minimumAmount)
+                .setGameEngine(this.gameEngine)
+                .setTypeOfGame(this.typeOfGame)
+                .setCreator(this.creator)
+                .build();
     }
 
     public static class Builder {
@@ -141,28 +168,5 @@ public class Game implements Serializable {
 
             return null;
         }
-    }
-
-    public int getMinimumAmount() {
-        return minimumAmount;
-    }
-
-    public ETypeOfGame getTypeOfGame() {
-        return typeOfGame;
-    }
-
-    public String getCreatorName() {
-        return this.creator.getName();
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return new Game.Builder(this.gameName)
-                .setMinimumPlayers(this.minimumPlayers)
-                .setMinimumAmount(this.minimumAmount)
-                .setGameEngine(this.gameEngine)
-                .setTypeOfGame(this.typeOfGame)
-                .setCreator(this.creator)
-                .build();
     }
 }

@@ -125,10 +125,6 @@ public class CommandManager {
         CommandAdapter.blockPlayer(commandLine, this.getOnlinePlayers());
     }
 
-    public void startTurn(String commandLine) {
-        CommandAdapter.startTurn(commandLine, applicationData);
-    }
-
     public void showGameInfo(String commandLine) {
         CommandAdapter.showGameInfo(commandLine, applicationData.getGamesList());
     }

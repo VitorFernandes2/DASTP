@@ -63,12 +63,6 @@ public class TextUI {
                     case LIST_PLAYERS:
                         appFacade.getOnlinePlayersToString(commandLine);
                         break;
-                    case LIST_COMPETITIVE_GAMES:
-                        appFacade.listCompetitiveGames();
-                        break;
-                    case LIST_FRIENDLY_GAMES:
-                        appFacade.listFriendlyGames();
-                        break;
                     case ADD_FRIEND:
                         appFacade.addFriend(commandLine);
                         break;
@@ -79,13 +73,19 @@ public class TextUI {
                         appFacade.sendMessage(commandLine);
                         break;
 
-                    // $$ Virtual Money $$
+                    // $$ Game Functionalities $$
+                    case LIST_COMPETITIVE_GAMES:
+                        appFacade.listCompetitiveGames();
+                        break;
+                    case LIST_FRIENDLY_GAMES:
+                        appFacade.listFriendlyGames();
+                        break;
                     case BUY_POKER_CHIPS:
                         appFacade.buyChips(commandLine);
                         break;
                     case CREATE_FRIENDLY_GAME:
                         boolean gameCreated = appFacade.createFriendlyGame(commandLine);
-                        System.out.println("[Game]" + (gameCreated ? "Game created with success" : "Game was not created!"));
+                        System.out.println("[Game] " + (gameCreated ? "Game created with success" : "Game was not created!"));
                         break;
                     case CREATE_COMPETITIVE_GAME:
                         boolean competitiveGameCreated = appFacade.createCompetitiveGame(commandLine);

@@ -52,7 +52,7 @@ public class CardsUtils {
         return null;
     }
 
-    public static String printCards(ICard ... cards) {
+    public static String cardsToString(ICard ... cards) {
         StringBuilder str = new StringBuilder("[ ");
         for (ICard c : cards) {
             str.append(c.getStringCardValue()).append(" | ");

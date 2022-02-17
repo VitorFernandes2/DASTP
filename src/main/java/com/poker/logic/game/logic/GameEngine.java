@@ -22,7 +22,7 @@ public class GameEngine implements Serializable {
     private static final long serialVersionUID = 2948663272030254773L;
 
     private final ServiceAdapter walletUtils = new ServiceAdapter(EServices.UNKNOWN);
-    private final Map<String, Player> players;
+    private final Map<String, Player> players; // TODO: update this list when the dealer change, to be the first
     private final Queue<String> queuePlayOrder;
     private final Map<String, Integer> playerBetsList;
     private final List<String> playerFoldList;
@@ -56,11 +56,15 @@ public class GameEngine implements Serializable {
 
     // TODO: generalize this method for all games or validate in another place TBC
     // Add player to the game and convert PCs into PCJs
-    public boolean addPlayer(Player player, int entryFee, ETypeOfGame typeOfGame) {
+    public boolean addPlayer(Player player, int fee, ETypeOfGame typeOfGame) {
         if (!this.playerInGame(player.getName())) {
             //TODO: [TBC] convert PCs into PCJs in a competitive game
-            if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame) && player.getWallet().getPokerChips() >= entryFee) {
-                walletUtils.chipsToGame(entryFee);
+            if (Objects.equals(ETypeOfGame.FRIENDLY, typeOfGame)) {
+                walletUtils.chipsToGame(1);
+            } else if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame) && player.getWallet().getPokerChips() >= fee) {
+                walletUtils.chipsToGame(fee); // TODO: remove PCs
+            } else {
+                return false;
             }
             this.players.put(player.getName(), player);
             return true;
@@ -71,9 +75,12 @@ public class GameEngine implements Serializable {
     // Remove player from the game and convert PCJs into PCs
     public boolean removePlayer(String playerName, ETypeOfGame typeOfGame) {
         if (this.playerInGame(playerName)) {
-            //TODO: [TBC] convert game money to wallet
-            // TODO: validate if is a friendly game
-            walletUtils.chipsToPocket(players.remove(playerName).getWallet().getPokerGameChips());
+            // TODO: [TBC] validate if is a friendly game and convert game money to wallet
+            if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame)) {
+                walletUtils.chipsToPocket(players.remove(playerName).getWallet().resetPokerGameChips());
+            } else {
+                players.remove(playerName).getWallet().resetPokerGameChips();
+            }
             return true;
         }
         return false;
@@ -109,42 +116,40 @@ public class GameEngine implements Serializable {
     }
 
     // FIXME: maybe move this to a GameUtils
-    private void chooseDealer(Player dealer) throws Exception {
+    private void chooseDealer(Player dealer) {
         if (Objects.isNull(dealer)) {
             //TODO: [IMPROVEMENT] use the correct implementation of dealer choose (witch one take a card and the higher one start the game and receive the dealer)
-            if (this.players.size() > 0) {
-                Map.Entry<String, Player> newDealerSet = this.players.entrySet().iterator().next();
-                setDealer(newDealerSet.getValue());
-            } else {
-                throw new Exception("No players found!");
-            }
+            Map.Entry<String, Player> newDealerSet = this.players.entrySet().iterator().next();
+            setDealer(newDealerSet.getValue());
         } else {
-            if (this.players.size() > 0) {
-                MapUtils<String, Player> mapUtils = new MapUtils<>();
-                int position = mapUtils.getMapPosition(this.players, dealer.getName());
-                if (position >= 0) {
-                    int newDealerPosition = (position == (this.players.size() - 1)) ? 0 : position + 1;
-                    Player newDealer = (new ArrayList<>(this.players.values())).get(newDealerPosition);
-                    setDealer(newDealer);
-                }
-            } else {
-                throw new Exception("No players found!");
+            MapUtils<String, Player> mapUtils = new MapUtils<>();
+            int position = mapUtils.getMapPosition(this.players, dealer.getName());
+            if (position >= 0) {
+                int newDealerPosition = (position == (this.players.size() - 1)) ? 0 : position + 1;
+                Player newDealer = (new ArrayList<>(this.players.values())).get(newDealerPosition);
+                setDealer(newDealer);
             }
         }
     }
 
-    public boolean bet(String playerName, Integer amount) {
-        // Check if is the player turn
+    // Check if is the player turn
+    public boolean isPlayerTurn(String playerName) {
         if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println();
-            LOG.addAndShowLog("[Game] " + queuePlayOrder.peek() + " needs to bet first!");
+            LOG.addAndShowLog("[Game] " + queuePlayOrder.peek() + " needs to wait is turn!");
             return false;
         }
+        return true;
+    }
+
+    public boolean bet(String playerName, Integer amount) {
+        if(!isPlayerTurn(playerName)) return false;
 
         // Don't have PCJs enough
         if (!players.get(playerName).getWallet().removePokerGameChips(amount)) {
             return false;
         }
+
+        // TODO: check if is equals or higher then the minimum amount
 
         // TODO: [TBC] bet logic (check if the player needs to bet more, history if bets in that turn)
         // Compare with the higher bet
@@ -161,6 +166,7 @@ public class GameEngine implements Serializable {
             });
         }
 
+        // TODO: bet history of the actual state
         playerBetsList.put(playerName, playerBetsList.containsKey(playerName) ? playerBetsList.get(playerName) + amount : amount);
 
         addToPot(amount);
@@ -187,10 +193,8 @@ public class GameEngine implements Serializable {
     }
 
     public boolean fold(String playerName) {
-        if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println("[Game]" + queuePlayOrder.peek() + " needs to wait is turn to give up!");
-            return false;
-        }
+        if(!isPlayerTurn(playerName)) return false;
+
         // TODO: [TBC] remove from queue and save that he fold from this round
         queuePlayOrder.remove(playerName);
         playerFoldList.add(playerName);
@@ -295,7 +299,7 @@ public class GameEngine implements Serializable {
         players.forEach((s, player) -> str.append(s).append(", "));
         str.setLength(str.length() - 2); // remove the last 2 characters
         str.append("]");
-        str.append("\n## Table cards: ").append(CardsUtils.printCards(tableCards.toArray(ICard[]::new)));
+        str.append("\n## Table cards: ").append(CardsUtils.cardsToString(tableCards.toArray(ICard[]::new)));
         str.append("\n## Pot value: ").append(pot).append(" PCJs");
         str.append("\n## Next turn: ").append(queuePlayOrder.peek());
         str.append("\n## Blinds: ").append("S: ").append(smallBlind).append(" | B: ").append(bigBlind);
