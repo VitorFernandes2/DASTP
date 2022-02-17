@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.poker.model.enums.ECommand.LIST_FRIENDLY_GAMES;
+import static com.poker.model.enums.ECommand.LIST_FRIENDS;
 
 public class MockCommands {
     public static final List<String> CREATE_GAME = new ArrayList<>(Arrays.asList(
@@ -79,6 +80,13 @@ public class MockCommands {
             "check game=jogo1 player=lj",
             "check game=jogo1 player=ana",
             "check game=jogo1 player=manel"
+    ));
+
+    public static final List<String> CREATE_FRIEND_REQUEST = new ArrayList<>(Arrays.asList(
+            "log name=lj",
+            "log name=ana",
+            "addFriend player=lj add=ana",
+            LIST_FRIENDS.getExample()
     ));
 
     public static final List<String> CREATE_GAME_BETTING = new ArrayList<>(Arrays.asList(

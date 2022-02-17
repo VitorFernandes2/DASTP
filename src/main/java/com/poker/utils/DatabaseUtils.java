@@ -160,4 +160,22 @@ public class DatabaseUtils {
             throw new Exception(e.getMessage());
         }
     }
+
+    public static void updatePlayerName(String name, String newName) {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            String updateUserWalletSQL = "UPDATE PLAYER " +
+                    "SET name=" + newName + " " +
+                    "WHERE name='" + name + "'";
+            statement.executeUpdate(updateUserWalletSQL);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("Error updating user " + e.getMessage());
+        }
+    }
 }

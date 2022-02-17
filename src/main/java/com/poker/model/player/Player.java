@@ -2,6 +2,7 @@ package com.poker.model.player;
 
 import com.poker.model.card.ICard;
 import com.poker.model.wallet.Wallet;
+import com.poker.utils.DatabaseUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 1503947119842473197L;
-    private final String name;
+    private String name;
     private final Wallet wallet;
     private final List<String> friends;
     private final List<String> playersBlocked;
@@ -85,5 +86,10 @@ public class Player implements Serializable {
 
     public void setGameCards(ICard[] gameCards) {
         this.gameCards = gameCards;
+    }
+
+    public void setName(String name) {
+        DatabaseUtils.updatePlayerName(this.name, name);
+        this.name = name;
     }
 }

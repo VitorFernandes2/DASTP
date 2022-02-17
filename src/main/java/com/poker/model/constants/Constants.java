@@ -11,6 +11,7 @@ public class Constants {
     public static final Integer FRIENDLY_GAME_MAXIMUM_PLAYERS = 3;
     public static final Integer FRIENDLY_GAME_MINIMUM_PLAYERS = 2;
     public static final String GAME_NAME = "savegame.txt";
+    public static final String ADMIN_NAME = "admin";
 
     // Payments
     public static final Integer MONEY_CONVERSION_RATE = 100;
@@ -29,5 +30,6 @@ public class Constants {
     public static final String PLAYER_PARAMETER = "player";
     public static final String BLOCK_PARAMETER = "block";
     public static final String ADD_PARAMETER = "add";
+    public static final String NEW_NAME_PARAMETER = "newName";
 
 }

@@ -5,7 +5,9 @@ import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
+import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
+import com.poker.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -131,5 +133,47 @@ public class CommandManager {
 
     public void listGames(ETypeOfGame typeOfGame) {
         CommandAdapter.getGamesToString(applicationData.getGamesList(), typeOfGame);
+    }
+
+    public void listPlayerFriends(String commandLine) {
+        CommandAdapter.showPlayerRelationList(commandLine, this.getOnlinePlayers(), EPlayerRelation.FRIENDS);
+    }
+
+    public void showPlayerBlockedPlayers(String commandLine) {
+        CommandAdapter.showPlayerRelationList(commandLine, this.getOnlinePlayers(), EPlayerRelation.BLOCKEDS);
+    }
+
+    public void createUser(String commandLine) {
+        if (isAdminUser()) {
+            this.addUser(commandLine);
+        }
+    }
+
+    public void addGame(String commandLine) {
+        if (isAdminUser()) {
+            Map<String, String> command = StringUtils.mapCommand(commandLine);
+            String name = command.get(Constants.NAME_PARAMETER);
+            if (name != null) {
+                this.addGame("createFriendlyGame name=" + name + "creator=admin");
+            } else {
+                System.out.println("Error creating the game!");
+            }
+        }
+    }
+
+    public void removeGame(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.removeGame(commandLine, applicationData.getGamesList());
+        }
+    }
+
+    private boolean isAdminUser() {
+        return this.getOnlinePlayers().get(Constants.ADMIN_NAME) != null;
+    }
+
+    public void editUser(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.editUser(commandLine, this.getOnlinePlayers());
+        }
     }
 }

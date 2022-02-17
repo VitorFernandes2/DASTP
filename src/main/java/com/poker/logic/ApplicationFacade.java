@@ -43,6 +43,7 @@ public class ApplicationFacade {
 
     public void startGame(String commandLine) {
         commandManager.startGame(commandLine);
+        this.startTurn(commandLine);
     }
 
     public boolean bet(String commandLine) {
@@ -114,5 +115,38 @@ public class ApplicationFacade {
 
     public void listCompetitiveGames() {
         commandManager.listGames(ETypeOfGame.COMPETITIVE);
+    }
+
+    public void listPlayerFriends(String commandLine) {
+        commandManager.listPlayerFriends(commandLine);
+    }
+
+    public void showPlayerBlockedPlayers(String commandLine) {
+        commandManager.showPlayerBlockedPlayers(commandLine);
+    }
+
+    public void createUser(String commandLine) {
+        commandManager.createUser(commandLine);
+    }
+
+    public void addGame(String commandLine) {
+        commandManager.addGame(commandLine);
+    }
+
+    public void removeGame(String commandLine) {
+        commandManager.removeGame(commandLine);
+    }
+
+    public void editUser(String commandLine) {
+        commandManager.editUser(commandLine);
+    }
+
+    public void kickUser(String commandLine) {
+    }
+
+    public void checkUserActivities(String commandLine) {
+    }
+
+    public void seeGame(String commandLine) {
     }
 }

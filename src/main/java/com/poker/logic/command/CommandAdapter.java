@@ -11,12 +11,14 @@ import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
 import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
+import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
 import com.poker.model.wallet.Wallet;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
 import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 public class CommandAdapter {
@@ -281,5 +283,47 @@ public class CommandAdapter {
             }
         });
         System.out.println(str);
+    }
+
+    public static void showPlayerRelationList(String commandLine, Map<String, Player> onlinePlayers, EPlayerRelation relation) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String username = command.get(Constants.NAME_PARAMETER);
+
+        if (username != null && username.length() > 0) {
+            Player player = onlinePlayers.get(username);
+            List<String> relatedPlayers = null;
+            switch (relation) {
+                case FRIENDS:
+                    relatedPlayers = player.getFriends();
+                    break;
+                case BLOCKEDS:
+                    relatedPlayers = player.getPlayersBlocked();
+                    break;
+            }
+            StringBuilder strOut = new StringBuilder();
+            strOut.append("List of ").append(relation).append(" of ").append(username).append(":\n");
+            relatedPlayers.forEach(s -> strOut.append("> ").append(s).append("\n"));
+            System.out.println(strOut);
+        }
+    }
+
+    public static void removeGame(String commandLine, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String gameName = command.get(Constants.NAME_PARAMETER);
+        if (gameName != null && gameName.length() > 0) {
+            gamesList.remove(gameName);
+        }
+    }
+
+    public static void editUser(String commandLine, Map<String, Player> onlinePlayers) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.NAME_PARAMETER);
+        String playerNewName = command.get(Constants.NEW_NAME_PARAMETER);
+
+        if (playerNewName != null && playerName != null &&
+                playerName.length() > 0 && playerNewName.length() > 0) {
+            Player player = onlinePlayers.get(playerName);
+            player.setName(playerNewName);
+        }
     }
 }
