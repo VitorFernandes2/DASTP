@@ -36,8 +36,8 @@ public enum ECommand {
 
     // In-Game commands
     BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
-    CHECK("passar", "p", ""),
-    FOLD("desistir", "d", ""),
+    CHECK("check", "c", "check game=jogo1 player=lj"),
+    FOLD("fold", "f", "fold game=jogo1 player=lj"),
     SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=jogo1"),
 
     // Admin commands

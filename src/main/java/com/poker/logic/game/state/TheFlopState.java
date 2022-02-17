@@ -20,7 +20,11 @@ public class TheFlopState extends StateAdapter {
 
     @Override
     public IGameState check(String playerName) {
-        return super.check(playerName);
+        boolean nextState = getGameEngine().check(playerName);
+        if (nextState) {
+            return isRoundOver();
+        }
+        return this;
     }
 
     @Override

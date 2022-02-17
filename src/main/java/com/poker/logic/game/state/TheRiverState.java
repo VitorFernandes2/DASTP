@@ -20,7 +20,11 @@ public class TheRiverState extends StateAdapter {
 
     @Override
     public IGameState check(String playerName) {
-        return super.check(playerName);
+        boolean nextState = getGameEngine().check(playerName);
+        if (nextState) {
+            return isGameOver();
+        }
+        return this;
     }
 
     @Override

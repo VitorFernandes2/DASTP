@@ -20,13 +20,20 @@ public class TheTurnState extends StateAdapter {
 
     @Override
     public IGameState check(String playerName) {
-        return super.check(playerName);
+        boolean nextState = getGameEngine().check(playerName);
+        if (nextState) {
+            return isRoundOver();
+        }
+        return this;
     }
 
     @Override
     public IGameState fold(String playerName) {
-        // TODO
-        return super.fold(playerName);
+        boolean nextState = getGameEngine().fold(playerName);
+        if (nextState) {
+            return isRoundOver();
+        }
+        return this;
     }
 
     private IGameState isRoundOver() {

@@ -183,6 +183,7 @@ public class CommandAdapter {
                         return false;
                     }
 
+                    // TODO: deal with this minimumAmount, custom for competitive games, and the default value from Constants for friendly games
                     GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, players, player);
                     Game game = factory.createObject(gameCreationData);
 
