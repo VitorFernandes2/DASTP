@@ -16,9 +16,9 @@ public class CardTest {
         for (ICard card : deck) {
             System.out.println(card.getStringCardValue());
         }
-        System.out.println(CardsUtils.printCards(deck.toArray(ICard[]::new)));
+        System.out.println(CardsUtils.cardsToString(deck.toArray(ICard[]::new)));
 
-        System.out.println(CardsUtils.printCards(
+        System.out.println(CardsUtils.cardsToString(
                 new SpadesCard(11),
                 new HeartsCard(6),
                 new DiamondsCard(5),

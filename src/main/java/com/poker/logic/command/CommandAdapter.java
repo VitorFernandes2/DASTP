@@ -237,13 +237,6 @@ public class CommandAdapter {
         System.out.println("[Game] Game not started");
     }
 
-    public static void startTurn(String commandLine, ApplicationData data) {
-        LOG.addLog(commandLine);
-        Map<String, String> command = StringUtils.mapCommand(commandLine);
-        String gameName = command.get(Constants.NAME_PARAMETER); // TODO: change this to "game"
-        data.getGamesList().get(gameName).startTurn();
-    }
-
     public static void getOnlinePlayersToString(Map<String, Player> onlinePlayers) {
         StringBuilder str = new StringBuilder("# Online players:");
         onlinePlayers.forEach((s, player) -> str.append("\n ").append(s));
