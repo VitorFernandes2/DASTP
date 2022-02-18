@@ -560,12 +560,14 @@ public class Score implements IScore {
     @Override
     public String[] calculateWithHandScore(List<ICard> playerHand) {
         String[] output = new String[2];
+        List<ICard> cardsCopy;
         if (cards.isEmpty()) {
-            return output;
+            cardsCopy = new ArrayList<>(playerHand);
+        } else {
+            cardsCopy = new ArrayList<>(cards);
+            cardsCopy.addAll(playerHand);
+            sortCards(cardsCopy);
         }
-        List<ICard> cardsCopy = new ArrayList<>(cards);
-        cardsCopy.addAll(playerHand);
-        sortCards(cardsCopy);
 
         Map<String, List<ICard>> cardSet = setMapCreator(cardsCopy);
         int highSet = setHighSetValue(cardSet);
