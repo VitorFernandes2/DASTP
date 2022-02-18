@@ -14,7 +14,7 @@ public interface IScore {
      * @param playerHand
      * @return
      */
-    int calculateWithHandScore(List<ICard> playerHand);
+    String[] calculateWithHandScore(List<ICard> playerHand);
 
     /**
      * @param singleCard

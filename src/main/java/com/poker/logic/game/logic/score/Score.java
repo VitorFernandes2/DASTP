@@ -558,9 +558,10 @@ public class Score implements IScore {
     }
 
     @Override
-    public int calculateWithHandScore(List<ICard> playerHand) {
+    public String[] calculateWithHandScore(List<ICard> playerHand) {
+        String[] output = new String[2];
         if (cards.isEmpty()) {
-            return 0;
+            return output;
         }
         List<ICard> cardsCopy = new ArrayList<>(cards);
         cardsCopy.addAll(playerHand);
@@ -582,9 +583,12 @@ public class Score implements IScore {
 
             score = total - 100;
 
-            LOG.addAndShowLog("Royal Straight Flush detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Royal Straight Flush detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Royal Straight Flush";
+
+            return output;
         }
 
         // Rule: Straight Flush
@@ -597,9 +601,12 @@ public class Score implements IScore {
 
             score = total - 200;
 
-            LOG.addAndShowLog("Straight Flush detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Straight Flush detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Straight Flush";
+
+            return output;
         }
 
         // Rule: Four of a Kind
@@ -614,9 +621,12 @@ public class Score implements IScore {
 
             score = total - 300;
 
-            LOG.addAndShowLog("Four of a Kind detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Four of a Kind detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Four of a Kind";
+
+            return output;
         }
 
         // Rule: Full House
@@ -647,9 +657,12 @@ public class Score implements IScore {
 
             score = total - 400;
 
-            LOG.addAndShowLog("Full House detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Full House detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Full House";
+
+            return output;
         }
 
 
@@ -663,9 +676,12 @@ public class Score implements IScore {
 
             score = total - 500;
 
-            LOG.addAndShowLog("Flush detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Flush detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Flush";
+
+            return output;
         }
 
         // Rule: Straight
@@ -678,9 +694,12 @@ public class Score implements IScore {
 
             score = total - 600;
 
-            LOG.addAndShowLog("Straight detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Straight detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Straight";
+
+            return output;
         }
 
         // Rule: Three of a Kind
@@ -695,9 +714,12 @@ public class Score implements IScore {
 
             score = total - 700;
 
-            LOG.addAndShowLog("Three of a Kind detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Three of a Kind detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Three of a Kind";
+
+            return output;
         }
 
         // Rule: Two Pairs
@@ -712,9 +734,12 @@ public class Score implements IScore {
 
             score = total - 800;
 
-            LOG.addAndShowLog("Two Pairs detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("Two Pairs detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "Two Pairs";
+
+            return output;
         }
 
         // Rule: One Pair
@@ -729,9 +754,12 @@ public class Score implements IScore {
 
             score = total - 900;
 
-            LOG.addAndShowLog("One Pairs detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("One Pairs detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "One Pairs";
+
+            return output;
         }
 
         // Rule: High Card
@@ -740,13 +768,16 @@ public class Score implements IScore {
             int highCard = cardsCopy.get(cardsCopy.size() - 1).getCardValue();
             int score = (highCard == 1 ? 14 : highCard) - 1000;
 
-            LOG.addAndShowLog("High Card detected!\t\t-\tScore: " + score);
+            // LOG.addAndShowLog("High Card detected!\t\t-\tScore: " + score);
 
-            return score;
+            output[0] = Integer.toString(score);
+            output[1] = "High Card";
+
+            return output;
         }
 
-        LOG.addAndShowLog("ERROR SCORING - Nothing was detected!");
-        return 0;
+        // LOG.addAndShowLog("ERROR SCORING - Nothing was detected!");
+        return output;
     }
 
     /**
