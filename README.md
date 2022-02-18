@@ -39,16 +39,16 @@ ____
 <details><summary>Implemented Rules [PT]</summary>
 <p>
 
-- [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [DONE]
-- [x] Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente; Exemplo: __[9♣] [8♣] [7♣] [6♣] [5♣]__ [DONE]
-- [x] Four of a Kind — quatro cartas do mesmo valor; Exemplo: __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ [DONE]
-- [x] Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[J♣] [J♥] [J♠] [8♦] [8♥]__ [DONE]
-- [x] Flush — quaisquer cinco cartas do mesmo naipe; Exemplo: __[A♠] [J♠] [8♠] [5♠] [2♠]__ [DONE]
-- [x] Straight — quaisquer cinco cartas classificadas consecutivamente; Exemplo: __[Q♣] [J♦] [10♥] [9♠] [8♦]__ [DONE]
-- [x] Three of a Kind — três cartas do mesmo valor; Exemplo: __[8♣] [8♠] [8♦] [K♣] [4♥]__ [DONE]
-- [x] Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[A♠] [A♣] [J♦] [J♣] [7♠]__ [DONE]
-- [x] One Pair — duas cartas do mesmo valor; Exemplo: __[10♥] [10♣] [9♥] [4♦] [2♦]__ [DONE]
-- [x] High Card — cinco cartas incomparáveis; Exemplo: __[A♣] [J♦] [10♠] [5♣] [2♥]__ [DONE]
+- [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [WIP]
+- [x] Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente; Exemplo: __[9♣] [8♣] [7♣] [6♣] [5♣]__ [WIP]
+- [x] Four of a Kind — quatro cartas do mesmo valor; Exemplo: __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ [WIP]
+- [x] Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[J♣] [J♥] [J♠] [8♦] [8♥]__ [WIP]
+- [x] Flush — quaisquer cinco cartas do mesmo naipe; Exemplo: __[A♠] [J♠] [8♠] [5♠] [2♠]__ [WIP]
+- [x] Straight — quaisquer cinco cartas classificadas consecutivamente; Exemplo: __[Q♣] [J♦] [10♥] [9♠] [8♦]__ [WIP]
+- [x] Three of a Kind — três cartas do mesmo valor; Exemplo: __[8♣] [8♠] [8♦] [K♣] [4♥]__ [WIP]
+- [x] Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[A♠] [A♣] [J♦] [J♣] [7♠]__ [WIP]
+- [x] One Pair — duas cartas do mesmo valor; Exemplo: __[10♥] [10♣] [9♥] [4♦] [2♦]__ [WIP]
+- [x] High Card — cinco cartas incomparáveis; Exemplo: __[A♣] [J♦] [10♠] [5♣] [2♥]__ [WIP]
 
 </p>
 </details>
@@ -171,6 +171,40 @@ ____
         - [ ] `verificaLog utilizador=joao nomeJogo=jogo1`
         - [x] `logout name`
         - [x] `cfg` -> create friendly game
+        - [ ] `login` | `log` name -> login of a player
+        - [ ] `register` | `reg` name -> register of a new player
+        - [ ] `shutdown` | `std` -> shutdown of the game
+        - [ ] `logout` | `lout` -> exemplo: `logout name=joaquim` -> logout of player joaquim
+        - [ ] `undo` | `u` -> undo of command in game
+        - [ ] `redo` | `r` -> redo of command in game
+        - [ ] `sendMessage` | `sm` -> example: `sendMessage from=joaquim to=ana Olá, o meu nome é joaquim!` -> sending a mensage from joaquim to ana
+        - [ ] `addFriend` | `af` -> example: `addFriend player=joaquim add=antonio` -> adding a player to the friends list -> joaquim added antonio to the friends list
+        - [ ] `blockPlayer` | `bp` -> examplo: `blockPlayer player=joaquim block=antonio` -> adding a player to the blocked list -> joaquim added antonio to the blocked list
+        - [ ] `comprarPokerChips` | `cpc` -> buy PCs with Money
+        - [ ] `listarJogadores` | `lj` -> players list
+        - [ ] `listFriend` | `lf` -> friends list
+        - [ ] `listBlocked` | `lb` -> blocked list
+        - [ ] `listFriendlyGames` | `lfg` -> list of friendly games
+        - [ ] `listarJogosCompetitivos` | `ljc` -> list of competitive games
+        - [ ] `listarCampeonatos` | `lc` -> list championships games
+        - [ ] `listarPontuações` | `lp` -> list ranking
+        - [ ] `createFriendlyGame` | `cfg` -> example: `createFriendlyGame name=jogo1 creator=lj` -> create a friendly game
+        - [ ] `createCompetitiveGame` | `cjc` -> example: `cjc name=jogo1 creator=lj` -> create a competitive game
+        - [ ] `startGame` | `sg` -> example: `startGame name=jogo1 player=lj`
+        - [ ] `iniciarTurno` | `sg`
+        - [ ] `joinGame` | `jg` -> example: `joinGame name=jogo1 player=ana`
+        - [ ] `bet` | `b` -> example: `bet game=jogo1 player=lj amount=5`
+        - [ ] `check` | `c` -> example: `check game=jogo1 player=lj`
+        - [ ] `fold` | `f` -> example: `fold game=jogo1 player=lj`
+        - [ ] `showGameInfo` | `sgi` -> example: `showGameInfo game=jogo1`
+        - [ ] `criarJogador` | `cj`
+        - [ ] `editarJogador` | `ej`
+        - [ ] `expulsarJogador` | `exj`
+        - [ ] `verificarAtividadesJogador` | `vaj`
+        - [ ] `verJogo` | `vj`
+        - [ ] `adicionarJogo` | `aj`
+        - [ ] `removerJogo` | `rj`
+        - [ ] `help` | `h` -> see all the commands
 
     - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation [DONE]
 
