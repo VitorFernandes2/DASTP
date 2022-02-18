@@ -20,24 +20,30 @@ public class Game implements Serializable {
     private final int minimumAmount;
     private final GameEngine gameEngine;
     private IGameState state;
+    private final int convertionTax;
+    private int bigBlind;
 
-    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount) {
+    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int convertionTax, int bigBlind) {
         this.gameName = gameName;
         this.typeOfGame = typeOfGame;
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
+        this.convertionTax = convertionTax;
+        this.bigBlind = bigBlind;
         this.gameEngine = new GameEngine(players, Constants.PCJ_MINIMUM_BET, typeOfGame);
         this.state = new BuyInState(this.gameEngine);
     }
 
-    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine) {
+    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, int convertionTax, int bigBlind) {
         this.gameName = gameName;
         this.creator = creator;
         this.typeOfGame = typeOfGame;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
         this.gameEngine = gameEngine;
+        this.convertionTax = convertionTax;
+        this.bigBlind = bigBlind;
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -77,35 +83,12 @@ public class Game implements Serializable {
         return gameEngine.showGameInfo(gameName);
     }
 
-    public int getMinimumAmount() {
-        return minimumAmount;
-    }
-
-    public ETypeOfGame getTypeOfGame() {
-        return typeOfGame;
-    }
-
-    public String getCreatorName() {
-        return this.creator.getName();
-    }
-
     public IGameState getState() {
         return state;
     }
 
     public boolean isNull() {
         return getState() == null;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return new Game.Builder(this.gameName)
-                .setMinimumPlayers(this.minimumPlayers)
-                .setMinimumAmount(this.minimumAmount)
-                .setGameEngine(this.gameEngine)
-                .setTypeOfGame(this.typeOfGame)
-                .setCreator(this.creator)
-                .build();
     }
 
     public static class Builder {
@@ -116,9 +99,13 @@ public class Game implements Serializable {
         private GameEngine gameEngine;
         private int minimumPlayers;
         private int minimumAmount;
+        private int convertionTax;
+        private int bigBlind;
 
         public Builder(String gameName) {
             this.gameName = gameName;
+            this.convertionTax = Constants.MONEY_CONVERSION_RATE;
+            this.bigBlind = Constants.DEFAULT_BIG_BLIND;
         }
 
         public Builder setPlayers(Map<String, Player> players) {
@@ -155,18 +142,69 @@ public class Game implements Serializable {
             return (Objects.isNull(this.gameName) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
         }
 
+        public Builder setConvertionTax(int convertionTax) {
+            this.convertionTax = convertionTax;
+            return this;
+        }
+
+        public Builder setBigBlind(int bigBlind) {
+            this.bigBlind = bigBlind;
+            return this;
+        }
+
         public Game build() {
             if (isValid()) {
                 return null;
             }
 
             if (gameEngine != null) {
-                return new Game(this.gameName, this.creator, this.typeOfGame, this.minimumPlayers, this.minimumAmount, this.gameEngine);
+                return new Game(this.gameName, this.creator, this.typeOfGame, this.minimumPlayers, this.minimumAmount, this.gameEngine, this.convertionTax, this.bigBlind);
             } else if (!Objects.isNull(this.players)) {
-                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount);
+                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount, this.convertionTax, this.bigBlind);
             }
 
             return null;
         }
+    }
+
+    public int getMinimumAmount() {
+        return minimumAmount;
+    }
+
+    public ETypeOfGame getTypeOfGame() {
+        return typeOfGame;
+    }
+
+    public String getCreatorName() {
+        return this.creator.getName();
+    }
+
+    public Map<String, Player> getPlayersList() {
+        return gameEngine.getPlayers();
+    }
+
+    public int getConvertionTax() {
+        return convertionTax;
+    }
+
+    public int getBigBlind() {
+        return bigBlind;
+    }
+
+    public void incrementBigBlind(int bigBlind) {
+        this.bigBlind += bigBlind;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Game.Builder(this.gameName)
+                .setMinimumPlayers(this.minimumPlayers)
+                .setMinimumAmount(this.minimumAmount)
+                .setGameEngine(this.gameEngine)
+                .setTypeOfGame(this.typeOfGame)
+                .setCreator(this.creator)
+                .setBigBlind(this.bigBlind)
+                .setConvertionTax(this.convertionTax)
+                .build();
     }
 }

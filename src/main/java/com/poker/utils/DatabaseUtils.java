@@ -1,6 +1,7 @@
 package com.poker.utils;
 
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 import com.poker.model.wallet.Wallet;
 
 import java.sql.*;
@@ -17,8 +18,10 @@ public class DatabaseUtils {
             Statement statement = connection.createStatement();
             String createUserSQL = "CREATE TABLE PLAYER " + "(name VARCHAR(255) not NULL UNIQUE)";
             String createWalletSQL = "CREATE TABLE WALLET " + "(name VARCHAR(255) not NULL UNIQUE, " + "amount DOUBLE, " + "pokerchips INTEGER, " + "pokergamechips INTEGER, " + "PRIMARY KEY (name))";
+            String createRankingSQL = "CREATE TABLE RANKING " + "(name VARCHAR(255) not NULL UNIQUE, " + "wins INTEGER, " + "PRIMARY KEY (name))";
             statement.execute(createUserSQL);
             statement.execute(createWalletSQL);
+            statement.execute(createRankingSQL);
             statement.close();
             connection.close();
         } catch (SQLException e) {
@@ -31,7 +34,7 @@ public class DatabaseUtils {
             Class.forName("org.h2.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement statement = connection.createStatement();
-            String dropTablesSQL = "DROP TABLE IF EXISTS PLAYER, WALLET";
+            String dropTablesSQL = "DROP TABLE IF EXISTS PLAYER, WALLET, RANKING";
             statement.execute(dropTablesSQL);
             statement.close();
             connection.close();
@@ -176,6 +179,73 @@ public class DatabaseUtils {
             connection.close();
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Error updating user " + e.getMessage());
+        }
+    }
+
+    public static void removePlayerFromDB(String playerName) throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            String deleteUserSQL = "DELETE FROM PLAYER WHERE name='" + playerName + "'";
+            statement.executeUpdate(deleteUserSQL);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public static void insertRanking(RankingLine element) throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            String createRankingSQL = "INSERT INTO RANKING(name, wins) VALUES ('" + element.getPlayerName() + "', " + element.getWins() + ")";
+            statement.executeUpdate(createRankingSQL);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public static void deleteRanking(RankingLine element) throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            String deleteRankingSQL = "DELETE FROM RANKING WHERE name='" + element.getPlayerName() + "'";
+            statement.executeUpdate(deleteRankingSQL);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public static void updateRanking(RankingLine element) throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            String updateUserWalletSQL = "UPDATE RANKING " +
+                    "SET name=" + element.getPlayerName() + ", " +
+                    "wins=" + element.getWins() + " " +
+                    "WHERE name='" + element.getPlayerName() + "'";
+            statement.executeUpdate(updateUserWalletSQL);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new Exception(e.getMessage());
         }
     }
 }

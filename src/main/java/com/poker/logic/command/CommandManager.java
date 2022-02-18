@@ -176,4 +176,34 @@ public class CommandManager {
             CommandAdapter.editUser(commandLine, this.getOnlinePlayers());
         }
     }
+
+    public void kickUser(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.kickUser(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+        }
+    }
+
+    public void checkUserActivities(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.checkUserActivities(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+        }
+    }
+
+    public void seeGame(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.seeGame(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+        }
+    }
+
+    public void addCardsToUser(String commandLine) {
+        //TODO: finalize flow
+    }
+
+    public void getRankings() {
+        //TODO: finalize flow
+    }
+
+    public void addCustomRankings(String commandLine) {
+        //TODO: finalize flow
+    }
 }

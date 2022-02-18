@@ -33,6 +33,10 @@ public enum ECommand {
     START_GAME("startGame", "sg", "startGame name=jogo1 player=lj"),
     JOIN_GAME("joinGame", "jg", "joinGame name=jogo1 player=ana"),
 
+    //DEBUG COMMANDS
+    ADD_CARDS_TO_USER("setCards", "stc", "setCards player=lj game=jogo1 c1=KS c2=KC"),
+    ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
+
     // In-Game commands
     BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
     CHECK("check", "c", "check game=jogo1 player=lj"),
@@ -49,6 +53,9 @@ public enum ECommand {
     REMOVE_GAME("removeGame", "rg", "rg name=jogo1"),
 
     HELP("help", "h", "1"),
+
+    // Debug commands
+
 
     // default value
     UNKNOWN("Comando desconhecido ... tente outra vez", "UNKNOWN", "2");

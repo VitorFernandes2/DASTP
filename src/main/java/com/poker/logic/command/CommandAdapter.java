@@ -8,7 +8,9 @@ import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
+import com.poker.model.filter.FilterDecorator;
 import com.poker.model.filter.Log;
+import com.poker.model.filter.UserFilter;
 import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.EPlayerRelation;
@@ -17,8 +19,9 @@ import com.poker.model.wallet.Wallet;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CommandAdapter {
@@ -291,19 +294,21 @@ public class CommandAdapter {
 
         if (username != null && username.length() > 0) {
             Player player = onlinePlayers.get(username);
-            List<String> relatedPlayers = null;
-            switch (relation) {
-                case FRIENDS:
-                    relatedPlayers = player.getFriends();
-                    break;
-                case BLOCKEDS:
-                    relatedPlayers = player.getPlayersBlocked();
-                    break;
+            if (player != null) {
+                List<String> relatedPlayers = null;
+                switch (relation) {
+                    case FRIENDS:
+                        relatedPlayers = player.getFriends();
+                        break;
+                    case BLOCKEDS:
+                        relatedPlayers = player.getPlayersBlocked();
+                        break;
+                }
+                StringBuilder strOut = new StringBuilder();
+                strOut.append("List of ").append(relation).append(" of ").append(username).append(":\n");
+                relatedPlayers.forEach(s -> strOut.append("> ").append(s).append("\n"));
+                System.out.println(strOut);
             }
-            StringBuilder strOut = new StringBuilder();
-            strOut.append("List of ").append(relation).append(" of ").append(username).append(":\n");
-            relatedPlayers.forEach(s -> strOut.append("> ").append(s).append("\n"));
-            System.out.println(strOut);
         }
     }
 
@@ -323,7 +328,60 @@ public class CommandAdapter {
         if (playerNewName != null && playerName != null &&
                 playerName.length() > 0 && playerNewName.length() > 0) {
             Player player = onlinePlayers.get(playerName);
-            player.setName(playerNewName);
+            if (player != null) {
+                player.setName(playerNewName);
+            }
+        }
+    }
+
+    public static void kickUser(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.NAME_PARAMETER);
+
+        if (playerName != null && playerName.length() > 0) {
+            Player player = onlinePlayers.get(playerName);
+            if (player != null) {
+                gamesList.forEach((s, game) -> {
+                    boolean containsKey = game.getPlayersList().containsKey(playerName);
+                    if (!containsKey) {
+                        onlinePlayers.remove(playerName);
+                        try {
+                            DatabaseUtils.removePlayerFromDB(playerName);
+                        } catch (Exception e) {
+                            System.out.println("Error removing the player from the database");
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public static void checkUserActivities(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.NAME_PARAMETER);
+
+        if (playerName != null && playerName.length() > 0) {
+            Player player = onlinePlayers.get(playerName);
+            if (player != null) {
+                FilterDecorator search = new UserFilter(LOG, playerName);
+                System.out.println("User Activities:\n" + search.filter());
+            }
+        }
+    }
+
+    public static void seeGame(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String gameName = command.get(Constants.NAME_PARAMETER);
+
+        if (gameName != null && gameName.length() > 0) {
+            Game game = gamesList.get(gameName);
+            if (game != null) {
+                StringBuilder str = new StringBuilder();
+                str.append("Creator: ").append(game.getCreatorName()).append("\n\n");
+                str.append("Players\t\t");
+                game.getPlayersList().forEach((s, player) -> str.append("> ").append(s).append("\n"));
+                System.out.println(str);
+            }
         }
     }
 }

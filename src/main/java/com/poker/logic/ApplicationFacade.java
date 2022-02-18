@@ -43,7 +43,6 @@ public class ApplicationFacade {
 
     public void startGame(String commandLine) {
         commandManager.startGame(commandLine);
-        this.startTurn(commandLine);
     }
 
     public boolean bet(String commandLine) {
@@ -142,11 +141,26 @@ public class ApplicationFacade {
     }
 
     public void kickUser(String commandLine) {
+        commandManager.kickUser(commandLine);
     }
 
     public void checkUserActivities(String commandLine) {
+        commandManager.checkUserActivities(commandLine);
     }
 
     public void seeGame(String commandLine) {
+        commandManager.seeGame(commandLine);
+    }
+
+    public void addCardsToUser(String commandLine) {
+        commandManager.addCardsToUser(commandLine);
+    }
+
+    public void listRankings() {
+        commandManager.getRankings();
+    }
+
+    public void addCustomRankings(String commandLine) {
+        commandManager.addCustomRankings(commandLine);
     }
 }

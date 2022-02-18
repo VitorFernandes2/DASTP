@@ -61,19 +61,19 @@ public class TextUI {
                         appFacade.createUser(commandLine);
                         break;
                     case EDIT_USER:
-                        ////TODO: Test
+                        //TODO: Test
                         appFacade.editUser(commandLine);
                         break;
                     case KICK_USER:
-                        //TODO: implement kick user
+                        //TODO: Test
                         appFacade.kickUser(commandLine);
                         break;
                     case CHECK_USER_ACTIVITIES:
-                        //TODO: implement check user activities
+                        //TODO: Test
                         appFacade.checkUserActivities(commandLine);
                         break;
                     case SEE_GAME:
-                        //TODO: implement see game by an admin
+                        //TODO: Test
                         appFacade.seeGame(commandLine);
                         break;
                     case ADD_GAME:
@@ -83,6 +83,16 @@ public class TextUI {
                     case REMOVE_GAME:
                         //TODO: Test
                         appFacade.removeGame(commandLine);
+                        break;
+
+                    // $$ DEBUG Commands $$
+                    case ADD_CARDS_TO_USER:
+                        //TODO: Test
+                        appFacade.addCardsToUser(commandLine);
+                        break;
+                    case ADD_CUSTOM_RANKINGS:
+                        //TODO: Test
+                        appFacade.addCustomRankings(commandLine);
                         break;
 
                     // $$ Chat Functionalities $$
@@ -100,6 +110,7 @@ public class TextUI {
                         break;
                     case LIST_RANKING:
                         //TODO: implement print rankings
+                        appFacade.listRankings();
                         break;
                     case ADD_FRIEND:
                         appFacade.addFriend(commandLine);

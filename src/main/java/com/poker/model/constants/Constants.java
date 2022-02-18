@@ -12,7 +12,7 @@ public class Constants {
     public static final Integer FRIENDLY_GAME_MINIMUM_PLAYERS = 2;
     public static final String GAME_NAME = "savegame.txt";
     public static final String ADMIN_NAME = "admin";
-
+    public static final int DEFAULT_BIG_BLIND = 2;
     // Payments
     public static final Integer MONEY_CONVERSION_RATE = 100;
     public static final Integer PC_CONVERSION_RATE = 50;
