@@ -55,4 +55,29 @@ public class MockCommands {
             "cfg name=jogo2 creator=ana",
             LIST_FRIENDLY_GAMES.getExample()
     ));
+
+    public static final List<String> CREATE_GAME_WINNING = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "reg name=ana",
+            "log name=ana",
+            "reg name=manel",
+            "log name=manel",
+            "joinGame name=jogo1 player=ana",
+            "joinGame name=jogo1 player=manel",
+            "startGame name=jogo1 player=lj",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel"
+    ));
 }

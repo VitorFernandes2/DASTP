@@ -9,6 +9,7 @@ import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.Player;
 import com.poker.utils.CardsUtils;
 import com.poker.utils.MapUtils;
+import com.poker.utils.ScoreUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -211,9 +212,9 @@ public class GameEngine implements Serializable {
         return isRoundOver();
     }
 
-    // TODO: calculate the winner, info that and set new cards to the players
     public void triggerShowdown() {
-        System.out.println("[Game] Winner winner chicken dinner"); // TODO: TBR
+        fillQueue();
+        ScoreUtils.scoring(this.pot, this.tableCards, this.queuePlayOrder, this.players);
         startRound();
     }
 

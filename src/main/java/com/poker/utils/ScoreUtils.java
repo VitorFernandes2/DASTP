@@ -15,23 +15,27 @@ public class ScoreUtils {
 
     /**
      * Function to calculate the winner of this game round and give him all the pot money.
-     * @param pot {@link Integer} - Pot money in current game.
-     * @param tableCards {@link List} - Cards shown on the table.
+     *
+     * @param pot            {@link Integer} - Pot money in current game.
+     * @param tableCards     {@link List} - Cards shown on the table.
      * @param queuePlayOrder {@link Queue} - Players who are currently playing until the end.
-     * @param players {@link Map} - Players map.
+     * @param players        {@link Map} - Players map.
      */
     public static void scoring(Integer pot, List<ICard> tableCards, Queue<String> queuePlayOrder, Map<String, Player> players) {
         Score score = new Score(tableCards);
-        int highestScore = -999999, scoreAux;
+        int highestScore = -999999;
+        String[] scoreAux;
         String winner = "", winningPlay = "";
 
         // Decide the winner
         for (String playerName : queuePlayOrder) {
-            scoreAux = Integer.getInteger(score.calculateWithHandScore(List.of(players.get(playerName).getGameCards()))[0]);
-            if (highestScore < scoreAux) {
-                highestScore = scoreAux;
+            scoreAux = score.calculateWithHandScore(List.of(players.get(playerName).getGameCards()));
+            int highAux = Integer.parseInt(scoreAux[0]);
+            System.out.println("The player " + playerName + " has " + scoreAux[1] + "\nCards: " + CardsUtils.cardsToString(Stream.concat(tableCards.stream(), Stream.of(players.get(playerName).getGameCards())).toArray(ICard[]::new)));
+            if (highestScore < highAux) {
+                highestScore = highAux;
                 winner = playerName;
-                winningPlay = score.calculateWithHandScore(List.of(players.get(playerName).getGameCards()))[1];
+                winningPlay = scoreAux[1];
             }
         }
 
