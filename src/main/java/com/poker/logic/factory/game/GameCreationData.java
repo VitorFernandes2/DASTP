@@ -14,28 +14,23 @@ public class GameCreationData {
     private final ETypeOfGame typeOfGame;
     private final Map<String, Player> players;
     private final Player player;
-    private final double fee;
+    private int fee;
     private int bigBlind;
     private int increment;
-
-    public GameCreationData(String gameName, Integer friendlyGameMinimumPlayers, int minimumAmount, ETypeOfGame typeOfGame, Player player, double fee, int bigBlind, int increment) {
-        this.gameName = gameName;
-        this.friendlyGameMinimumPlayers = friendlyGameMinimumPlayers;
-        this.minimumAmount = minimumAmount;
-        this.typeOfGame = typeOfGame;
-        this.fee = fee;
-        this.bigBlind = bigBlind;
-        this.players = new LinkedHashMap<>();
-        this.player = player;
-        this.increment = increment;
-    }
 
     public GameCreationData(String gameName, Integer friendlyGameMinimumPlayers, int minimumAmount, ETypeOfGame typeOfGame, Player player) {
         this.gameName = gameName;
         this.friendlyGameMinimumPlayers = friendlyGameMinimumPlayers;
         this.minimumAmount = minimumAmount;
         this.typeOfGame = typeOfGame;
-        this.fee = Constants.DEFAULT_FEE;
+        switch (typeOfGame) {
+            case COMPETITIVE:
+                this.fee = Constants.COMPETITIVE_DEFAULT_FEE;
+                break;
+            case FRIENDLY:
+                this.fee = Constants.FRIENDLY_DEFAULT_FEE;
+                break;
+        }
         this.bigBlind = Constants.DEFAULT_BIG_BLIND;
         this.increment = Constants.DEFAULT_INCREMENT;
         this.players = new LinkedHashMap<>();
@@ -66,7 +61,7 @@ public class GameCreationData {
         return player;
     }
 
-    public double getFee() {
+    public int getFee() {
         return fee;
     }
 
@@ -76,5 +71,17 @@ public class GameCreationData {
 
     public int getIncrement() {
         return increment;
+    }
+
+    public void setBigBlind(int bigBlind) {
+        this.bigBlind = bigBlind;
+    }
+
+    public void setIncrement(int increment) {
+        this.increment = increment;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
     }
 }

@@ -22,9 +22,9 @@ public class Game implements Serializable {
     private final int minimumAmount;
     private final GameEngine gameEngine;
     private IGameState state;
-    private final double convertionTax;
+    private final int convertionTax;
 
-    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, double convertionTax, int bigBlind, int increment) {
+    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int convertionTax, int bigBlind, int increment) {
         this.gameName = gameName;
         this.typeOfGame = typeOfGame;
         this.creator = creator;
@@ -35,7 +35,7 @@ public class Game implements Serializable {
         this.state = new BuyInState(this.gameEngine);
     }
 
-    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, double convertionTax, int bigBlind) {
+    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, int convertionTax, int bigBlind) {
         this.gameName = gameName;
         this.creator = creator;
         this.typeOfGame = typeOfGame;
@@ -98,7 +98,7 @@ public class Game implements Serializable {
         private GameEngine gameEngine;
         private int minimumPlayers;
         private int minimumAmount;
-        private double convertionTax;
+        private int convertionTax;
         private int bigBlind;
         private int increment;
 
@@ -143,7 +143,7 @@ public class Game implements Serializable {
             return (Objects.isNull(this.gameName) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
         }
 
-        public Builder setConvertionTax(double convertionTax) {
+        public Builder setConvertionTax(int convertionTax) {
             this.convertionTax = convertionTax;
             return this;
         }
@@ -189,7 +189,7 @@ public class Game implements Serializable {
         return gameEngine.getPlayers();
     }
 
-    public double getConvertionTax() {
+    public int getConvertionTax() {
         return convertionTax;
     }
 

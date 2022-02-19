@@ -24,7 +24,7 @@ public class MockCommands {
     public static final List<String> CREATE_COMPETITIVE_GAME = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
-            "cjc name=jogo1 creator=lj fee=1.5 bigBlind=50 increment=5",
+            "ccg name=jogo1 creator=lj fee=10 bigBlind=4",
             "log name=ana",
             "joinGame name=jogo1 player=ana"
     ));

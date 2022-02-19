@@ -7,7 +7,7 @@ import com.poker.logic.factory.game.GameCreationData;
 import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
-import com.poker.model.card.*;
+import com.poker.model.card.ICard;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.FilterDecorator;
 import com.poker.model.filter.Log;
@@ -23,7 +23,10 @@ import com.poker.utils.CardsUtils;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CommandAdapter {
@@ -187,35 +190,43 @@ public class CommandAdapter {
                     if (factory == null) {
                         return false;
                     }
-                    
+
                     int bigBlindValue = 0;
                     int incrementValue = 0;
-                    double feeValue = 0;
+                    int feeValue = 0;
 
-                    if (fee != null && bigBlind != null && increment != null) {
-                        feeValue = Double.parseDouble(fee);
-                        bigBlindValue = Integer.parseInt(bigBlind);
-                        incrementValue = Integer.parseInt(increment);
-
-                        if (feeValue == 0 || bigBlindValue == 0 || incrementValue == 0) {
-                            typeOfGame = ETypeOfGame.FRIENDLY;
-                        }
-                    } else {
-                        typeOfGame = ETypeOfGame.FRIENDLY;
-                    }
-                    
                     // TODO: deal with this minimumAmount, custom for competitive games, and the default value from Constants for friendly games
-                    GameCreationData gameCreationData = null;
-                    switch (typeOfGame) {
-                        case COMPETITIVE:
-                            gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player, feeValue, bigBlindValue, incrementValue);
-                            break;
-                        case FRIENDLY:
-                            gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player);
-                            break;
+                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player);
+
+                    if (typeOfGame != ETypeOfGame.FRIENDLY) {
+                        if (fee != null) {
+                            feeValue = Integer.parseInt(fee);
+                            if (feeValue < Constants.COMPETITIVE_DEFAULT_FEE) {
+                                System.out.println("Fee can't be smaller than " + Constants.COMPETITIVE_DEFAULT_FEE);
+                                return false;
+                            }
+                            gameCreationData.setFee(feeValue);
+                        }
+
+                        if (bigBlind != null) {
+                            bigBlindValue = Integer.parseInt(bigBlind);
+                            if (bigBlindValue < Constants.DEFAULT_BIG_BLIND) {
+                                System.out.println("Big blind can't be smaller than " + Constants.DEFAULT_BIG_BLIND);
+                                return false;
+                            }
+                            gameCreationData.setBigBlind(bigBlindValue);
+                        }
+
+                        if (increment != null) {
+                            incrementValue = Integer.parseInt(increment);
+                            if (incrementValue > 0) {
+                                gameCreationData.setIncrement(incrementValue);
+                            }
+                        }
                     }
+
                     Game game = factory.createObject(gameCreationData);
-                    game.addPlayer(player, 1); // TODO: adapt this fee on the competitive game
+                    game.addPlayer(player, game.getConvertionTax()); // TODO: adapt this fee on the competitive game
 
                     return data.addGame(game);
                 }
@@ -375,7 +386,7 @@ public class CommandAdapter {
             Player player = onlinePlayers.get(playerName);
             if (player != null) {
                 boolean containsKey = gamesList.entrySet().stream().anyMatch(stringGameEntry ->
-                     stringGameEntry.getValue().getPlayersList().containsKey(playerName));
+                        stringGameEntry.getValue().getPlayersList().containsKey(playerName));
 
                 //FIXME: make possible to remove a player even if he is in a game
 
@@ -483,7 +494,7 @@ public class CommandAdapter {
     }
 
     private static void replaceCards(ICard[] newCards, ICard[] cardsToDeck, Game game, Player player) {
-        if (cardsToDeck[0] != null && cardsToDeck[1]!=null && game.getDeck() != null && game.getDeck().size() > 0) {
+        if (cardsToDeck[0] != null && cardsToDeck[1] != null && game.getDeck() != null && game.getDeck().size() > 0) {
             game.getDeck().removeIf(card -> card.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
                     card.getStringCardValue().equals(newCards[1].getStringCardValue()));
 
