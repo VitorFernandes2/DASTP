@@ -205,6 +205,10 @@ public class Game implements Serializable {
         return this.gameEngine.getTableCards();
     }
 
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return new Game.Builder(this.gameName)

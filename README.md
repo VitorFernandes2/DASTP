@@ -18,6 +18,7 @@ ____
 #### Important Notes:
 - A graphical application with a command line that manages all user actions.
 - Graphical part only reflects the state / action implemented punctually (it is __not__ necessary to present multiple interfaces on the same plane).
+- An admin need to be registered and logged in the application
 
 ____
 

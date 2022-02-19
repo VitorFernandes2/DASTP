@@ -17,6 +17,7 @@ import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingLine;
+import com.poker.model.ranking.RankingProvider;
 import com.poker.model.wallet.Wallet;
 import com.poker.utils.CardsUtils;
 import com.poker.utils.DatabaseUtils;
@@ -317,7 +318,10 @@ public class CommandAdapter {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.NAME_PARAMETER);
         if (gameName != null && gameName.length() > 0) {
-            gamesList.remove(gameName);
+            Game game = gamesList.remove(gameName);
+            game.getPlayersList().forEach((s, player) -> {
+                game.getGameEngine().removePlayer(player.getName());
+            });
         }
     }
 
@@ -330,6 +334,7 @@ public class CommandAdapter {
                 playerName.length() > 0 && playerNewName.length() > 0) {
             Player player = onlinePlayers.get(playerName);
             if (player != null) {
+                //FIXME: update this method to change all the player references
                 player.setName(playerNewName);
             }
         }
@@ -344,6 +349,8 @@ public class CommandAdapter {
             if (player != null) {
                 boolean containsKey = gamesList.entrySet().stream().anyMatch(stringGameEntry ->
                      stringGameEntry.getValue().getPlayersList().containsKey(playerName));
+
+                //FIXME: make possible to remove a player even if he is in a game
 
                 if (!containsKey) {
                     Player removedPlayer = onlinePlayers.remove(playerName);
@@ -375,22 +382,6 @@ public class CommandAdapter {
         }
     }
 
-    public static void seeGame(String commandLine, Map<String, Game> gamesList) {
-        Map<String, String> command = StringUtils.mapCommand(commandLine);
-        String gameName = command.get(Constants.NAME_PARAMETER);
-
-        if (gameName != null && gameName.length() > 0) {
-            Game game = gamesList.get(gameName);
-            if (game != null) {
-                StringBuilder str = new StringBuilder();
-                str.append("Creator: ").append(game.getCreatorName()).append("\n");
-                str.append("Players:\t\t\n");
-                game.getPlayersList().forEach((s, player) -> str.append("> ").append(s).append("\n"));
-                System.out.println(str);
-            }
-        }
-    }
-
     public static void addCardsToUser(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
@@ -403,6 +394,13 @@ public class CommandAdapter {
                 ICard[] newCards = new ICard[2];
                 newCards[0] = CardsUtils.convertCardFromString(cardOne);
                 newCards[1] = CardsUtils.convertCardFromString(cardTwo);
+
+                if (newCards[0] != null && newCards[1] != null) {
+                    if (newCards[0].getStringCardValue().equals(newCards[1].getStringCardValue())) {
+                        System.out.println("Change one of the cards, they can't be the same");
+                        return;
+                    }
+                }
 
                 var playerGame = gamesList
                         .values()
@@ -462,7 +460,14 @@ public class CommandAdapter {
             game.getDeck().removeIf(card -> card.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
                     card.getStringCardValue().equals(newCards[1].getStringCardValue()));
 
-            game.getDeck().addAll(List.of(cardsToDeck));
+            if (!cardsToDeck[0].getStringCardValue().equals(newCards[0].getStringCardValue()) &&
+                    !cardsToDeck[0].getStringCardValue().equals(newCards[1].getStringCardValue())) {
+                game.getDeck().add(cardsToDeck[0]);
+            }
+            if (!cardsToDeck[1].getStringCardValue().equals(newCards[0].getStringCardValue()) &&
+                    !cardsToDeck[1].getStringCardValue().equals(newCards[1].getStringCardValue())) {
+                game.getDeck().add(cardsToDeck[1]);
+            }
         }
 
         player.getGameCards()[0] = newCards[0];
@@ -485,7 +490,7 @@ public class CommandAdapter {
             entry.forEach(stringRankingLineEntry -> {
                 RankingLine line = stringRankingLineEntry.getValue();
                 stringBuilder.append(line.getPlayerName())
-                        .append("\t\t")
+                        .append("\t\t\t\t")
                         .append(line.getWins())
                         .append("\n");
             });
@@ -501,12 +506,32 @@ public class CommandAdapter {
 
         if (playerName != null && playerName.length() > 0) {
             if (rankings.size() > 0) {
-                rankings.remove(playerName);
+                RankingLine line = rankings.remove(playerName);
+                RankingProvider.getInstance().registerDelete(line);
             }
         }
     }
 
-    public static void addCustomRankings(String commandLine, Map<String, RankingLine> rankings) {
+    public static void addCustomRankings(String commandLine, Map<String, RankingLine> rankings, Map<String, Player> onlinePlayers) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+        String wins = command.get(Constants.WINS_TWO_PARAMETER);
 
+        if (wins != null && playerName != null) {
+            int winsValue = Integer.parseInt(wins);
+            if (rankings != null) {
+                Player player = onlinePlayers.get(playerName);
+                if (player != null) {
+                    RankingLine rankingLine = rankings.get(playerName);
+                    if (rankingLine == null) {
+                        rankingLine = new RankingLine(playerName, winsValue);
+                        rankings.put(playerName, rankingLine);
+                        RankingProvider.getInstance().registerNew(rankingLine);
+                    } else {
+                        rankingLine.setWins(winsValue);
+                    }
+                }
+            }
+        }
     }
 }

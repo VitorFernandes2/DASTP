@@ -82,7 +82,7 @@ public class RankingProvider implements UnitOfWork<RankingLine> {
         }
     }
 
-    public RankingProvider getInstance() {
+    public static RankingProvider getInstance() {
         if (provider == null) {
             provider = new RankingProvider();
         }

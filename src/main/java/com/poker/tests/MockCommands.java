@@ -97,7 +97,9 @@ public class MockCommands {
             "log name=ana",
             "joinGame name=jogo1 player=ana",
             "startGame name=jogo1 player=lj",
-            "setCards player=lj game=jogo1 c1=KS c2=KC"
+            "setCards player=lj game=jogo1 c1=KS c2=KC",
+            "setCards player=ana game=jogo1 c1=KH c2=KD",
+            "setCards player=lj game=jogo1 c1=KS c2=8C"
     ));
 
     public static final List<String> SEE_GAME_COMMAND_TEST = new ArrayList<>(Arrays.asList(
@@ -110,7 +112,7 @@ public class MockCommands {
             "log name=ana",
             "joinGame name=jogo1 player=ana",
             "startGame name=jogo1 player=lj",
-            "sga name=jogo1"
+            "sga game=jogo1"
     ));
 
     public static final List<String> ADD_GAME_COMMAND_TEST = new ArrayList<>(Arrays.asList(
@@ -126,8 +128,25 @@ public class MockCommands {
             "ag name=jogo2",
             "listFriendlyGames",
             "rg name=jogo1",
-            "listFriendlyGames",
-            "ca name=lj"
+            "listFriendlyGames"
+    ));
+
+    public static final List<String> RANKING_COMMAND_TEST = new ArrayList<>(Arrays.asList(
+            "reg name=ana",
+            "reg name=lj",
+            "reg name=admin",
+            "log name=admin",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "log name=ana",
+            "listRankings",
+            "setNewRanking player=lj wins=6",
+            "listRankings",
+            "setNewRanking player=ana wins=2",
+            "listRankings",
+            "removeRanking player=ana",
+            "listRankings",
+            "std"
     ));
 
     public static final List<String> KICK_COMMAND_TEST = new ArrayList<>(Arrays.asList(

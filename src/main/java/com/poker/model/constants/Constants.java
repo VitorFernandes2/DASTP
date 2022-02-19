@@ -34,5 +34,6 @@ public class Constants {
     public static final String NEW_NAME_PARAMETER = "newName";
     public static final String CARD_ONE_PARAMETER = "c1";
     public static final String CARD_TWO_PARAMETER = "c2";
+    public static final String WINS_TWO_PARAMETER = "wins";
 
 }

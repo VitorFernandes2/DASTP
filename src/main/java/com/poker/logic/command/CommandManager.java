@@ -7,6 +7,8 @@ import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
 import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingProvider;
+import com.poker.model.ranking.UnitOfWork;
 import com.poker.utils.StringUtils;
 
 import java.io.IOException;
@@ -62,6 +64,7 @@ public class CommandManager {
     public void saveGame() {
         try {
             applicationData.saveGames(Constants.GAME_NAME);
+            RankingProvider.getInstance().commit();
         } catch (IOException e) {
             Log.getInstance().addLog("Couldn't save the game " + e.getMessage());
         }
@@ -154,7 +157,12 @@ public class CommandManager {
             Map<String, String> command = StringUtils.mapCommand(commandLine);
             String name = command.get(Constants.NAME_PARAMETER);
             if (name != null) {
-                this.createFriendlyGame("createFriendlyGame name=" + name + " creator=admin");
+                this.createFriendlyGame("createFriendlyGame name=" + name + " creator=" + Constants.ADMIN_NAME);
+
+                Game game = applicationData.getGame(name);
+                if (game != null) {
+                    game.removePlayer(Constants.ADMIN_NAME);
+                }
             } else {
                 System.out.println("Error creating the game!");
             }
@@ -191,7 +199,7 @@ public class CommandManager {
 
     public void seeGame(String commandLine) {
         if (isAdminUser()) {
-            CommandAdapter.seeGame(commandLine, applicationData.getGamesList());
+            CommandAdapter.showGameInfo(commandLine, applicationData.getGamesList());
         }
     }
 
@@ -204,7 +212,7 @@ public class CommandManager {
     }
 
     public void addCustomRankings(String commandLine) {
-        CommandAdapter.addCustomRankings(commandLine, applicationData.getRankings());
+        CommandAdapter.addCustomRankings(commandLine, applicationData.getRankings(), this.getOnlinePlayers());
     }
 
     public void removeRanking(String commandLine) {

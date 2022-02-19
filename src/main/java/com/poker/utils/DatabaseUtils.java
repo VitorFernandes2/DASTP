@@ -238,7 +238,7 @@ public class DatabaseUtils {
             Statement statement = connection.createStatement();
 
             String updateUserWalletSQL = "UPDATE RANKING " +
-                    "SET name=" + element.getPlayerName() + ", " +
+                    "SET name='" + element.getPlayerName() + "', " +
                     "wins=" + element.getWins() + " " +
                     "WHERE name='" + element.getPlayerName() + "'";
             statement.executeUpdate(updateUserWalletSQL);
