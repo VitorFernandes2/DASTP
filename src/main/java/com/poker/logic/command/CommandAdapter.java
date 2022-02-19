@@ -176,6 +176,9 @@ public class CommandAdapter {
         if (command.size() > 3) {
             String gameName = command.get(Constants.NAME_PARAMETER);
             String creator = command.get(Constants.CREATOR_PARAMETER);
+            String fee = command.get(Constants.FEE_PARAMETER);
+            String bigBlind = command.get(Constants.BIG_BLIND_PARAMETER);
+            String increment = command.get(Constants.INCREMENT_BLIND_PARAMETER);
 
             if (!gameName.equals("") && !creator.equals("")) {
                 Player player = playerList.get(creator);
@@ -184,9 +187,33 @@ public class CommandAdapter {
                     if (factory == null) {
                         return false;
                     }
+                    
+                    int bigBlindValue = 0;
+                    int incrementValue = 0;
+                    double feeValue = 0;
 
+                    if (fee != null && bigBlind != null && increment != null) {
+                        feeValue = Double.parseDouble(fee);
+                        bigBlindValue = Integer.parseInt(bigBlind);
+                        incrementValue = Integer.parseInt(increment);
+
+                        if (feeValue == 0 || bigBlindValue == 0 || incrementValue == 0) {
+                            typeOfGame = ETypeOfGame.FRIENDLY;
+                        }
+                    } else {
+                        typeOfGame = ETypeOfGame.FRIENDLY;
+                    }
+                    
                     // TODO: deal with this minimumAmount, custom for competitive games, and the default value from Constants for friendly games
-                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player);
+                    GameCreationData gameCreationData = null;
+                    switch (typeOfGame) {
+                        case COMPETITIVE:
+                            gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player, feeValue, bigBlindValue, incrementValue);
+                            break;
+                        case FRIENDLY:
+                            gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player);
+                            break;
+                    }
                     Game game = factory.createObject(gameCreationData);
                     game.addPlayer(player, 1); // TODO: adapt this fee on the competitive game
 

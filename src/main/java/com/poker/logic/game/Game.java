@@ -22,22 +22,20 @@ public class Game implements Serializable {
     private final int minimumAmount;
     private final GameEngine gameEngine;
     private IGameState state;
-    private final int convertionTax;
-    private int bigBlind;
+    private final double convertionTax;
 
-    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int convertionTax, int bigBlind) {
+    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, double convertionTax, int bigBlind, int increment) {
         this.gameName = gameName;
         this.typeOfGame = typeOfGame;
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
         this.convertionTax = convertionTax;
-        this.bigBlind = bigBlind;
-        this.gameEngine = new GameEngine(players, Constants.PCJ_MINIMUM_BET, typeOfGame);
+        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment);
         this.state = new BuyInState(this.gameEngine);
     }
 
-    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, int convertionTax, int bigBlind) {
+    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, double convertionTax, int bigBlind) {
         this.gameName = gameName;
         this.creator = creator;
         this.typeOfGame = typeOfGame;
@@ -45,7 +43,6 @@ public class Game implements Serializable {
         this.minimumAmount = minimumAmount;
         this.gameEngine = gameEngine;
         this.convertionTax = convertionTax;
-        this.bigBlind = bigBlind;
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -101,13 +98,15 @@ public class Game implements Serializable {
         private GameEngine gameEngine;
         private int minimumPlayers;
         private int minimumAmount;
-        private int convertionTax;
+        private double convertionTax;
         private int bigBlind;
+        private int increment;
 
         public Builder(String gameName) {
             this.gameName = gameName;
             this.convertionTax = Constants.MONEY_CONVERSION_RATE;
             this.bigBlind = Constants.DEFAULT_BIG_BLIND;
+            this.increment = Constants.DEFAULT_INCREMENT;
         }
 
         public Builder setPlayers(Map<String, Player> players) {
@@ -144,13 +143,18 @@ public class Game implements Serializable {
             return (Objects.isNull(this.gameName) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
         }
 
-        public Builder setConvertionTax(int convertionTax) {
+        public Builder setConvertionTax(double convertionTax) {
             this.convertionTax = convertionTax;
             return this;
         }
 
         public Builder setBigBlind(int bigBlind) {
             this.bigBlind = bigBlind;
+            return this;
+        }
+
+        public Builder setIncrement(int increment) {
+            this.increment = increment;
             return this;
         }
 
@@ -162,7 +166,7 @@ public class Game implements Serializable {
             if (gameEngine != null) {
                 return new Game(this.gameName, this.creator, this.typeOfGame, this.minimumPlayers, this.minimumAmount, this.gameEngine, this.convertionTax, this.bigBlind);
             } else if (!Objects.isNull(this.players)) {
-                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount, this.convertionTax, this.bigBlind);
+                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount, this.convertionTax, this.bigBlind, this.increment);
             }
 
             return null;
@@ -185,20 +189,20 @@ public class Game implements Serializable {
         return gameEngine.getPlayers();
     }
 
-    public int getConvertionTax() {
+    public double getConvertionTax() {
         return convertionTax;
     }
 
     public int getBigBlind() {
-        return bigBlind;
+        return this.getGameEngine().getBigBlind();
     }
 
     public List<ICard> getDeck() {
         return this.gameEngine.getDeck();
     }
 
-    public void incrementBigBlind(int bigBlind) {
-        this.bigBlind += bigBlind;
+    public void incrementBigBlind() {
+        this.gameEngine.incrementBigBlind();
     }
 
     public List<ICard> getTableCards() {
@@ -217,8 +221,13 @@ public class Game implements Serializable {
                 .setGameEngine(this.gameEngine)
                 .setTypeOfGame(this.typeOfGame)
                 .setCreator(this.creator)
-                .setBigBlind(this.bigBlind)
+                .setBigBlind(this.getBigBlind())
                 .setConvertionTax(this.convertionTax)
+                .setIncrement(this.getIncrement())
                 .build();
+    }
+
+    private int getIncrement() {
+        return gameEngine.getIncrement();
     }
 }
