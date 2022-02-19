@@ -13,12 +13,14 @@ __Git behaviours:__
 
 ____
 
-# Game Rules - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)  | [link_3](https://pt.wikipedia.org/wiki/Texas_hold_%27em)
+# Game Rules - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)  | [link_3](https://pt.wikipedia.org/wiki/Texas_hold_%27em) | [link_4](https://www.cardplayer.com/poker-tools/odds-calculator/texas-holdem)
 
 #### Important Notes:
 - A graphical application with a command line that manages all user actions.
 - Graphical part only reflects the state / action implemented punctually (it is __not__ necessary to present multiple interfaces on the same plane).
 - An admin need to be registered and logged in the application
+- The Pot money should be divided between the users with the highest score and in case of an odd quantity of pot chips, the nearest player to the dealer should receive the odd chip.
+
 
 ____
 
@@ -40,16 +42,16 @@ ____
 <details><summary>Implemented Rules [PT]</summary>
 <p>
 
-- [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [WIP]
-- [x] Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente; Exemplo: __[9♣] [8♣] [7♣] [6♣] [5♣]__ [WIP]
-- [x] Four of a Kind — quatro cartas do mesmo valor; Exemplo: __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ [WIP]
-- [x] Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[J♣] [J♥] [J♠] [8♦] [8♥]__ [WIP]
-- [x] Flush — quaisquer cinco cartas do mesmo naipe; Exemplo: __[A♠] [J♠] [8♠] [5♠] [2♠]__ [WIP]
-- [x] Straight — quaisquer cinco cartas classificadas consecutivamente; Exemplo: __[Q♣] [J♦] [10♥] [9♠] [8♦]__ [WIP]
-- [x] Three of a Kind — três cartas do mesmo valor; Exemplo: __[8♣] [8♠] [8♦] [K♣] [4♥]__ [WIP]
-- [x] Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[A♠] [A♣] [J♦] [J♣] [7♠]__ [WIP]
-- [x] One Pair — duas cartas do mesmo valor; Exemplo: __[10♥] [10♣] [9♥] [4♦] [2♦]__ [WIP]
-- [x] High Card — cinco cartas incomparáveis; Exemplo: __[A♣] [J♦] [10♠] [5♣] [2♥]__ [WIP]
+- [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [DONE]
+- [x] Straight Flush — cinco cartas do mesmo naipe e classificadas consecutivamente; Exemplo: __[9♣] [8♣] [7♣] [6♣] [5♣]__ [DONE]
+- [x] Four of a Kind — quatro cartas do mesmo valor; Exemplo: __[Q♣] [Q♥] [Q♦] [Q♠] [4♦]__ [DONE]
+- [x] Full House — três cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[J♣] [J♥] [J♠] [8♦] [8♥]__ [DONE]
+- [x] Flush — quaisquer cinco cartas do mesmo naipe; Exemplo: __[A♠] [J♠] [8♠] [5♠] [2♠]__ [DONE]
+- [x] Straight — quaisquer cinco cartas classificadas consecutivamente; Exemplo: __[Q♣] [J♦] [10♥] [9♠] [8♦]__ [DONE]
+- [x] Three of a Kind — três cartas do mesmo valor; Exemplo: __[8♣] [8♠] [8♦] [K♣] [4♥]__ [DONE]
+- [x] Two Pair — duas cartas do mesmo valor e mais duas cartas do mesmo valor; Exemplo: __[A♠] [A♣] [J♦] [J♣] [7♠]__ [DONE]
+- [x] One Pair — duas cartas do mesmo valor; Exemplo: __[10♥] [10♣] [9♥] [4♦] [2♦]__ [DONE]
+- [x] High Card — cinco cartas incomparáveis; Exemplo: __[A♣] [J♦] [10♠] [5♣] [2♥]__ [DONE]
 
 </p>
 </details>
@@ -59,7 +61,13 @@ ____
 # Functionalities:
 
 ### Game Scenarios:
-- [x] __CREATE_GAME__ -> ~~Login of two users, an user creates a game, an user joins in the game and the game starts~~
+- [x] __CREATE_GAME__ -> Login of two players, a player creates a game, a player joins in the game and the game starts.
+- [x] __CREATE_COMPETITIVE_GAME__ -> A player creates a competitive game.
+- [x] __BET_IN_GAME__ -> Creates a game, joins players to the game, execute a bet (command) and undo it and redo it.
+- [x] __CREATE_PLAYER__ -> Creates a new player (`lj12`).
+- [x] __LOGIN_PLAYER__ -> Login of an existing player (`lj`).
+- [x] __LIST_GAMES__ -> Creation of two games and listing of them.
+- [x] __CREATE_GAME_WINNING__ -> Creation of a single game, join of 2 more players and the host, game starts and all players do check of their hand. (It is good to test cards scoring.)
 
 ### Games System:
 - [x] ~~User tells the system that he wants to join that game~~ [DONE]
