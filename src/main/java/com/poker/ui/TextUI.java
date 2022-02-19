@@ -33,7 +33,7 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = CREATE_GAME_WINNING; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = SEE_GAME_COMMAND_TEST; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
@@ -47,21 +47,66 @@ public class TextUI {
 
                 switch (command) {
                     case REGISTER:
-                        boolean added = appFacade.addUser(commandLine);
-                        System.out.println(added ? "User added with success!" : "Error adding the user!");
+                        appFacade.addUser(commandLine);
                         break;
                     case LOGIN:
-                        boolean loggedIn = appFacade.loginUser(commandLine);
-                        System.out.println(loggedIn ? "User logged in with success!" : "Something went wrong or user does not exist!");
+                        appFacade.loginUser(commandLine);
                         break;
                     case LOGOUT:
                         appFacade.logoutUser(commandLine);
-                        System.out.println("User logged out with success!");
+                        break;
+
+                    // $$ Admin Functionalities $$
+                    case CREATE_USER:
+                        appFacade.createUser(commandLine);
+                        break;
+                    case EDIT_USER:
+                        //FIXME: Possibly it will be removed
+                        //appFacade.editUser(commandLine);
+                        break;
+                    case KICK_USER:
+                        appFacade.kickUser(commandLine);
+                        break;
+                    case CHECK_USER_ACTIVITIES:
+                        appFacade.checkUserActivities(commandLine);
+                        break;
+                    case SEE_GAME:
+                        appFacade.seeGame(commandLine);
+                        break;
+                    case ADD_GAME:
+                        //TODO: Create competitive games with this command
+                        appFacade.addGame(commandLine);
+                        break;
+                    case REMOVE_GAME:
+                        appFacade.removeGame(commandLine);
+                        break;
+
+                    // $$ DEBUG Commands $$
+                    case ADD_CARDS_TO_USER:
+                        appFacade.addCardsToUser(commandLine);
+                        break;
+                    case ADD_CUSTOM_RANKINGS:
+                        appFacade.addCustomRankings(commandLine);
+                        break;
+                    case REMOVE_CUSTOM_RANKING:
+                        appFacade.removeRanking(commandLine);
                         break;
 
                     // $$ Chat Functionalities $$
                     case LIST_PLAYERS:
                         appFacade.getOnlinePlayersToString(commandLine);
+                        break;
+                    case LIST_FRIENDS:
+                        appFacade.listPlayerFriends(commandLine);
+                        break;
+                    case LIST_BLOCKED:
+                        appFacade.showPlayerBlockedPlayers(commandLine);
+                        break;
+                    case LIST_CHAMPIONSHIPS:
+                        //TODO: implement list of championships
+                        break;
+                    case LIST_RANKING:
+                        appFacade.listRankings();
                         break;
                     case ADD_FRIEND:
                         appFacade.addFriend(commandLine);
@@ -88,29 +133,22 @@ public class TextUI {
                         System.out.println("[Game] " + (gameCreated ? "Game created with success" : "Game was not created!"));
                         break;
                     case CREATE_COMPETITIVE_GAME:
-                        boolean competitiveGameCreated = appFacade.createCompetitiveGame(commandLine);
-                        System.out.println(competitiveGameCreated ? "Game created with success" : "Game was not created!");
+                        appFacade.createCompetitiveGame(commandLine);
                         break;
                     case JOIN_GAME:
-                        boolean joinedGame = appFacade.joinGame(commandLine);
-                        System.out.println(joinedGame ? "User joined the game" : "User couldn't join the game!");
+                        appFacade.joinGame(commandLine);
                         break;
                     case START_GAME:
                         appFacade.startGame(commandLine);
-                        appFacade.startTurn(commandLine);
-//                        System.out.println(gameStarted ? "Game started" : "Game could not be started");
                         break;
                     case BET:
-                        boolean betted = appFacade.bet(commandLine);
-//                        System.out.println(betted ? "Bet correctly made" : "Can't perform bet");
+                        appFacade.bet(commandLine);
                         break;
                     case CHECK:
-                        boolean skipped = appFacade.check(commandLine);
-//                        System.out.println(skipped ? "Skip correctly made" : "Can't perform skip");
+                        appFacade.check(commandLine);
                         break;
                     case FOLD:
-                        boolean gaveUp = appFacade.fold(commandLine);
-//                        System.out.println(gaveUp ? "User gave up" : "Can't perform gave up for the selected user");
+                        appFacade.fold(commandLine);
                         break;
                     case SHOW_GAME_INFO:
                         appFacade.showGameInfo(commandLine);

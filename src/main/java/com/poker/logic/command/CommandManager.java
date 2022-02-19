@@ -5,7 +5,11 @@ import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
+import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingProvider;
+import com.poker.model.ranking.UnitOfWork;
+import com.poker.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,6 +64,7 @@ public class CommandManager {
     public void saveGame() {
         try {
             applicationData.saveGames(Constants.GAME_NAME);
+            RankingProvider.getInstance().commit();
         } catch (IOException e) {
             Log.getInstance().addLog("Couldn't save the game " + e.getMessage());
         }
@@ -131,5 +136,86 @@ public class CommandManager {
 
     public void listGames(ETypeOfGame typeOfGame) {
         CommandAdapter.getGamesToString(applicationData.getGamesList(), typeOfGame);
+    }
+
+    public void listPlayerFriends(String commandLine) {
+        CommandAdapter.showPlayerRelationList(commandLine, this.getOnlinePlayers(), EPlayerRelation.FRIENDS);
+    }
+
+    public void showPlayerBlockedPlayers(String commandLine) {
+        CommandAdapter.showPlayerRelationList(commandLine, this.getOnlinePlayers(), EPlayerRelation.BLOCKEDS);
+    }
+
+    public void createUser(String commandLine) {
+        if (isAdminUser()) {
+            this.addUser(commandLine);
+        }
+    }
+
+    public void addGame(String commandLine) {
+        if (isAdminUser()) {
+            Map<String, String> command = StringUtils.mapCommand(commandLine);
+            String name = command.get(Constants.NAME_PARAMETER);
+            if (name != null) {
+                this.createFriendlyGame("createFriendlyGame name=" + name + " creator=" + Constants.ADMIN_NAME);
+
+                Game game = applicationData.getGame(name);
+                if (game != null) {
+                    game.removePlayer(Constants.ADMIN_NAME);
+                }
+            } else {
+                System.out.println("Error creating the game!");
+            }
+        }
+    }
+
+    public void removeGame(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.removeGame(commandLine, applicationData.getGamesList());
+        }
+    }
+
+    private boolean isAdminUser() {
+        return this.getOnlinePlayers().get(Constants.ADMIN_NAME) != null;
+    }
+
+    public void editUser(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.editUser(commandLine, this.getOnlinePlayers());
+        }
+    }
+
+    public void kickUser(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.kickUser(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+        }
+    }
+
+    public void checkUserActivities(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.checkUserActivities(commandLine, getOnlinePlayers());
+        }
+    }
+
+    public void seeGame(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.showGameInfo(commandLine, applicationData.getGamesList());
+        }
+    }
+
+    public void addCardsToUser(String commandLine) {
+        CommandAdapter.addCardsToUser(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+    }
+
+    public void getRankings() {
+        CommandAdapter.getRankings(applicationData.getRankings());
+    }
+
+    public void addCustomRankings(String commandLine) {
+        CommandAdapter.addCustomRankings(commandLine, applicationData.getRankings(), this.getOnlinePlayers());
+    }
+
+    public void removeRanking(String commandLine) {
+        CommandAdapter.removeRanking(commandLine, applicationData.getRankings());
     }
 }

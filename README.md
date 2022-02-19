@@ -18,7 +18,9 @@ ____
 #### Important Notes:
 - A graphical application with a command line that manages all user actions.
 - Graphical part only reflects the state / action implemented punctually (it is __not__ necessary to present multiple interfaces on the same plane).
+- An admin need to be registered and logged in the application
 - The Pot money should be divided between the users with the highest score and in case of an odd quantity of pot chips, the nearest player to the dealer should receive the odd chip.
+
 
 ____
 

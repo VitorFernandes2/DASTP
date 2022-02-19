@@ -22,17 +22,21 @@ public enum ECommand {
     BLOCK_PLAYER("blockPlayer", "bp", "blockPlayer player=joaquim block=antonio"),
     BUY_POKER_CHIPS("comprarPokerChips", "cpc", ""),
     LIST_PLAYERS("listarJogadores", "lj", ""),
-    LIST_FRIENDS("listFriend", "lf", "listFriend"),
+    LIST_FRIENDS("listFriend", "lf", "listFriend name=lj"),
     LIST_BLOCKED("listBlocked", "lb", "listBlocked"),
     LIST_FRIENDLY_GAMES("listFriendlyGames", "lfg", "listFriendlyGames"),
     LIST_COMPETITIVE_GAMES("listarJogosCompetitivos", "ljc", ""),
     LIST_CHAMPIONSHIPS("listarCampeonatos", "lc", ""),
-    LIST_RANKING("listarPontuações", "lp", ""),
+    LIST_RANKING("listRankings", "lr", "listRankings"),
     CREATE_FRIENDLY_GAME("createFriendlyGame", "cfg", "createFriendlyGame name=jogo1 creator=lj"),
     CREATE_COMPETITIVE_GAME("createCompetitiveGame", "cjc", "cjc name=jogo1 creator=lj"),
     START_GAME("startGame", "sg", "startGame name=jogo1 player=lj"),
-    START_TURN("iniciarTurno", "it", ""),
     JOIN_GAME("joinGame", "jg", "joinGame name=jogo1 player=ana"),
+
+    //DEBUG COMMANDS
+    ADD_CARDS_TO_USER("setCards", "st", "setCards player=lj game=jogo1 c1=KS c2=KC"),
+    ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
+    REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),
 
     // In-Game commands
     BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
@@ -41,15 +45,18 @@ public enum ECommand {
     SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=jogo1"),
 
     // Admin commands
-    CREATE_USER("criarJogador", "cj", ""),
-    EDIT_USER("editarJogador", "ej", ""),
-    KICK_USER("expulsarJogador", "exj", ""),
-    CHECK_USER_ACTIVITIES("verificarAtividadesJogador", "vaj", ""),
-    SEE_GAME("verJogo", "vj", ""),
-    ADD_GAME("adicionarJogo", "aj", ""),
-    REMOVE_GAME("removerJogo", "rj", ""),
+    CREATE_USER("createPlayer", "cp", "cp name=vitor"),
+    EDIT_USER("editPlayer", "ep", "ep name=vitor newName=vh"),
+    KICK_USER("kick", "k", "kk name=vitor"),
+    CHECK_USER_ACTIVITIES("checkActivities", "ca", "ca name=vitor"),
+    SEE_GAME("seeGame", "sga", "sga game=jogo1"),
+    ADD_GAME("addGame", "ag", "ag name=jogo1"),
+    REMOVE_GAME("removeGame", "rg", "rg name=jogo1"),
 
     HELP("help", "h", "1"),
+
+    // Debug commands
+
 
     // default value
     UNKNOWN("Comando desconhecido ... tente outra vez", "UNKNOWN", "2");
