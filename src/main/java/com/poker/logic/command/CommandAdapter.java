@@ -16,7 +16,6 @@ import com.poker.model.wallet.Wallet;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -174,18 +173,15 @@ public class CommandAdapter {
             if (!gameName.equals("") && !creator.equals("")) {
                 Player player = playerList.get(creator);
                 if (!Objects.isNull(player)) {
-                    Map<String, Player> players = new LinkedHashMap<>();
-                    players.put(creator, player);
-
                     GameFactory factory = (GameFactory) FactoryProvider.getFactory(EFactory.GAMES);
-
                     if (factory == null) {
                         return false;
                     }
 
                     // TODO: deal with this minimumAmount, custom for competitive games, and the default value from Constants for friendly games
-                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, players, player);
+                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player);
                     Game game = factory.createObject(gameCreationData);
+                    game.addPlayer(player, 1); // TODO: adapt this fee on the competitive game
 
                     return data.addGame(game);
                 }

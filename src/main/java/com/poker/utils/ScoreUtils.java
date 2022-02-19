@@ -44,7 +44,6 @@ public class ScoreUtils {
 
         System.out.println("\n[Game] Winning Cards: " + CardsUtils.cardsToString(Stream.concat(tableCards.stream(), Stream.of(players.get(winner).getGameCards())).toArray(ICard[]::new)));
         LOG.addAndShowLog("[Game] Winner of this round is " + winner + " with an " + winningPlay + ".");
-        LOG.addAndShowLog("[Game] Player " + winner + " now has " + players.get(winner).getWallet().getPokerGameChips() + " PCJs.");
+        LOG.addAndShowLog("[Game] Player " + winner + " win " + pot + " PCJs, now has " + players.get(winner).getWallet().getPokerGameChips() + " PCJs.");
     }
-
 }

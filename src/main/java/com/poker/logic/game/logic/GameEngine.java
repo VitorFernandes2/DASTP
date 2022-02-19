@@ -26,37 +26,40 @@ public class GameEngine implements Serializable {
     private final Queue<String> queuePlayOrder;
     private final Map<String, Integer> playerBetsList;
     private final List<String> playerFoldList;
-    private final List<ICard> deck;
     private final List<ICard> tableCards;
+    private final ETypeOfGame typeOfGame;
+    private List<ICard> deck;
     private Player dealer;
     private Integer pot;
     private Integer higherBet;
-    private Integer smallBlind;
+    private Integer smallBlind; // TODO: apply small and big blind automatically
     private Integer bigBlind;
 
-    public GameEngine(Map<String, Player> players, Integer bigBlind) {
+    public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame) {
         this.players = players;
         this.queuePlayOrder = new ArrayDeque<>();
         this.dealer = null;
         this.deck = new CardFactory().createObject(null);
         this.tableCards = new ArrayList<>();
+        this.typeOfGame = typeOfGame;
         this.pot = 0;
         this.higherBet = 0;
         this.bigBlind = bigBlind;
         this.smallBlind = bigBlind / 2;
-        playerBetsList = new HashMap<>();
-        playerFoldList = new ArrayList<>();
+        this.playerBetsList = new HashMap<>();
+        this.playerFoldList = new ArrayList<>();
     }
 
     // TODO: [TBC] generalize this method for all games or validate in another place TBC
     // Add player to the game and convert PCs into PCJs
-    public boolean addPlayer(Player player, int fee, ETypeOfGame typeOfGame) {
+    public boolean addPlayer(Player player, int fee) {
         if (!this.playerInGame(player.getName())) {
             //TODO: [TBC] convert PCs into PCJs in a competitive game
             if (Objects.equals(ETypeOfGame.FRIENDLY, typeOfGame)) {
-                walletUtils.chipsToGame(1);
+                player.getWallet().setPokerGameChips(walletUtils.chipsToGame(1));
             } else if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame) && player.getWallet().getPokerChips() >= fee) {
-                walletUtils.chipsToGame(fee); // TODO: remove PCs
+                player.getWallet().setPokerGameChips(walletUtils.chipsToGame(fee)); // TODO: [TBC] remove PCs
+                player.getWallet().removePokerChips(fee);
             } else {
                 return false;
             }
@@ -67,14 +70,16 @@ public class GameEngine implements Serializable {
     }
 
     // Remove player from the game and convert PCJs into PCs
-    public boolean removePlayer(String playerName, ETypeOfGame typeOfGame) {
+    public boolean removePlayer(String playerName) {
         if (this.playerInGame(playerName)) {
+            Player player = players.get(playerName);
             // TODO: [TBC] validate if is a friendly game and convert game money to wallet
             if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame)) {
-                walletUtils.chipsToPocket(players.remove(playerName).getWallet().resetPokerGameChips());
+                player.getWallet().addPokerChips(walletUtils.chipsToPocket(players.remove(playerName).getWallet().resetPokerGameChips()));
             } else {
                 players.remove(playerName).getWallet().resetPokerGameChips();
             }
+            queuePlayOrder.remove(playerName);
             return true;
         }
         return false;
@@ -94,12 +99,13 @@ public class GameEngine implements Serializable {
     }
 
     public void startRound() {
+        chooseDealer(dealer);
+        deck = new CardFactory().createObject(null);
+        CardsUtils.distributeCardsPerPlayer(players, deck);
         reset();
     }
 
     private void reset() {
-        chooseDealer(dealer);
-        CardsUtils.distributeCardsPerPlayer(players, deck);
         pot = 0;
         higherBet = 0;
         playerBetsList.clear();
@@ -125,63 +131,70 @@ public class GameEngine implements Serializable {
         }
     }
 
-    private Integer getTotalAmount(String playerName, Integer amount) {
+    private Integer getBetsAmount(String playerName, Integer amount) {
         return playerBetsList.get(playerName) == null ? amount : playerBetsList.get(playerName) + amount;
     }
 
     public boolean bet(String playerName, Integer amount) {
         if (!isPlayerTurn(playerName)) return false;
 
+        int betsAmount = getBetsAmount(playerName, amount);
+        if (betsAmount < bigBlind) {
+            System.out.println("[Game] The player " + playerName + " needs to bet at least " + bigBlind + " PCJs");
+            return false;
+        }
+
+        // Compare with the higher bet
+        if (higherBet == null) {
+            higherBet = betsAmount;
+        } else if (betsAmount < higherBet) { // need to call
+            System.out.println("[Game] The player " + playerName +
+                    " need to bet more! Value to call: " +
+                    (playerBetsList.containsKey(playerName) ? higherBet - playerBetsList.get(playerName) : higherBet) +
+                    " PCJs");
+            return false;
+        } else if (betsAmount > higherBet) { // made a raise
+            // Check if any player needs to be added to the queue
+            if (players.size() - playerFoldList.size() > queuePlayOrder.size()) {
+                List<String> playersAux = new ArrayList<>(players.keySet());
+                for (Map.Entry<String, Player> e : players.entrySet()) {
+                    String key = e.getKey();
+                    String playerNameAux = playersAux.remove(0);
+                    if (key.equals(playerName)) break;
+                    if (!playerFoldList.contains(playerNameAux) && !queuePlayOrder.contains(playerNameAux)) {
+                        playersAux.add(playerNameAux);
+                    }
+                }
+                playersAux.removeAll(queuePlayOrder); // FIXME: check if can remove this line
+                queuePlayOrder.addAll(playersAux);
+            }
+            higherBet = betsAmount;
+        }
+
         // Don't have PCJs enough
         if (!players.get(playerName).getWallet().removePokerGameChips(amount)) {
             return false;
         }
-
-        // TODO: check if is equals or higher then the minimum amount
-
-        // TODO: [TBC] bet logic (check if the player needs to bet more, history if bets in that turn)
-        // Compare with the higher bet
-        if (higherBet == null) {
-            higherBet = getTotalAmount(playerName, amount);
-        } else if (getTotalAmount(playerName, amount) < higherBet) {
-            System.out.println("[Game] Player: " + playerName +
-                    " need to bet at least " +
-                    (playerBetsList.containsKey(playerName) ? higherBet - playerBetsList.get(playerName) : higherBet) +
-                    " PCJs");
-            return false;
-        } else if (getTotalAmount(playerName, amount) > higherBet) {
-            if (higherBet != 0) {
-                for (Map.Entry<String, Player> entry : players.entrySet()) {
-                    String s = entry.getKey();
-                    if (s.equals(playerName)) break;
-                    queuePlayOrder.add(s);
-                }
-            }
-            higherBet = getTotalAmount(playerName, amount);
-        }
-
-        // TODO: bet history of the actual state
         playerBetsList.put(playerName, playerBetsList.containsKey(playerName) ? playerBetsList.get(playerName) + amount : amount);
 
         addToPot(amount);
-        System.out.println("[Game] Player: " + playerName + " made a bet of " + amount + " PCJs");
+        System.out.println("[Game] The player " + playerName + " made a bet of " + amount + " PCJs");
         queuePlayOrder.remove(playerName);
         return queuePlayOrder.size() == 0;
     }
 
     public boolean check(String playerName) {
         if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println("[Game] " + queuePlayOrder.peek() + " needs to play first!");
+            System.out.println("[Game] The player " + queuePlayOrder.peek() + " needs to play first!");
             return false;
         }
 
-        // TODO: [TBC] check if the player can check or needs to bet
         if (higherBet != 0 && !higherBet.equals(playerBetsList.get(playerName))) {
-            System.out.println("[Game] Player: " + playerName + " needs to bet or fold! Value to call: " + higherBet);
+            System.out.println("[Game] The player " + playerName + " needs to bet or fold! Value to call: " + higherBet);
             return false;
         }
 
-        System.out.println("[Game] Player: " + playerName + " Check!");
+        System.out.println("[Game] The player " + playerName + " Check!");
         queuePlayOrder.remove(playerName);
         return queuePlayOrder.size() == 0;
     }
@@ -215,7 +228,18 @@ public class GameEngine implements Serializable {
     public void triggerShowdown() {
         fillQueue();
         ScoreUtils.scoring(this.pot, this.tableCards, this.queuePlayOrder, this.players);
+        clearPlayer();
         startRound();
+    }
+
+    private void clearPlayer() {
+        List<String> playersToBeRemoved = new ArrayList<>();
+        players.forEach((s, player) -> {
+            if (!playerHasEnoughPockerGameChips(player)) {
+                playersToBeRemoved.add(s);
+            }
+        });
+        playersToBeRemoved.forEach(this::removePlayer);
     }
 
     private void withdrawCardToTable() {
@@ -226,6 +250,7 @@ public class GameEngine implements Serializable {
         return !Objects.isNull(this.players.get(username));
     }
 
+    // Check if the player made fold
     private boolean playerGaveUp(String playerName) {
         return playerFoldList.contains(playerName);
     }
@@ -235,19 +260,19 @@ public class GameEngine implements Serializable {
         if (playerName.equals(queuePlayOrder.peek())) {
             return true;
         }
-        LOG.addAndShowLog("[Game] " + queuePlayOrder.peek() + " needs to wait is turn!");
+        LOG.addAndShowLog("[Game] " + playerName + " needs to wait is turn!");
         return false;
     }
 
-    // TODO: check if is the endRound check the number of players in the queue before fillQueue()
+    // Check if is the end round by checking the number of players in the queue
     public boolean isRoundOver() {
-        // if true show the table winner
-        return false;
+        System.out.println("[DEBUG] Number of player: " + queuePlayOrder.size());
+        return queuePlayOrder.size() == 1;
     }
 
-    // TODO: check if is the endgame check the number of players and the minimum bet
+    // TODO: [TBC] check if is the endgame check the number of players and the minimum bet
     public boolean isGameOver() {
-        return false;
+        return players.size() == 1;
     }
 
     private void fillQueue() {
@@ -257,12 +282,15 @@ public class GameEngine implements Serializable {
             higherBet = 0;
 
             players.forEach((s, player) -> {
-                        if (!playerGaveUp(player.getName())) {
-                            queuePlayOrder.add(s);
-                        }
-                    }
-            );
+                if (!playerGaveUp(player.getName())) {
+                    queuePlayOrder.add(s);
+                }
+            });
         }
+    }
+
+    private boolean playerHasEnoughPockerGameChips(Player player) {
+        return player.getWallet().getPokerGameChips() >= bigBlind;
     }
 
     private void printCardsPerPlayer() {
@@ -330,6 +358,10 @@ public class GameEngine implements Serializable {
 
     public Map<String, Player> getPlayers() {
         return players;
+    }
+
+    public ETypeOfGame getTypeOfGame() {
+        return typeOfGame;
     }
 
     //</editor-fold>

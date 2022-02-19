@@ -39,7 +39,7 @@ public class StateAdapter implements IGameState, Serializable {
     protected IGameState isGameOver() {
         getGameEngine().triggerShowdown();
         if (getGameEngine().isGameOver()) {
-            return null;
+            return null; // TODO: deal with the end game
         } else {
             return new SetupState(getGameEngine());
         }

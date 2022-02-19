@@ -3,6 +3,7 @@ package com.poker.logic.factory.game;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.model.player.Player;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class GameCreationData {
@@ -13,12 +14,12 @@ public class GameCreationData {
     private final Map<String, Player> players;
     private final Player player;
 
-    public GameCreationData(String gameName, Integer friendlyGameMinimumPlayers, int minimumAmount, ETypeOfGame typeOfGame, Map<String, Player> players, Player player) {
+    public GameCreationData(String gameName, Integer friendlyGameMinimumPlayers, int minimumAmount, ETypeOfGame typeOfGame, Player player) {
         this.gameName = gameName;
         this.friendlyGameMinimumPlayers = friendlyGameMinimumPlayers;
         this.minimumAmount = minimumAmount;
         this.typeOfGame = typeOfGame;
-        this.players = players;
+        this.players = new LinkedHashMap<>();
         this.player = player;
     }
 

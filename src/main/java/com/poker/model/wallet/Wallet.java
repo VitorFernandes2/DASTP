@@ -59,7 +59,7 @@ public class Wallet implements Serializable {
     }
 
     public boolean removePokerGameChips(int pokerGameChips) {
-        if (this.pokerGameChips <= pokerGameChips) {
+        if (this.pokerGameChips >= pokerGameChips) {
             this.pokerGameChips -= pokerGameChips;
             return true;
         }

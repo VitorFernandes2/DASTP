@@ -30,6 +30,7 @@ public class TheRiverState extends StateAdapter {
     @Override
     public IGameState fold(String playerName) {
         boolean nextState = getGameEngine().fold(playerName);
+        if (getGameEngine().isRoundOver())  getGameEngine().triggerShowdown();
         if (nextState) {
             return isGameOver();
         }
