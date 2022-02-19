@@ -92,10 +92,6 @@ public class ApplicationFacade {
         commandManager.blockPlayer(commandLine);
     }
 
-    // TODO: remove
-    public void startTurn(String commandLine) {
-    }
-
     public void undo() {
         commandManager.undo();
     }

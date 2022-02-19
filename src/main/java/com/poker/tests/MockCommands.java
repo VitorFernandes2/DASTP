@@ -80,4 +80,29 @@ public class MockCommands {
             "check game=jogo1 player=ana",
             "check game=jogo1 player=manel"
     ));
+
+    public static final List<String> CREATE_GAME_BETTING = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "reg name=ana",
+            "log name=ana",
+            "reg name=manel",
+            "log name=manel",
+            "joinGame name=jogo1 player=ana",
+            "joinGame name=jogo1 player=manel",
+            "startGame name=jogo1 player=lj",
+            "bet game=jogo1 player=lj amount=5",
+            "bet game=jogo1 player=ana amount=5",
+            "bet game=jogo1 player=manel amount=5",
+            "bet game=jogo1 player=lj amount=5",
+            "bet game=jogo1 player=ana amount=5",
+            "bet game=jogo1 player=manel amount=5",
+            "bet game=jogo1 player=lj amount=5",
+            "bet game=jogo1 player=ana amount=5",
+            "bet game=jogo1 player=manel amount=5",
+            "bet game=jogo1 player=lj amount=5",
+            "bet game=jogo1 player=ana amount=5",
+            "bet game=jogo1 player=manel amount=5"
+    ));
 }

@@ -65,7 +65,9 @@ public class CardsUtils {
         StringBuilder str = new StringBuilder();
         str.append("## Player's cards:");
         players.forEach((playerName, player) -> {
-            str.append("\n\tName: ").append(playerName).append(" | Cards: ").append(cardsToString(player.getGameCards()));
+            str.append("\n\tName: ").append(playerName)
+                    .append(" | PCJs: ").append(player.getWallet().getPokerGameChips())
+                    .append(" | Cards: ").append(cardsToString(player.getGameCards()));
         });
         return str.toString();
     }

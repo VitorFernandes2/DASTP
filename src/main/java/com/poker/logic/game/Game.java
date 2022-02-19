@@ -27,7 +27,7 @@ public class Game implements Serializable {
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
-        this.gameEngine = new GameEngine(players, Constants.PCJ_MINIMUM_BET);
+        this.gameEngine = new GameEngine(players, Constants.PCJ_MINIMUM_BET, typeOfGame);
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -46,11 +46,11 @@ public class Game implements Serializable {
     }
 
     public boolean addPlayer(Player player, int fee) {
-        return this.gameEngine.addPlayer(player, fee, typeOfGame);
+        return this.gameEngine.addPlayer(player, fee);
     }
 
     public boolean removePlayer(String player) {
-        return this.gameEngine.removePlayer(player, typeOfGame);
+        return this.gameEngine.removePlayer(player);
     }
 
     public void startGame(Player player) {
