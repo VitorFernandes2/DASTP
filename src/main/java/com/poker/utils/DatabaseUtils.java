@@ -5,6 +5,7 @@ import com.poker.model.ranking.RankingLine;
 import com.poker.model.wallet.Wallet;
 
 import java.sql.*;
+import java.util.Map;
 
 public class DatabaseUtils {
     static final String DB_URL = "jdbc:h2:~/poker";
@@ -245,6 +246,31 @@ public class DatabaseUtils {
             statement.close();
             connection.close();
         } catch (SQLException | ClassNotFoundException e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public static void setRankings(Map<String, RankingLine> rankings) throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            String username = "";
+            int wins = 0;
+
+            String findUserSQL = "SELECT * FROM RANKING";
+            ResultSet rs = statement.executeQuery(findUserSQL);
+            while (rs.next()) {
+                username = rs.getString("name");
+                wins = rs.getInt("wins");
+
+                rankings.put(username, new RankingLine(username, wins));
+            }
+            rs.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
             throw new Exception(e.getMessage());
         }
     }

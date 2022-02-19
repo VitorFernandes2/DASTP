@@ -1,6 +1,6 @@
 package com.poker.utils;
 
-import com.poker.model.card.ICard;
+import com.poker.model.card.*;
 import com.poker.model.player.Player;
 
 import java.util.ArrayList;
@@ -70,5 +70,57 @@ public class CardsUtils {
                     .append(" | Cards: ").append(cardsToString(player.getGameCards()));
         });
         return str.toString();
+    }
+
+    public static ICard convertCardFromString(String card) {
+        int length = card.length();
+        int lastCharPlace = length - 1;
+        ICard newCard;
+        int value;
+        char firstChar = card.toUpperCase().charAt(0);
+        char secondChar = card.toUpperCase().charAt(1);
+        char lastChar = card.toUpperCase().charAt(lastCharPlace);
+
+        switch (firstChar) {
+            case 'K':
+                value = 13;
+                break;
+            case 'J':
+                value = 11;
+                break;
+            case 'Q':
+                value = 12;
+                break;
+            case 'A':
+                value = 1;
+                break;
+            default:
+                if (length > 2 && firstChar == '1' && secondChar == '0') {
+                    value = 10;
+                } else if (length == 2) {
+                    value = firstChar - '0';
+                } else {
+                    return null;
+                }
+        }
+
+        switch (lastChar) {
+            case 'S':
+                newCard = new SpadesCard(value);
+                break;
+            case 'C':
+                newCard = new ClubsCard(value);
+                break;
+            case 'D':
+                newCard = new DiamondsCard(value);
+                break;
+            case 'H':
+                newCard = new HeartsCard(value);
+                break;
+            default:
+                return null;
+        }
+
+        return newCard;
     }
 }

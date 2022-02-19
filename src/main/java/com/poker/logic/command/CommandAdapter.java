@@ -7,6 +7,7 @@ import com.poker.logic.factory.game.GameCreationData;
 import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.logic.game.Game;
+import com.poker.model.card.*;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.FilterDecorator;
 import com.poker.model.filter.Log;
@@ -15,14 +16,14 @@ import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 import com.poker.model.wallet.Wallet;
+import com.poker.utils.CardsUtils;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommandAdapter {
     private static final Log LOG = Log.getInstance();
@@ -72,7 +73,7 @@ public class CommandAdapter {
                 return false;
             }
 
-            if (!Objects.isNull(player) && !inPlayersArray(playerList, name)) {
+            if (!Objects.isNull(player) && playersInArray(playerList, name)) {
                 // Notify other players
                 notifyNewLogin(playerList, name);
 
@@ -100,8 +101,8 @@ public class CommandAdapter {
         }));
     }
 
-    private static boolean inPlayersArray(Map<String, Player> playerList, String name) {
-        return playerList.get(name) != null;
+    private static boolean playersInArray(Map<String, Player> playerList, String name) {
+        return playerList.get(name) == null;
     }
 
     public static void buyChips(String commandLine, Map<String, Player> playerList) {
@@ -109,7 +110,7 @@ public class CommandAdapter {
         String username = command.get(Constants.NAME_PARAMETER);
         String valueStr = command.get(Constants.VALUE_PARAMETER);
         String method = command.get(Constants.METHOD_PARAMETER);
-        double value = 0;
+        double value;
 
         if (username != null && valueStr != null && method != null) {
             value = Double.parseDouble(valueStr);
@@ -154,12 +155,12 @@ public class CommandAdapter {
             return;
         }
 
-        if (!inPlayersArray(onlinePlayers, senderName)) {
+        if (playersInArray(onlinePlayers, senderName)) {
             System.out.println("[System] " + senderName + " is offline!");
             return;
         }
 
-        System.out.println(!inPlayersArray(onlinePlayers, receiverName) ?
+        System.out.println(playersInArray(onlinePlayers, receiverName) ?
                 "[System] " + receiverName + " is offline!" :
                 onlinePlayers.get(receiverName).getPlayersBlocked().contains(senderName) ?
                         "[System] You can't send messages to this user!" :
@@ -341,22 +342,27 @@ public class CommandAdapter {
         if (playerName != null && playerName.length() > 0) {
             Player player = onlinePlayers.get(playerName);
             if (player != null) {
-                gamesList.forEach((s, game) -> {
-                    boolean containsKey = game.getPlayersList().containsKey(playerName);
-                    if (!containsKey) {
-                        onlinePlayers.remove(playerName);
-                        try {
-                            DatabaseUtils.removePlayerFromDB(playerName);
-                        } catch (Exception e) {
-                            System.out.println("Error removing the player from the database");
-                        }
+                boolean containsKey = gamesList.entrySet().stream().anyMatch(stringGameEntry ->
+                     stringGameEntry.getValue().getPlayersList().containsKey(playerName));
+
+                if (!containsKey) {
+                    Player removedPlayer = onlinePlayers.remove(playerName);
+                    onlinePlayers.forEach((s, p) -> {
+                        p.getFriends().remove(removedPlayer.getName());
+                        p.getPlayersBlocked().remove(removedPlayer.getName());
+                    });
+
+                    try {
+                        DatabaseUtils.removePlayerFromDB(playerName);
+                    } catch (Exception e) {
+                        System.out.println("Error removing the player from the database");
                     }
-                });
+                }
             }
         }
     }
 
-    public static void checkUserActivities(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+    public static void checkUserActivities(String commandLine, Map<String, Player> onlinePlayers) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
 
@@ -369,7 +375,7 @@ public class CommandAdapter {
         }
     }
 
-    public static void seeGame(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+    public static void seeGame(String commandLine, Map<String, Game> gamesList) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.NAME_PARAMETER);
 
@@ -377,11 +383,130 @@ public class CommandAdapter {
             Game game = gamesList.get(gameName);
             if (game != null) {
                 StringBuilder str = new StringBuilder();
-                str.append("Creator: ").append(game.getCreatorName()).append("\n\n");
-                str.append("Players\t\t");
+                str.append("Creator: ").append(game.getCreatorName()).append("\n");
+                str.append("Players:\t\t\n");
                 game.getPlayersList().forEach((s, player) -> str.append("> ").append(s).append("\n"));
                 System.out.println(str);
             }
         }
+    }
+
+    public static void addCardsToUser(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+        String cardOne = command.get(Constants.CARD_ONE_PARAMETER);
+        String cardTwo = command.get(Constants.CARD_TWO_PARAMETER);
+
+        if (playerName != null && cardOne != null && cardTwo != null) {
+            Player player = onlinePlayers.get(playerName);
+            if (player != null) {
+                ICard[] newCards = new ICard[2];
+                newCards[0] = CardsUtils.convertCardFromString(cardOne);
+                newCards[1] = CardsUtils.convertCardFromString(cardTwo);
+
+                var playerGame = gamesList
+                        .values()
+                        .stream()
+                        .filter(v -> v.getPlayersList().containsKey(playerName))
+                        .collect(Collectors.toList());
+                Game game;
+                if (playerGame.size() == 1) {
+                    game = playerGame.get(0);
+                } else {
+                    System.out.println("The player isn't in the game");
+                    return;
+                }
+
+                if (cardsAreValid(newCards, game, player)) {
+                    replaceCards(newCards, player.getGameCards(), game, player);
+                }
+            }
+        }
+    }
+
+    private static boolean cardsAreValid(ICard[] newCards, Game game, Player player) {
+
+        if (newCards[0] != null && newCards[1] != null
+                && player.getGameCards()[0] != null && player.getGameCards()[0] != null) {
+            //Validate Cards in player hands
+            boolean inPlayersHand = game.getPlayersList().entrySet().stream().anyMatch(stringPlayerEntry -> {
+                var gameCards = stringPlayerEntry.getValue().getGameCards();
+
+                if (stringPlayerEntry.getKey().equals(player.getName())) {
+                    return false;
+                }
+
+                if (gameCards == null) {
+                    return false;
+                }
+
+                return Arrays.stream(gameCards).anyMatch(iCard ->
+                        iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
+                                iCard.getStringCardValue().equals(newCards[1].getStringCardValue()));
+            });
+
+            //Validate if in the table
+            boolean inTable = game.getDeck().stream().anyMatch(iCard -> {
+                var value = iCard.getStringCardValue();
+                return value.equals(newCards[0].getStringCardValue()) ||
+                        value.equals(newCards[1].getStringCardValue());
+            });
+
+            return inTable && !inPlayersHand;
+        }
+        return true;
+    }
+
+    private static void replaceCards(ICard[] newCards, ICard[] cardsToDeck, Game game, Player player) {
+        if (cardsToDeck[0] != null && cardsToDeck[1]!=null && game.getDeck() != null && game.getDeck().size() > 0) {
+            game.getDeck().removeIf(card -> card.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
+                    card.getStringCardValue().equals(newCards[1].getStringCardValue()));
+
+            game.getDeck().addAll(List.of(cardsToDeck));
+        }
+
+        player.getGameCards()[0] = newCards[0];
+        player.getGameCards()[1] = newCards[1];
+    }
+
+    public static void getRankings(Map<String, RankingLine> rankings) {
+        if (rankings.size() == 0) {
+            try {
+                DatabaseUtils.setRankings(rankings);
+            } catch (Exception e) {
+                System.out.println("Error getting rankings from Database! " + e.getMessage());
+            }
+        }
+
+        if (rankings.size() > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Player name\t\tNumber of wins\n");
+            var entry = rankings.entrySet();
+            entry.forEach(stringRankingLineEntry -> {
+                RankingLine line = stringRankingLineEntry.getValue();
+                stringBuilder.append(line.getPlayerName())
+                        .append("\t\t")
+                        .append(line.getWins())
+                        .append("\n");
+            });
+            System.out.println(stringBuilder);
+        } else {
+            System.out.println("There are no rankings available to show");
+        }
+    }
+
+    public static void removeRanking(String commandLine, Map<String, RankingLine> rankings) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+
+        if (playerName != null && playerName.length() > 0) {
+            if (rankings.size() > 0) {
+                rankings.remove(playerName);
+            }
+        }
+    }
+
+    public static void addCustomRankings(String commandLine, Map<String, RankingLine> rankings) {
+
     }
 }

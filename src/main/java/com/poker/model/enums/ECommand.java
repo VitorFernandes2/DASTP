@@ -36,6 +36,7 @@ public enum ECommand {
     //DEBUG COMMANDS
     ADD_CARDS_TO_USER("setCards", "stc", "setCards player=lj game=jogo1 c1=KS c2=KC"),
     ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
+    REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),
 
     // In-Game commands
     BET("bet", "b", "bet game=jogo1 player=lj amount=5"),

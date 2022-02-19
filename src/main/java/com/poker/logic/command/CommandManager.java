@@ -154,7 +154,7 @@ public class CommandManager {
             Map<String, String> command = StringUtils.mapCommand(commandLine);
             String name = command.get(Constants.NAME_PARAMETER);
             if (name != null) {
-                this.addGame("createFriendlyGame name=" + name + "creator=admin");
+                this.createFriendlyGame("createFriendlyGame name=" + name + " creator=admin");
             } else {
                 System.out.println("Error creating the game!");
             }
@@ -185,25 +185,29 @@ public class CommandManager {
 
     public void checkUserActivities(String commandLine) {
         if (isAdminUser()) {
-            CommandAdapter.checkUserActivities(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+            CommandAdapter.checkUserActivities(commandLine, getOnlinePlayers());
         }
     }
 
     public void seeGame(String commandLine) {
         if (isAdminUser()) {
-            CommandAdapter.seeGame(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+            CommandAdapter.seeGame(commandLine, applicationData.getGamesList());
         }
     }
 
     public void addCardsToUser(String commandLine) {
-        //TODO: finalize flow
+        CommandAdapter.addCardsToUser(commandLine, getOnlinePlayers(), applicationData.getGamesList());
     }
 
     public void getRankings() {
-        //TODO: finalize flow
+        CommandAdapter.getRankings(applicationData.getRankings());
     }
 
     public void addCustomRankings(String commandLine) {
-        //TODO: finalize flow
+        CommandAdapter.addCustomRankings(commandLine, applicationData.getRankings());
+    }
+
+    public void removeRanking(String commandLine) {
+        CommandAdapter.removeRanking(commandLine, applicationData.getRankings());
     }
 }

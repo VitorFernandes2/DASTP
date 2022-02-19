@@ -6,6 +6,8 @@ import com.poker.logic.command.CommandManager;
 import com.poker.logic.command.FoldCommand;
 import com.poker.logic.game.ETypeOfGame;
 
+import java.util.List;
+
 public class ApplicationFacade {
     private final CommandManager commandManager;
 
@@ -162,5 +164,9 @@ public class ApplicationFacade {
 
     public void addCustomRankings(String commandLine) {
         commandManager.addCustomRankings(commandLine);
+    }
+
+    public void removeRanking(String commandLine) {
+        commandManager.removeRanking(commandLine);
     }
 }

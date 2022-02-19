@@ -89,6 +89,59 @@ public class MockCommands {
             LIST_FRIENDS.getExample()
     ));
 
+    public static final List<String> DEBUG_COMMAND_TEST = new ArrayList<>(Arrays.asList(
+            "reg name=ana",
+            "reg name=lj",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "log name=ana",
+            "joinGame name=jogo1 player=ana",
+            "startGame name=jogo1 player=lj",
+            "setCards player=lj game=jogo1 c1=KS c2=KC"
+    ));
+
+    public static final List<String> SEE_GAME_COMMAND_TEST = new ArrayList<>(Arrays.asList(
+            "reg name=ana",
+            "reg name=lj",
+            "reg name=admin",
+            "log name=admin",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "log name=ana",
+            "joinGame name=jogo1 player=ana",
+            "startGame name=jogo1 player=lj",
+            "sga name=jogo1"
+    ));
+
+    public static final List<String> ADD_GAME_COMMAND_TEST = new ArrayList<>(Arrays.asList(
+            "reg name=ana",
+            "reg name=lj",
+            "reg name=admin",
+            "log name=admin",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "log name=ana",
+            "joinGame name=jogo1 player=ana",
+            "startGame name=jogo1 player=lj",
+            "ag name=jogo2",
+            "listFriendlyGames",
+            "rg name=jogo1",
+            "listFriendlyGames",
+            "ca name=lj"
+    ));
+
+    public static final List<String> KICK_COMMAND_TEST = new ArrayList<>(Arrays.asList(
+            "reg name=ana",
+            "reg name=lj",
+            "reg name=admin",
+            "log name=admin",
+            "log name=lj",
+            "log name=ana",
+            "listarJogadores",
+            "kick name=ana",
+            "listarJogadores"
+    ));
+
     public static final List<String> CREATE_GAME_BETTING = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",

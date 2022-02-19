@@ -13,6 +13,7 @@ public class Constants {
     public static final String GAME_NAME = "savegame.txt";
     public static final String ADMIN_NAME = "admin";
     public static final int DEFAULT_BIG_BLIND = 2;
+
     // Payments
     public static final Integer MONEY_CONVERSION_RATE = 100;
     public static final Integer PC_CONVERSION_RATE = 50;
@@ -31,5 +32,7 @@ public class Constants {
     public static final String BLOCK_PARAMETER = "block";
     public static final String ADD_PARAMETER = "add";
     public static final String NEW_NAME_PARAMETER = "newName";
+    public static final String CARD_ONE_PARAMETER = "c1";
+    public static final String CARD_TWO_PARAMETER = "c2";
 
 }

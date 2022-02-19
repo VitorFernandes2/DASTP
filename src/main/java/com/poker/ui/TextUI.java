@@ -61,38 +61,37 @@ public class TextUI {
                         appFacade.createUser(commandLine);
                         break;
                     case EDIT_USER:
-                        //TODO: Test
-                        appFacade.editUser(commandLine);
+                        //FIXME: Possibly it will be removed
+                        //appFacade.editUser(commandLine);
                         break;
                     case KICK_USER:
-                        //TODO: Test
                         appFacade.kickUser(commandLine);
                         break;
                     case CHECK_USER_ACTIVITIES:
-                        //TODO: Test
                         appFacade.checkUserActivities(commandLine);
                         break;
                     case SEE_GAME:
-                        //TODO: Test
                         appFacade.seeGame(commandLine);
                         break;
                     case ADD_GAME:
-                        //TODO: Test
+                        //TODO: Create competitive games with this command
                         appFacade.addGame(commandLine);
                         break;
                     case REMOVE_GAME:
-                        //TODO: Test
                         appFacade.removeGame(commandLine);
                         break;
 
                     // $$ DEBUG Commands $$
                     case ADD_CARDS_TO_USER:
-                        //TODO: Test
                         appFacade.addCardsToUser(commandLine);
                         break;
                     case ADD_CUSTOM_RANKINGS:
                         //TODO: Test
                         appFacade.addCustomRankings(commandLine);
+                        break;
+                    case REMOVE_CUSTOM_RANKING:
+                        //TODO: Test
+                        appFacade.removeRanking(commandLine);
                         break;
 
                     // $$ Chat Functionalities $$
@@ -109,7 +108,7 @@ public class TextUI {
                         //TODO: implement list of championships
                         break;
                     case LIST_RANKING:
-                        //TODO: implement print rankings
+                        //TODO: Test
                         appFacade.listRankings();
                         break;
                     case ADD_FRIEND:
@@ -133,7 +132,6 @@ public class TextUI {
                         appFacade.buyChips(commandLine);
                         break;
                     case CREATE_FRIENDLY_GAME:
-                        appFacade.createFriendlyGame(commandLine);
                         boolean gameCreated = appFacade.createFriendlyGame(commandLine);
                         System.out.println("[Game] " + (gameCreated ? "Game created with success" : "Game was not created!"));
                         break;

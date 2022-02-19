@@ -3,10 +3,12 @@ package com.poker.logic.game;
 import com.poker.logic.game.logic.GameEngine;
 import com.poker.logic.game.state.BuyInState;
 import com.poker.logic.game.state.IGameState;
+import com.poker.model.card.ICard;
 import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -191,8 +193,16 @@ public class Game implements Serializable {
         return bigBlind;
     }
 
+    public List<ICard> getDeck() {
+        return this.gameEngine.getDeck();
+    }
+
     public void incrementBigBlind(int bigBlind) {
         this.bigBlind += bigBlind;
+    }
+
+    public List<ICard> getTableCards() {
+        return this.gameEngine.getTableCards();
     }
 
     @Override
