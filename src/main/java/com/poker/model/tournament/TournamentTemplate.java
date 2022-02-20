@@ -38,5 +38,5 @@ public abstract class TournamentTemplate {
     }
 
     public abstract void startTournament();
-    public abstract void createFinal();
+    public abstract void createFinal(Map<String, Player> winners);
 }

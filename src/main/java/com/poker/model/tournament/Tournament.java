@@ -53,12 +53,21 @@ public class Tournament extends TournamentTemplate {
     }
 
     @Override
-    public void createFinal() {
-        Game finalGame = gameList.get(gameList.size()-1);
-        for (int i = 0; i < 3; i++) {
-            Game pastGame = gameList.get(i);
-            //TODO: add winners to the game
+    public void createFinal(Map<String, Player> winners) {
+        GameCreationData gameCreationData = new GameCreationData("game3" + tournamentName,
+                Constants.GAME_MINIMUM_PLAYERS,
+                Constants.GAME_MINIMUM_AMOUNT,
+                ETypeOfGame.COMPETITIVE,
+                creator);
+
+        gameCreationData.getPlayers().putAll(winners);
+
+        GameFactory factory = (GameFactory) FactoryProvider.getFactory(EFactory.GAMES);
+        if (factory == null) {
+            return;
         }
+        gameList.add(factory.createObject(gameCreationData));
+        gameList.get(gameList.size()-1).startGame(creator);
     }
 
     private void addPlayersToGames(List<GameCreationData> gameCreationDataList, Map<String, Player> playersMap) {

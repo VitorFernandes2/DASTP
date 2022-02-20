@@ -234,4 +234,8 @@ public class CommandManager {
     public void showTournamentsInfo() {
         CommandAdapter.showTournamentsInfo(applicationData.getTournamentList());
     }
+
+    public void startFinalGame(String commandLine) {
+        CommandAdapter.startFinalGame(commandLine, applicationData.getTournamentList(), getOnlinePlayers());
+    }
 }

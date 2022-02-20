@@ -6,8 +6,6 @@ import com.poker.logic.command.CommandManager;
 import com.poker.logic.command.FoldCommand;
 import com.poker.logic.game.ETypeOfGame;
 
-import java.util.List;
-
 public class ApplicationFacade {
     private final CommandManager commandManager;
 
@@ -184,5 +182,9 @@ public class ApplicationFacade {
 
     public void showTournamentsInfo() {
         commandManager.showTournamentsInfo();
+    }
+
+    public void startFinalGame(String commandLine) {
+        commandManager.startFinalGame(commandLine);
     }
 }

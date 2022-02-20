@@ -24,10 +24,7 @@ import com.poker.utils.CardsUtils;
 import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandAdapter {
@@ -641,5 +638,33 @@ public class CommandAdapter {
                 .append(tournament.getPlayersMap().size())
                 .append("\n"));
         System.out.println(str);
+    }
+
+    public static void startFinalGame(String commandLine, Map<String, Tournament> tournamentList, Map<String, Player> onlinePlayers) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String tourName = command.get(Constants.NAME_PARAMETER);
+
+        if (tourName != null) {
+            Tournament tournament = tournamentList.get(tourName);
+            if (tournament != null) {
+                var gamesList = tournament.getGameList();
+                Map<String, Player> winners = new HashMap<>();
+                boolean goToTheFinal = true;
+                for (var game: gamesList) {
+                    if (game.getState() == null) {
+                        Player player = onlinePlayers.get(game.getLastGameWinner());
+                        winners.put(player.getName(), player);
+                    } else {
+                        goToTheFinal = false;
+                    }
+                }
+
+                if (goToTheFinal) {
+                    tournament.createFinal(winners);
+                }
+            } else {
+                System.out.println("Can't find the tournament!");
+            }
+        }
     }
 }
