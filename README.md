@@ -1,5 +1,5 @@
 # DASTP
-Poker Game in Java
+Poker Game (_Texas Hold’em_) in Java
 
 # Java version 11  
 
@@ -16,15 +16,23 @@ ____
 # Game Rules - [link_1](http://www.pokerlistings.com/poker-rules) | [link_2](https://www.pokernews.com/poker-rules/texas-holdem.htm)  | [link_3](https://pt.wikipedia.org/wiki/Texas_hold_%27em) | [link_4](https://www.cardplayer.com/poker-tools/odds-calculator/texas-holdem)
 
 #### Important Notes:
-- A graphical application with a command line that manages all user actions.
-- Graphical part only reflects the state / action implemented punctually (it is __not__ necessary to present multiple interfaces on the same plane).
-- An admin need to be registered and logged in the application
+- A graphical application with a command line that manages all user actions;
+- Graphical part only reflects the state / action implemented punctually (it is __not__ necessary to present multiple interfaces on the same plane);
+- An admin need to be registered and logged in the application;
 - The Pot money should be divided between the users with the highest score and in case of an odd quantity of pot chips, the nearest player to the dealer should receive the odd chip.
-
 
 ____
 
-# Card Sequences (generic):
+# __Important Tags__
+| __Tag__ | __Meaning__ |
+| --- |  ---  |
+| __[DONE]__ | __Functionality is done and was tested.__ |
+| __[WIP]__ | __Functionality is actualy in working in progress.__ |
+| __[TBT]__ | __Functionality is implemented, but it needs to be tested.__ |
+
+____
+
+# __Card Sequences__ (generic):
 
 | Rules | Example |
 | --- |  ---  |
@@ -81,23 +89,25 @@ ____
   - [ ] Client (__normal user__)
     - [x] ~~User registration~~ [DONE]
     - [x] ~~Create Friendly Games~~ [DONE]
-    - [ ] List of Games (only those games that the user can participate should appear)
+    - [ ] List of Games (only those games that the user can participate should appear) __[TBT]__
 
-  - [ ] Client (__paid out user__)(all normal user features + extras)
+  - [ ] Client (__paid out user__)(all normal user features + extras) __[TBT]__
     - [x] ~~System Services~~ [DONE]
 
 		
 ### Virtual Money (Poker-Chips == PCs | Poker-Chips-Jogos == PCJs):
 
   - [ ] __Acquisition:__
-    - [x] ~~Compra no Sistema~~ [DONE]
-    - [ ] Ganho em Jogos / Torneios
+    - [x] ~~System Money Aquisition~~ [DONE]
+    - [x] ~~Receive Pot money in Friendly Games (PCJs)~~ [DONE]
+    - [ ] Receive Pot money in Competitive Games (PCJs and Money) __[TBT: Money]__
+    - [ ] Receive Pot money in Championships Games (PCJs and Money) __[WIP]__
 
-  - [ ] __Utilization:__
+  - [x] __Utilization:__
     - [x] ~~Purchase of Services (ex: paid games creation)~~ [DONE]
-    - [ ] Games betting [WIP]
+    - [x] ~~Games betting~~ [DONE]
     - [x] ~~Cash Conversion~~ [DONE]
-    - [ ] (We) Set the conversion rate in the competitive game [WIP]
+    - [x] ~~(We) Set the conversion rate in the competitive game~~ [DONE]
 
 	
 ### Games (settings depend on game scenario __(Game Type and Configuration)__):
@@ -106,11 +116,11 @@ ____
   - [ ] They all start with the same amount of PCJs
   - [x] ~~PCJs are obtained after paying an amount of PCs (conversion rate A)~~ [DONE]
   - [x] ~~PCJs are converted to PCs after game completion (A conversion rate)~~ [DONE]
-  - [ ] Friendly Games (0 PCs == 50 PCJs) they have no return from PCJs to PCs at the end of the game
+  - [ ] Friendly Games (0 PCs == 50 PCJs) they have no return from PCJs to PCs at the end of the game __[TBT]__
   - [x] ~~Payment / transfer methods~~ [DONE]
   - [x] ~~(5% of the purchase price of PCs is acquired by the company)~~ [DONE]
   - [x] ~~After Min players present, host can start the game~~ [DONE]
-    - [ ] After the game starts, specified deposit is charged
+    - [ ] After the game starts, specified deposit is charged __[TBT]__
 
   - [ ] Friendly Games __(not configurable)__:
     - [ ] 0 PCs == 50 PCJs
@@ -124,7 +134,7 @@ ____
     - [ ] Amount of Bets (Min)
     - [ ] PC conversion rate for this game
 
-  - [ ] Tournaments __(their format)__[^2]
+  - [ ] Tournaments __(their format)__[^2] __[WIP]__
 
 
 ### Communication between Players
@@ -139,22 +149,23 @@ ____
 ### Game Creation
 
   - [x] ~~Min deposit~~ [DONE]
-  - [ ] Initial value of PCJs (you can set the conversion rate at the start)
+  - [x] ~~Initial value of PCJs (you can set the conversion rate at the start, only on competitive games)~~ [DONE]
   - [x] ~~Number of Players (Min)~~ [DONE]
   - [x] ~~Creator with 50 PCs or more -> competitive play~~ [DONE]
 
 
 ### Management Operations
 
-  - [ ] BackEnd:
+  - [x] BackEnd:
     - [x] ~~CRUD, Action Log and other user features~~  [DONE]
-    - [ ] Creation / Removal / Game Info [WIP]
+    - [x] ~~Creation / Removal / Game Info~~ [DONE]
+    - [x] ~~Players Ranking by Games~~ [DONE]
 
 
 ### User Interface
 
   - [ ] CLI application
-    - [ ] Functions to simulate user and administrator actions
+    - [x] Functions to simulate user and administrator actions [DONE][^2]
     - [x] ~~Registration and Log of user actions~~ [DONE]
       - [ ] __Sintaxe:__[^1]
         - [ ] `criaTreino nomeJogo=jogo1 criador=joao`
@@ -217,6 +228,7 @@ ____
 
     - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation [DONE]
 
+____
 
 ### Implementation Restrictions[^3]
 <!-- Esta parte não foi traduzida por conveniencia atual de trabalho -->
@@ -225,11 +237,10 @@ ____
   - [x] ~~Fábrica de Fábricas de Objetos~~ -> __Criação dos tipos de Fábrica__ [DONE]
   - [x] ~~Padrão Protótipo~~ -> __Jogos__ [DONE]
   - [x] ~~Singleton~~ -> __Logs e Application Data__ [DONE]
-  - [ ] Object Poll -> ... [WIP][^1]
   - [x] ~~Padrão Builders~~ -> __Criação de Jogos__ [DONE]
 
 ##### __Padrões de Persistência__
-  - [ ] Unit of Work [^1]
+  - [x] ~~Unit of Work~~ -> __Rankings__ [DONE]
   - [x] ~~Identity Map~~ -> __Application Data__ [DONE]
 
 ##### __Padrões Arquiteturais de Persistência__
@@ -240,11 +251,11 @@ ____
   - [ ] Padrão Mapeamento
 
 ##### __Padrões de Desenho__
-  - [x] ~~Estratégias~~ + ~~Padrão Máquina de Estados~~ -> __Regras do Jogo__ [WIP][^1]
+  - [x] ~~Estratégias~~ + ~~Padrão Máquina de Estados~~ -> __Regras do Jogo__ [DONE]
   - [x] ~~Padrão de Decoradores~~ -> __Filtragem de acesso ao logs__ [DONE]
   - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__ [DONE]
   - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__ [DONE]
-  - [x] ~~Padrão Template~~ -> __Estados, ...__ [DONE]
+  - [x] ~~Padrão Template~~ -> __Torneios, ...__ [WIP]
   - [x] ~~Padrão Comando~~ -> __Comandos da "Aplicação" CLI__ [DONE]
 
 ____
@@ -252,14 +263,14 @@ ____
 ### GRASP
 ##### __Padrões GRASP__
   - [x] ~~Perito (de Informação)~~ -> [DONE]
-  - [x] ~~Criador~~ - Filtro -> [DONE]
+  - [x] ~~Criador~~ -> Filtro [DONE]
   - [x] ~~Baixo Acoplamento~~ -> [DONE]
-  - [x] ~~Controlador~~ - Facede -> [DONE]
+  - [x] ~~Controlador~~ -> Facede [DONE]
   - [x] ~~Alta Coesão~~ -> [DONE]
-  - [x] ~~Polimorfismo~~ - Filtro + Estados + Logs + ... -> [DONE]
-  - [x] ~~Invenção (Artifício)~~ - Facede -> [DONE]
-  - [x] ~~Indirecção~~ - CommandManager + Facede + CommandAdapter -> [DONE]
-  - [x] ~~Variação Protegida~~ - CommandManager -> [DONE]
+  - [x] ~~Polimorfismo~~ -> Filtro + Estados + Logs + ... [DONE]
+  - [x] ~~Invenção (Artifício)~~ -> Facede [DONE]
+  - [x] ~~Indirecção~~ -> CommandManager + Facede + CommandAdapter [DONE]
+  - [x] ~~Variação Protegida~~ -> CommandManager [DONE]
 ____
 
 [^1]: It may undergo changes.
