@@ -24,22 +24,25 @@ public class GameEngine implements Serializable {
     private final ServiceAdapter walletUtils = new ServiceAdapter(EServices.UNKNOWN);
     private final Map<String, Player> players; // TODO: update this list when the dealer change, to be the first
     private final Queue<String> queuePlayOrder;
+    private final Queue<String> queueDealerOrder;
     private final Map<String, Integer> playerBetsList;
     private final List<String> playerFoldList;
     private final List<String> playerAllInList;
     private final List<ICard> tableCards;
     private final ETypeOfGame typeOfGame;
     private List<ICard> deck;
-    private Player dealer;
+    private String dealer;
     private Integer pot;
     private Integer higherBet;
-    private Integer smallBlind; // TODO: apply small and big blind automatically
+    private Integer smallBlind;
     private Integer bigBlind;
+    private boolean isSmallBlind;
     private Integer increment;
 
     public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame, Integer increment) {
         this.players = players;
         this.queuePlayOrder = new ArrayDeque<>();
+        this.queueDealerOrder = new ArrayDeque<>();
         this.dealer = null;
         this.deck = new CardFactory().createObject(null);
         this.tableCards = new ArrayList<>();
@@ -103,9 +106,12 @@ public class GameEngine implements Serializable {
     }
 
     public void startRound() {
-        chooseDealer(dealer);
         deck = new CardFactory().createObject(null);
         CardsUtils.distributeCardsPerPlayer(players, deck);
+
+        // fill queue of dealers order
+        this.players.forEach((playerName, player) -> queueDealerOrder.add(playerName));
+
         reset();
     }
 
@@ -116,7 +122,31 @@ public class GameEngine implements Serializable {
         playerFoldList.clear();
         playerAllInList.clear();
         tableCards.clear();
+        isSmallBlind = true;
         fillQueue();
+
+        // dealer goes to the end of the queues
+        queueDealerOrder.add(dealer = queueDealerOrder.poll());
+        queuePlayOrder.add(queuePlayOrder.poll());
+        System.out.println("[Game] The player " + dealer + " is the dealer");
+        distributeSmallAndBigBlind();
+    }
+
+    private void distributeSmallAndBigBlind() {
+        // Small Blind implementation
+        String smallBlindPlayer = queuePlayOrder.peek();
+        System.out.println("[Game] Small blind removed automatically form the player " + smallBlindPlayer);
+        bet(smallBlindPlayer, smallBlind);
+        isSmallBlind = false;
+        // Add small blind player to the end of the queue
+        queuePlayOrder.add(smallBlindPlayer);
+
+        // Big Blind implementation
+        String bigBlindPlayer = queuePlayOrder.peek();
+        System.out.println("[Game] Big blind removed automatically form the player " + bigBlindPlayer);
+        bet(bigBlindPlayer, bigBlind);
+        // Add big blind player to the end of the queue, he is the player that decides is turn the cards or will raise more
+        queuePlayOrder.add(bigBlindPlayer);
     }
 
     // FIXME: maybe move this to a GameUtils
@@ -124,14 +154,14 @@ public class GameEngine implements Serializable {
         if (Objects.isNull(dealer)) {
             //TODO: [IMPROVEMENT] use the correct implementation of dealer choose (witch one take a card and the higher one start the game and receive the dealer)
             Map.Entry<String, Player> newDealerSet = this.players.entrySet().iterator().next();
-            setDealer(newDealerSet.getValue());
+            dealer = newDealerSet.getValue();
         } else {
             MapUtils<String, Player> mapUtils = new MapUtils<>();
             int position = mapUtils.getMapPosition(this.players, dealer.getName());
             if (position >= 0) {
                 int newDealerPosition = (position == (this.players.size() - 1)) ? 0 : position + 1;
                 Player newDealer = (new ArrayList<>(this.players.values())).get(newDealerPosition);
-                setDealer(newDealer);
+                dealer = newDealer;
             }
         }
     }
@@ -144,7 +174,7 @@ public class GameEngine implements Serializable {
         if (!isPlayerTurn(playerName)) return false;
 
         int betsAmount = getBetsAmount(playerName, amount);
-        if (betsAmount < bigBlind) {
+        if (betsAmount < bigBlind && !isSmallBlind()) {
             System.out.println("[Game] The player " + playerName + " needs to bet at least " + bigBlind + " PCJs");
             return false;
         }
@@ -161,11 +191,10 @@ public class GameEngine implements Serializable {
         } else if (betsAmount > higherBet) { // made a raise
             // Check if any player needs to be added to the queue
             if (players.size() - playerFoldList.size() > queuePlayOrder.size()) {
-                List<String> playersAux = new ArrayList<>(players.keySet());
-                for (Map.Entry<String, Player> e : players.entrySet()) {
-                    String key = e.getKey();
+                List<String> playersAux = new ArrayList<>(queueDealerOrder);
+                for (String player : queueDealerOrder) {
                     String playerNameAux = playersAux.remove(0);
-                    if (key.equals(playerName)) break;
+                    if (player.equals(playerName)) break;
                     if (!playerFoldList.contains(playerNameAux) && !playerAllIn(playerNameAux) && !queuePlayOrder.contains(playerNameAux)) {
                         playersAux.add(playerNameAux);
                     }
@@ -189,6 +218,10 @@ public class GameEngine implements Serializable {
         System.out.println("[Game] The player " + playerName + " made a bet of " + amount + " PCJs");
         queuePlayOrder.remove(playerName);
         return queuePlayOrder.size() == 0;
+    }
+
+    private boolean isSmallBlind() {
+        return isSmallBlind;
     }
 
     public boolean check(String playerName) {
@@ -296,9 +329,10 @@ public class GameEngine implements Serializable {
             playerBetsList.clear();
             higherBet = 0;
 
-            players.forEach((s, player) -> {
-                if (!playerGaveUp(s) && !playerAllIn(s)) {
-                    queuePlayOrder.add(s);
+            // The small blind is the first of this queue, so will always the first to play
+            queueDealerOrder.forEach((playerName) -> {
+                if (!playerGaveUp(playerName) && !playerAllIn(playerName)) {
+                    queuePlayOrder.add(playerName);
                 }
             });
         }
@@ -306,6 +340,18 @@ public class GameEngine implements Serializable {
 
     private boolean playerHasEnoughPockerGameChips(Player player) {
         return player.getWallet().getPokerGameChips() >= bigBlind;
+    }
+
+    public String printHistoryOfBets() {
+        StringBuilder str = new StringBuilder();
+        str.append("\n## Bets in the table:");
+//        playerBetsList.forEach((playerName, betValue) -> {
+        for (int i = playerBetsList.keySet().size() - 1; i >= 0; i--) {
+            String key = (String) playerBetsList.keySet().toArray()[i];
+            str.append("\nPlayer ").append(key).append(" has made a bet of ").append(playerBetsList.get(key));
+        }
+//        });
+        return str.toString();
     }
 
     private void printCardsPerPlayer() {
@@ -334,6 +380,7 @@ public class GameEngine implements Serializable {
         str.append("\n## Next turn: ").append(queuePlayOrder.peek());
         str.append("\n## Blinds: ").append("S: ").append(smallBlind).append(" | B: ").append(bigBlind);
         str.append("\n## Higher bet: ").append(higherBet == null ? 0 : higherBet);
+        if (playerBetsList.size() > 0) str.append(printHistoryOfBets());
         return str.toString();
     }
 
@@ -346,11 +393,11 @@ public class GameEngine implements Serializable {
         return tableCards;
     }
 
-    public Player getDealer() {
+    public String getDealer() {
         return dealer;
     }
 
-    public void setDealer(Player dealer) {
+    public void setDealer(String dealer) {
         this.dealer = dealer;
     }
 
@@ -390,6 +437,5 @@ public class GameEngine implements Serializable {
     public void incrementBigBlind() {
         this.bigBlind += this.increment;
     }
-
     //</editor-fold>
 }
