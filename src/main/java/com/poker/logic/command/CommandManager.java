@@ -218,4 +218,20 @@ public class CommandManager {
     public void removeRanking(String commandLine) {
         CommandAdapter.removeRanking(commandLine, applicationData.getRankings());
     }
+
+    public void createTournament(String commandLine) {
+        CommandAdapter.createTournament(commandLine, getOnlinePlayers(), applicationData.getTournamentList());
+    }
+
+    public void joinTournament(String commandLine) {
+        CommandAdapter.joinTournament(commandLine, getOnlinePlayers(), applicationData.getTournamentList(), applicationData.getGamesList());
+    }
+
+    public void startTournament(String commandLine) {
+        CommandAdapter.startTournament(commandLine, getOnlinePlayers(), applicationData.getTournamentList(), applicationData.getGamesList());
+    }
+
+    public void showTournamentsInfo() {
+        CommandAdapter.showTournamentsInfo(applicationData.getTournamentList());
+    }
 }

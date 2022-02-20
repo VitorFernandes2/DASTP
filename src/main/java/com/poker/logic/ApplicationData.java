@@ -3,11 +3,10 @@ package com.poker.logic;
 import com.poker.logic.game.Game;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingLine;
+import com.poker.model.tournament.Tournament;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ApplicationData {
     private static final ApplicationData applicationData = new ApplicationData();
@@ -15,12 +14,14 @@ public class ApplicationData {
     private final Map<String, Player> registeredPlayers;
     private final Map<String, RankingLine> rankings;
     private Map<String, Game> gamesList;
+    private final Map<String, Tournament> tournamentList;
 
     private ApplicationData() {
         this.rankings = new HashMap<>();
         this.onlinePlayers = new HashMap<>();
         this.gamesList = new HashMap<>();
         registeredPlayers = new HashMap<>();
+        tournamentList = new HashMap<>();
     }
 
     public static ApplicationData getInstance() {
@@ -73,6 +74,10 @@ public class ApplicationData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Map<String, Tournament> getTournamentList() {
+        return tournamentList;
     }
 
     public void loadGames(String gameName) throws IOException, ClassNotFoundException {

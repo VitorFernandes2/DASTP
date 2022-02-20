@@ -184,4 +184,39 @@ public class MockCommands {
             "bet game=jogo1 player=ana amount=5",
             "bet game=jogo1 player=manel amount=5"
     ));
+
+    public static final List<String> CREATE_TOURNAMENT = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "reg name=lj1",
+            "log name=lj1",
+            "reg name=lj2",
+            "log name=lj2",
+            "reg name=lj3",
+            "log name=lj3",
+            "reg name=lj4",
+            "log name=lj4",
+            "reg name=lj5",
+            "log name=lj5",
+            "reg name=lj6",
+            "log name=lj6",
+            "reg name=lj7",
+            "log name=lj7",
+            "reg name=lj8",
+            "log name=lj8",
+            "createTour name=tour1 player=lj1",
+            "listTour",
+            "joinTour name=tour1 player=lj",
+            "joinTour name=tour1 player=lj1",
+            "joinTour name=tour1 player=lj2",
+            "joinTour name=tour1 player=lj3",
+            "joinTour name=tour1 player=lj4",
+            "joinTour name=tour1 player=lj5",
+            "joinTour name=tour1 player=lj6",
+            "joinTour name=tour1 player=lj7",
+            "joinTour name=tour1 player=lj8",
+            "listTour",
+            "startTour name=tour1 player=lj1",
+            "listCompetitiveGames"
+    ));
 }

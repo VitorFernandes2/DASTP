@@ -18,6 +18,7 @@ import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingLine;
 import com.poker.model.ranking.RankingProvider;
+import com.poker.model.tournament.Tournament;
 import com.poker.model.wallet.Wallet;
 import com.poker.utils.CardsUtils;
 import com.poker.utils.DatabaseUtils;
@@ -196,7 +197,7 @@ public class CommandAdapter {
                     int feeValue = 0;
 
                     // TODO: deal with this minimumAmount, custom for competitive games, and the default value from Constants for friendly games
-                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, 0, typeOfGame, player);
+                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, Constants.GAME_MINIMUM_AMOUNT, typeOfGame, player);
 
                     if (typeOfGame != ETypeOfGame.FRIENDLY) {
                         if (fee != null) {
@@ -571,5 +572,74 @@ public class CommandAdapter {
                 }
             }
         }
+    }
+
+    public static void createTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+        String tourName = command.get(Constants.NAME_PARAMETER);
+
+        if (playerName != null && tourName != null) {
+            Player player = onlinePlayers.get(playerName);
+            if (player != null) {
+                if (tournamentList.get(tourName) == null) {
+                    tournamentList.put(tourName, new Tournament(tourName, player));
+                } else {
+                    System.out.println("Tournament already exists!");
+                }
+            }
+        }
+    }
+
+    public static void joinTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+        String tourName = command.get(Constants.NAME_PARAMETER);
+
+        if (playerName != null && tourName != null) {
+            Player player = onlinePlayers.get(playerName);
+            Tournament tournament = tournamentList.get(tourName);
+            if (!playerInGame(gamesList, player)) {
+                if (tournament != null && player != null) {
+                    tournament.addPlayer(player);
+                } else {
+                    System.out.println("Error adding the player!");
+                }
+            }
+        }
+    }
+
+    private static boolean playerInGame(Map<String, Game> gamesList, Player player) {
+        return gamesList.entrySet().stream().anyMatch(stringGameEntry -> stringGameEntry.getValue().getPlayersList().get(player.getName()) != null);
+    }
+
+    public static void startTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+        String tourName = command.get(Constants.NAME_PARAMETER);
+
+        if (playerName != null && tourName != null) {
+            Player player = onlinePlayers.get(playerName);
+            Tournament tournament = tournamentList.get(tourName);
+
+            if (player != null && tournament != null) {
+                tournament.startTournament();
+                for (var game : tournament.getGameList()) {
+                    gamesList.put(game.getGameName(), game);
+                }
+            } else {
+                System.out.println("Error starting the game!");
+            }
+        }
+    }
+
+    public static void showTournamentsInfo(Map<String, Tournament> tournamentList) {
+        StringBuilder str = new StringBuilder();
+        str.append("Tournament Name\t\tNumber of Players\n");
+        tournamentList.forEach((s, tournament) -> str.append(tournament.getTournamentName())
+                .append("\t\t\t\t")
+                .append(tournament.getPlayersMap().size())
+                .append("\n"));
+        System.out.println(str);
     }
 }

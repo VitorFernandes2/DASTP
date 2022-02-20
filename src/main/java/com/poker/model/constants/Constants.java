@@ -41,4 +41,6 @@ public class Constants {
     public static final String BIG_BLIND_PARAMETER = "bigBlind";
     public static final String INCREMENT_BLIND_PARAMETER = "increment";
 
+    public static final int TOURNAMENT_MINIMUM_PLAYERS = 9;
+    public static final int GAME_MINIMUM_AMOUNT = 50;
 }
