@@ -30,14 +30,14 @@ public class GameEngine implements Serializable {
     private final List<String> playerAllInList;
     private final List<ICard> tableCards;
     private final ETypeOfGame typeOfGame;
+    private final Integer smallBlind;
+    private final Integer increment;
     private List<ICard> deck;
     private String dealer;
     private Integer pot;
     private Integer higherBet;
-    private Integer smallBlind;
     private Integer bigBlind;
     private boolean isSmallBlind;
-    private Integer increment;
 
     public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame, Integer increment) {
         this.players = players;
@@ -95,6 +95,8 @@ public class GameEngine implements Serializable {
     public boolean startGame(String playerName, String creatorName, Integer minPlayers) {
         if (creatorName.equals(playerName) && minPlayers <= players.size()) {
             players.forEach((s, player) -> queuePlayOrder.add(s));
+            // fill queue of dealers order
+            this.players.forEach((s, player) -> queueDealerOrder.add(s));
             startRound();
             System.out.println("[Game] Let's Poker. Good luck!");
             return true;
@@ -108,9 +110,6 @@ public class GameEngine implements Serializable {
     public void startRound() {
         deck = new CardFactory().createObject(null);
         CardsUtils.distributeCardsPerPlayer(players, deck);
-
-        // fill queue of dealers order
-        this.players.forEach((playerName, player) -> queueDealerOrder.add(playerName));
 
         reset();
     }
@@ -278,7 +277,7 @@ public class GameEngine implements Serializable {
     private void clearPlayer() {
         List<String> playersToBeRemoved = new ArrayList<>();
         players.forEach((s, player) -> {
-            if (!playerHasEnoughPockerGameChips(player)) {
+            if (!playerHasEnoughPokerGameChips(player)) {
                 playersToBeRemoved.add(s);
             }
         });
@@ -323,6 +322,20 @@ public class GameEngine implements Serializable {
         return players.size() == 1;
     }
 
+    public void announceTableWinner() {
+        StringBuilder str = new StringBuilder();
+        int amount = players.get(getWinner()).getWallet().getPokerGameChips();
+
+        str.append("\nThe table winner was ").append(getWinner()).append(" with ").append(amount).append(" PCJs.");
+
+        if (ETypeOfGame.COMPETITIVE.equals(typeOfGame)) {
+            players.get(getWinner()).getWallet().addPokerChips(walletUtils.chipsToPocket(amount));
+            str.append("\nThis players as won ").append(walletUtils.chipsToPocket(amount)).append(" PCs.\n");
+        }
+
+        LOG.addAndShowLog(str.toString());
+    }
+
     private void fillQueue() {
         if (queuePlayOrder.size() == 0) {
             // Clear the bets from the last card turn phase
@@ -338,7 +351,7 @@ public class GameEngine implements Serializable {
         }
     }
 
-    private boolean playerHasEnoughPockerGameChips(Player player) {
+    private boolean playerHasEnoughPokerGameChips(Player player) {
         return player.getWallet().getPokerGameChips() >= bigBlind;
     }
 
@@ -348,7 +361,7 @@ public class GameEngine implements Serializable {
 //        playerBetsList.forEach((playerName, betValue) -> {
         for (int i = playerBetsList.keySet().size() - 1; i >= 0; i--) {
             String key = (String) playerBetsList.keySet().toArray()[i];
-            str.append("\nPlayer ").append(key).append(" has made a bet of ").append(playerBetsList.get(key));
+            str.append("\n\tPlayer ").append(key).append(" has made a bet of ").append(playerBetsList.get(key));
         }
 //        });
         return str.toString();
@@ -362,21 +375,22 @@ public class GameEngine implements Serializable {
         System.out.println("## Table cards: " + CardsUtils.cardsToString(tableCards.toArray(ICard[]::new)));
     }
 
-    private void printPlayers() {
+    private String printPlayers(List<String> players) {
         StringBuilder str = new StringBuilder();
-        str.append("\n## Players: [");
-        players.forEach((s, player) -> str.append(s).append(", "));
+        str.append("[");
+        players.forEach((s) -> str.append(s).append(", "));
         str.setLength(str.length() - 2); // remove the last 2 characters
         str.append("]");
-        System.out.println(str);
+        return str.toString();
     }
 
     public String showGameInfo(String gameName) {
         StringBuilder str = new StringBuilder();
         str.append("$$$$$ Game: ").append(gameName).append(" $$$$$");
+        str.append("\n## Players in game: ").append(printPlayers(new ArrayList<>(queueDealerOrder)));
         str.append("\n## Table cards: ").append(CardsUtils.cardsToString(tableCards.toArray(ICard[]::new)));
         str.append("\n## Pot value: ").append(pot).append(" PCJs\n");
-        str.append(CardsUtils.cardsPerPlayerToString(players));
+        str.append(CardsUtils.cardsPerPlayerToString(new ArrayList<>(queuePlayOrder), players));
         str.append("\n## Next turn: ").append(queuePlayOrder.peek());
         str.append("\n## Blinds: ").append("S: ").append(smallBlind).append(" | B: ").append(bigBlind);
         str.append("\n## Higher bet: ").append(higherBet == null ? 0 : higherBet);
@@ -413,9 +427,8 @@ public class GameEngine implements Serializable {
         this.pot += value;
     }
 
-    public boolean checkEndRound() {
-
-        return false;
+    public String getWinner() {
+        return ScoreUtils.getLastWinner();
     }
 
     public Map<String, Player> getPlayers() {

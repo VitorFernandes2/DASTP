@@ -4,6 +4,7 @@ import com.poker.model.card.*;
 import com.poker.model.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,14 +62,18 @@ public class CardsUtils {
         return str.toString();
     }
 
+    public static String cardsPerPlayerToString(List<String> playersName, Map<String, Player> players) {
+        Map<String, Player> playersPlaying = new HashMap<>();
+        playersName.forEach(s -> playersPlaying.put(s, players.get(s)));
+        return cardsPerPlayerToString(playersPlaying);
+    }
+
     public static String cardsPerPlayerToString(Map<String, Player> players) {
         StringBuilder str = new StringBuilder();
         str.append("## Player's cards:");
-        players.forEach((playerName, player) -> {
-            str.append("\n\tName: ").append(playerName)
-                    .append(" | PCJs: ").append(player.getWallet().getPokerGameChips())
-                    .append(" | Cards: ").append(cardsToString(player.getGameCards()));
-        });
+        players.forEach((playerName, player) -> str.append("\n\tName: ").append(playerName)
+                .append(" | PCJs: ").append(player.getWallet().getPokerGameChips())
+                .append(" | Cards: ").append(cardsToString(player.getGameCards())));
         return str.toString();
     }
 

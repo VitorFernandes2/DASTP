@@ -37,9 +37,12 @@ public class StateAdapter implements IGameState, Serializable {
     }
 
     protected IGameState isGameOver() {
+        // TODO: Verify if shutting down a occurring game brings bugs.
         getGameEngine().triggerShowdown();
         if (getGameEngine().isGameOver()) {
-            return null; // TODO: deal with the end game
+            // TODO: refresh of rankings.
+            getGameEngine().announceTableWinner();
+            return null; // TODO: [TBC] verify if the table ends and the winner was announce.
         } else {
             return new SetupState(getGameEngine());
         }
