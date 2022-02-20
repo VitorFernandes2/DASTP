@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 public class ScoreUtils {
     private static final Log LOG = Log.getInstance();
+    private static String lastWinner = "";
 
     /**
      * Function to calculate the winner of this game round and give him all the pot money.
@@ -77,5 +78,17 @@ public class ScoreUtils {
             LOG.addAndShowLog("[Game] Winner of this round is " + winner + " with an " + winningPlay + ".");
             LOG.addAndShowLog("[Game] Player " + winner + " win " + pot + " PCJs, now has " + players.get(winner).getWallet().getPokerGameChips() + " PCJs.");
         }
+
+        System.out.println("_______________________________________________________________________________________");
+
+        lastWinner = winner;
+    }
+
+    /**
+     * Function to return the last round winner of the game.
+     * @return String - Name of the last player to win the round / game.
+     */
+    public static String getLastWinner() {
+        return lastWinner;
     }
 }

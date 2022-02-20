@@ -62,6 +62,10 @@ public class Game implements Serializable {
         setState(this.state.startGame(player.getName(), creator.getName(), minimumPlayers));
     }
 
+    public String getLastGameWinner() {
+        return this.getGameEngine().getWinner();
+    }
+
     public void bet(String playerName, Integer amount) {
         setState(this.state.bet(playerName, amount));
     }

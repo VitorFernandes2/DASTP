@@ -219,4 +219,29 @@ public class MockCommands {
             "startTour name=tour1 player=lj1",
             "listCompetitiveGames"
     ));
+
+    public static final List<String> GAME_TO_FINNISH = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "cfg name=jogo1 creator=lj",
+            "reg name=ana",
+            "log name=ana",
+            "reg name=manel",
+            "log name=manel",
+            "joinGame name=jogo1 player=ana",
+            "joinGame name=jogo1 player=manel",
+            "startGame name=jogo1 player=lj",
+            "bet game=jogo1 player=lj amount=4",
+            "bet game=jogo1 player=ana amount=2",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj"
+            ));
 }
