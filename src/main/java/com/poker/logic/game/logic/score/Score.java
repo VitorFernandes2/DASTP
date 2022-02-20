@@ -4,11 +4,10 @@ import com.poker.model.card.ICard;
 import com.poker.model.filter.Log;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Score implements IScore {
-    private static List<ICard> cards;
     private static final Log LOG = Log.getInstance();
+    private static List<ICard> cards;
 
     public Score(List<ICard> cards) {
         Score.cards = cards;
@@ -59,74 +58,157 @@ public class Score implements IScore {
             }
             return o1.getCardValue().compareTo(o2.getCardValue());
         });
+
         return newCards;
     }
 
     /**
-     * Function to research for sequence formations in the table cards. It returns the size of the highest sequence of cards.
+     * Function to verify if the lowest rule of Royal Straight Flush is present on the cards list.
      *
-     * @return int - Size of the highest cards sequence.
+     * @param cardsList {@link List} - List of cards {@link ICard}.
+     * @return boolean - Is <code>true</code> if the lowest rule of Royal Straight Flush is present, otherwise is <code>false</code>.
      */
-    private int sequenceValue() {
-        int oneSequence = 0, twoSequence = 0, lastValue = 100;
-        boolean onlyOne = true;
+    private boolean isLowRoyalStraightFlush(List<ICard> cardsList) {
+        List<Integer> cardsValues = new ArrayList<>();
 
-        for (ICard card : cards) {
-            int cardValue = (card.getCardValue() == 1 ? 14 : card.getCardValue());
-
-            if (lastValue == 100) {
-                lastValue = cardValue;
-                continue;
-            }
-
-            if ((cardValue - lastValue) == 1 && onlyOne) {
-                oneSequence++;
-            } else {
-                onlyOne = false;
-            }
-
-            if ((cardValue - lastValue) == 1 && !onlyOne) {
-                twoSequence++;
-            }
-
-            lastValue = cardValue;
+        for (ICard card : cardsList) {
+            cardsValues.add(card.getCardValue());
         }
 
-        return Math.max(oneSequence, twoSequence);
+        return cardsValues.containsAll(Arrays.asList(5, 4, 3, 2, 1));
     }
 
     /**
-     * Function to research for sequence formations in table + player hand cards list. It returns the size of the highest sequence of cards.
+     * Function to get the first list with the highest sequence of cards possible.
      *
-     * @param sequence {@link List} - Table + player hand cards list.
-     * @return int - Size of the highest cards sequence.
+     * @return List - List of cards {@link ICard} with the biggest sequence.
      */
-    private int sequenceValue(List<ICard> sequence) {
-        int oneSequence = 0, twoSequence = 0, lastValue = 100;
+    private List<ICard> getSequenceList() {
+        int lastValue = 100;
         boolean onlyOne = true;
+        List<ICard> highFirstSequence = new ArrayList<>();
+        List<ICard> highSecondSequence = new ArrayList<>();
 
-        for (ICard card : sequence) {
-            int cardValue = (card.getCardValue() == 1 ? 14 : card.getCardValue());
+        if (!isLowRoyalStraightFlush(cards)) {
+            for (ICard card : cards) {
+                int cardValue = (card.getCardValue() == 1 ? 14 : card.getCardValue());
+
+                if (lastValue == 100) {
+                    lastValue = cardValue;
+                    highFirstSequence.add(card);
+                    continue;
+                }
+
+                if ((cardValue - lastValue) == 1 && onlyOne) {
+                    highFirstSequence.add(card);
+                } else {
+                    onlyOne = false;
+                }
+
+                if ((cardValue - lastValue) == 1 && !onlyOne) {
+                    highSecondSequence.add(card);
+                }
+
+                lastValue = cardValue;
+            }
+
+            // Because the cards list is already sorted (descending order) even if the sequences are
+            // of the same size, the first sequence will have the most valuable sequence of cards.
+            return highFirstSequence.size() >= highSecondSequence.size() ? highFirstSequence : highSecondSequence;
+        }
+
+        for (ICard card : cards) {
+            int cardValue = card.getCardValue();
 
             if (lastValue == 100) {
                 lastValue = cardValue;
+                highFirstSequence.add(card);
                 continue;
             }
 
             if ((cardValue - lastValue) == 1 && onlyOne) {
-                oneSequence++;
+                highFirstSequence.add(card);
             } else {
                 onlyOne = false;
             }
 
             if ((cardValue - lastValue) == 1 && !onlyOne) {
-                twoSequence++;
+                highSecondSequence.add(card);
             }
 
             lastValue = cardValue;
         }
 
-        return Math.max(oneSequence, twoSequence);
+        // Because the cards list is already sorted (descending order) even if the sequences are
+        // of the same size, the first sequence will have the most valuable sequence of cards.
+        return highFirstSequence.size() >= highSecondSequence.size() ? highFirstSequence : highSecondSequence;
+    }
+
+    /**
+     * Function to get the first list with the highest sequence of cards possible.
+     *
+     * @param sequence {@link List} - Its the list of cards {@link ICard}.
+     * @return List - List of cards {@link ICard} with the biggest sequence.
+     */
+    private List<ICard> getSequenceList(List<ICard> sequence) {
+        int lastValue = 100;
+        boolean onlyOne = true;
+        List<ICard> highFirstSequence = new ArrayList<>();
+        List<ICard> highSecondSequence = new ArrayList<>();
+
+        if (!isLowRoyalStraightFlush(sequence)) {
+            for (ICard card : sequence) {
+                int cardValue = (card.getCardValue() == 1 ? 14 : card.getCardValue());
+
+                if (lastValue == 100) {
+                    lastValue = cardValue;
+                    highFirstSequence.add(card);
+                    continue;
+                }
+
+                if ((cardValue - lastValue) == 1 && onlyOne) {
+                    highFirstSequence.add(card);
+                } else {
+                    onlyOne = false;
+                }
+
+                if ((cardValue - lastValue) == 1 && !onlyOne) {
+                    highSecondSequence.add(card);
+                }
+
+                lastValue = cardValue;
+            }
+
+            // Because the cards list is already sorted (descending order) even if the sequences are
+            // of the same size, the first sequence will have the most valuable sequence of cards.
+            return highFirstSequence.size() >= highSecondSequence.size() ? highFirstSequence : highSecondSequence;
+        }
+
+        for (ICard card : sequence) {
+            int cardValue = card.getCardValue();
+
+            if (lastValue == 100) {
+                lastValue = cardValue;
+                highFirstSequence.add(card);
+                continue;
+            }
+
+            if ((cardValue - lastValue) == 1 && onlyOne) {
+                highFirstSequence.add(card);
+            } else {
+                onlyOne = false;
+            }
+
+            if ((cardValue - lastValue) == 1 && !onlyOne) {
+                highSecondSequence.add(card);
+            }
+
+            lastValue = cardValue;
+        }
+
+        // Because the cards list is already sorted (descending order) even if the sequences are
+        // of the same size, the first sequence will have the most valuable sequence of cards.
+        return highFirstSequence.size() >= highSecondSequence.size() ? highFirstSequence : highSecondSequence;
     }
 
     /**
@@ -146,104 +228,6 @@ public class Score implements IScore {
 
         }
         return highSet;
-    }
-
-    /**
-     * Function to search for the lowest set formations in the cards list. It returns the size of the lowest set of cards.
-     *
-     * @return int - Size of the lowest cards set.
-     */
-    private int setLowSetValue(Map<String, List<ICard>> sets) {
-        int lowSet = 0;
-        for (String key : sets.keySet()) {
-            int setCounter = sets.get(key).size();
-            if (lowSet == 0) {
-                lowSet = setCounter;
-            } else if (lowSet > setCounter) {
-                lowSet = setCounter;
-            }
-
-        }
-        return lowSet;
-    }
-
-    /**
-     * Function to research for pair formations in the cards list. It returns the size of the highest pair of cards.
-     *
-     * @return int - Size of the highest cards pair.
-     */
-    private int pairValue() {
-        int pairTransformCount = 0, pairNormalCount = 0, lastValue = 100;
-        for (ICard card : cards) {
-            int cardValue = (card.getCardValue() == 1 ? 14 : card.getCardValue());
-
-            if (lastValue == 100) {
-                lastValue = cardValue;
-                continue;
-            }
-
-            if (cardValue == lastValue) {
-                pairTransformCount++;
-            }
-
-            lastValue = cardValue;
-        }
-
-        lastValue = 100;
-
-        for (ICard card : cards) {
-            if (lastValue == 100) {
-                lastValue = card.getCardValue();
-                continue;
-            }
-
-            if (card.getCardValue() == lastValue) {
-                pairNormalCount++;
-            }
-
-            lastValue = card.getCardValue();
-        }
-        return Math.max(pairTransformCount, pairNormalCount);
-    }
-
-    /**
-     * Function to research for pair formations in the cards list. It returns the size of the highest pair of cards.
-     *
-     * @param pair {@link List} - Table + player hand cards list.
-     * @return int - Size of the highest cards pair.
-     */
-    private int pairValue(List<ICard> pair) {
-        int pairTransformCount = 0, pairNormalCount = 0, lastValue = 100;
-        for (ICard card : pair) {
-            int cardValue = (card.getCardValue() == 1 ? 14 : card.getCardValue());
-
-            if (lastValue == 100) {
-                lastValue = cardValue;
-                continue;
-            }
-
-            if (cardValue == lastValue) {
-                pairTransformCount++;
-            }
-
-            lastValue = cardValue;
-        }
-
-        lastValue = 100;
-
-        for (ICard card : pair) {
-            if (lastValue == 100) {
-                lastValue = card.getCardValue();
-                continue;
-            }
-
-            if (card.getCardValue() == lastValue) {
-                pairNormalCount++;
-            }
-
-            lastValue = card.getCardValue();
-        }
-        return Math.max(pairTransformCount, pairNormalCount);
     }
 
     /**
@@ -291,7 +275,7 @@ public class Score implements IScore {
             }
         }
 
-        return cardSet;
+        return uselessSet(cardSet);
     }
 
     /**
@@ -323,7 +307,7 @@ public class Score implements IScore {
             }
         }
 
-        return cardSet;
+        return uselessSet(cardSet);
     }
 
     /**
@@ -332,18 +316,19 @@ public class Score implements IScore {
      * @return List - List of Integer Objects with the table card's value organized by the times they appear.
      */
     private List<Integer> getPairCounter() {
-        Map<Integer, Integer> pairCounter = new HashMap<>();
+        Map<Integer, Integer> sequenceCounter = new HashMap<>();
 
-        // Getting the number of cards of the same value
         for (ICard card : cards) {
-            if (!pairCounter.containsKey(card.getCardValue())) {
-                pairCounter.put(card.getCardValue(), 1);
+            int cardValue = card.getCardValue();
+            if (!sequenceCounter.containsKey(cardValue)) {
+                sequenceCounter.put(cardValue, 1);
             } else {
-                pairCounter.replace(card.getCardValue(), pairCounter.get(card.getCardValue()) + 1);
+                int counterAux = sequenceCounter.get(cardValue);
+                sequenceCounter.replace(cardValue, counterAux + 1);
             }
         }
 
-        return pairCounter.values().stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
+        return new ArrayList<>(sequenceCounter.values());
     }
 
     /**
@@ -352,34 +337,50 @@ public class Score implements IScore {
      * @return List - List of Integer Objects with the table card's value organized by the times they appear.
      */
     private List<Integer> getPairCounter(List<ICard> cardsCopy) {
-        Map<Integer, Integer> pairCounter = new HashMap<>();
+        Map<Integer, Integer> sequenceCounter = new HashMap<>();
 
-        // Getting the number of cards of the same value
         for (ICard card : cardsCopy) {
-            if (!pairCounter.containsKey(card.getCardValue())) {
-                pairCounter.put(card.getCardValue(), 1);
+            int cardValue = card.getCardValue();
+            if (!sequenceCounter.containsKey(cardValue)) {
+                sequenceCounter.put(cardValue, 1);
             } else {
-                pairCounter.replace(card.getCardValue(), pairCounter.get(card.getCardValue()) + 1);
+                int counterAux = sequenceCounter.get(cardValue);
+                sequenceCounter.replace(cardValue, counterAux + 1);
             }
         }
 
-        return pairCounter.values().stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
+        return new ArrayList<>(sequenceCounter.values());
     }
 
     /**
-     * Function to verify if the all the cards are from the same set.
+     * Function to calculate the possible final score of the table that can be achievable.
      *
-     * @param cardSet {@link Map} - Map with all the cards organized by their respective set.
-     * @return boolean - If all the cards are from the same set.
+     * @return int - Final score achievable.
      */
-    public boolean isSameSet(Map<String, List<ICard>> cardSet) {
-        for (String set : cardSet.keySet()) {
-            if (cardSet.get(set).size() == 5) {
-                return true;
-            }
+    private int totalScore() {
+        int total = 0;
+
+        for (ICard card : cards) {
+            total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
         }
 
-        return false;
+        return total;
+    }
+
+    /**
+     * Function to calculate the possible final score that can be achievable.
+     *
+     * @param cards {@link List} - List of cards {@link ICard}.
+     * @return int - Final score achievable.
+     */
+    private int totalScore(List<ICard> cards) {
+        int total = 0;
+
+        for (ICard card : cards) {
+            total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
+        }
+
+        return total;
     }
 
     /**
@@ -393,168 +394,72 @@ public class Score implements IScore {
             return 0;
         }
         sortCards();
-        Map<String, List<ICard>> cardSet = setMapCreator();
-        int highSet = setHighSetValue(cardSet);
+        Map<String, List<ICard>> cardSet = setMapCreator();    // Organizing the cards by their sets.
+        List<ICard> sequenceOfCards = getSequenceList();       // Use it to get the biggest cards sequence.
 
-        cardSet = uselessSet(cardSet);
-        List<Integer> pairsCounter = getPairCounter();
+        int highSet = setHighSetValue(cardSet);                // Getting the highest set counter value.
+        List<Integer> pairsCounter = getPairCounter();         // Array of cards value pairs.
+        int total = totalScore();                              // Total cards score. (Draws are settled after by a comparator.)
 
         // Rule: Royal Straight Flush
         // -100 score because it's the 1st highest score possible.
-        if (sequenceValue() == 4 && cards.get(cards.size() - 1).getCardValue() == 1 && isSameSet(cardSet)) {
-            int total = 0;
-            for (ICard card : cards) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-            }
-
-            LOG.addAndShowLog("\nRoyal Straight Flush detected!\n");
-
+        if (sequenceOfCards.get(0).getCardValue() == 1 && highSet >= 5) {
             return total - 100;
         }
 
         // Rule: Straight Flush
         // -200 score because it's the 2nd highest score possible.
-        if (sequenceValue() == 4 && cards.get(cards.size() - 1).getCardValue() != 1 && isSameSet(cardSet)) {
-            int total = 0;
-            for (ICard card : cards) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-            }
-
-            LOG.addAndShowLog("\nStraight Flush detected!\n");
-
+        if (sequenceOfCards.get(0).getCardValue() != 1 && highSet >= 5) {
             return total - 200;
         }
 
         // Rule: Four of a Kind
         // -300 score because it's the 3rd highest score possible.
-        if (pairValue() == 4) {
-            int total = 0;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
-            }
-
-            LOG.addAndShowLog("\nFour of a Kind detected!\n");
-
+        if (pairsCounter.contains(4)) {
             return total - 300;
         }
 
         // Rule: Full House
         // -400 score because it's the 4th highest score possible.
-        if (pairValue() == 3 && pairsCounter.get(1) == 2) {
-            int total = 0;
-            for (int i = 0, k = 0; i < pairsCounter.size(); i++) {
-                if (pairsCounter.get(i) >= 2 && total == 0) {
-                    for (int j = 0; j < pairsCounter.get(i); j++) {
-                        if (total == 0) {
-                            total = cards.get(j + k).getCardValue();
-                        } else {
-                            total += cards.get(j + k).getCardValue();
-                        }
-                    }
-                } else if (pairsCounter.get(i) >= 2) {
-                    for (int j = 0; j < pairsCounter.get(i); j++) {
-                        if (total == 0) {
-                            total = cards.get(j + k).getCardValue();
-                        } else {
-                            total += cards.get(j + k).getCardValue();
-                        }
-                    }
-                }
-
-                k += pairsCounter.get(i);
-            }
-
-            LOG.addAndShowLog("\nFull House detected!\n");
-
+        if (pairsCounter.contains(3) && pairsCounter.contains(2)) {
             return total - 400;
         }
 
 
         // Rule: Flush
         // -500 score because it's the 5th highest score possible.
-        if (sequenceValue() == 0 && pairValue() == 0 && highSet == 5) {
-            int total = 0;
-            for (ICard card : cards) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-            }
-
-            LOG.addAndShowLog("\nFlush detected!\n");
-
+        if (highSet >= 5) {
             return total - 500;
         }
 
         // Rule: Straight
         // -600 score because it's the 6th highest score possible.
-        if (sequenceValue() == 4) {
-            int total = 0;
-            for (ICard card : cards) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-            }
-
-            LOG.addAndShowLog("\nStraight detected!\n");
-
+        if (sequenceOfCards.size() >= 5) {
             return total - 600;
         }
 
         // Rule: Three of a Kind
         // -700 score because it's the 7th highest score possible.
-        if (pairValue() == 3) {
-            int total = 0;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
-            }
-
-            LOG.addAndShowLog("\nThree of a Kind detected!\n");
-
+        if (pairsCounter.contains(3)) {
             return total - 700;
         }
 
-        // Rule: Two Pairs
-        // -800 score because it's the 8th highest score possible.
-        if (pairValue() == 2) {
-            int total = 0;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
+        if (pairsCounter.contains(2)) {
+            // Rule: Two Pairs
+            // -800 score because it's the 8th highest score possible.
+            if (pairsCounter.indexOf(2) != pairsCounter.lastIndexOf(2)) {
+                return total - 800;
             }
 
-            LOG.addAndShowLog("\nTwo Pairs detected!\n");
-
-            return total - 800;
-        }
-
-        // Rule: One Pair
-        // -900 score because it's the 9th highest score possible.
-        if (pairValue() == 1) {
-            int total = 0;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
-            }
-
-            LOG.addAndShowLog("\nOne Pairs detected!\n");
-
+            // Rule: One Pair
+            // -900 score because it's the 9th highest score possible.
             return total - 900;
         }
 
         // Rule: High Card
         // -1000 score because it's the 10th highest score possible.
-        if (pairValue() == 0) {
-            int highCard = cards.get(cards.size() - 1).getCardValue();
-
-            LOG.addAndShowLog("\nHigh Card detected!\n");
-
-            return (highCard == 1 ? 14 : highCard) - 1000;
-        }
-
-        LOG.addAndShowLog("\nERROR - Nothing detected!\n");
-        return 0;
+        int highCard = cards.get(cards.size() - 1).getCardValue();
+        return (highCard == 1 ? 14 : highCard) - 1000;
     }
 
     @Override
@@ -569,63 +474,37 @@ public class Score implements IScore {
             sortCards(cardsCopy);
         }
 
-        Map<String, List<ICard>> cardSet = setMapCreator(cardsCopy);
-        int highSet = setHighSetValue(cardSet);
+        List<ICard> sequenceOfCards = getSequenceList(cardsCopy);       // Use it to get the biggest cards sequence.
+        List<Integer> pairsCounter = getPairCounter(cardsCopy);         // Array of cards value pairs.
+        int total = totalScore(cardsCopy);                              // Total cards score. (Draws are settled after by a comparator.)
 
-        cardSet = uselessSet(cardSet);
-        List<Integer> pairsCounter = getPairCounter(cardsCopy);
+        Map<String, List<ICard>> cardSet = setMapCreator(cardsCopy);    // Organizing the cards by their sets.
+        int highSet = setHighSetValue(cardSet);                         // Getting the highest set counter value.
 
-        // Rule: Royal Straight Flush
-        // -100 score because it's the 1st highest score possible.
-        if (sequenceValue(cardsCopy) == 4 && cardsCopy.get(cardsCopy.size() - 1).getCardValue() == 1 && isSameSet(cardSet)) {
-            int total = 0, score;
-            for (ICard card : cardsCopy) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
+        if (highSet >= 5 && sequenceOfCards.size() >= 5) {
+            // Rule: Royal Straight Flush
+            // -100 score because it's the 1st highest score possible.
+            if (sequenceOfCards.get(sequenceOfCards.size() - 1).getCardValue() == 1) {
+                output[0] = Integer.toString(total - 100);
+                output[1] = "Royal Straight Flush";
+
+                return output;
             }
 
-            score = total - 100;
+            // Rule: Straight Flush
+            // -200 score because it's the 2nd highest score possible.
+            if (sequenceOfCards.get(sequenceOfCards.size() - 1).getCardValue() != 1) {
+                output[0] = Integer.toString(total - 200);
+                output[1] = "Straight Flush";
 
-            // LOG.addAndShowLog("Royal Straight Flush detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
-            output[1] = "Royal Straight Flush";
-
-            return output;
-        }
-
-        // Rule: Straight Flush
-        // -200 score because it's the 2nd highest score possible.
-        if (sequenceValue(cardsCopy) == 4 && cardsCopy.get(cardsCopy.size() - 1).getCardValue() != 1 && isSameSet(cardSet)) {
-            int total = 0, score;
-            for (ICard card : cardsCopy) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
+                return output;
             }
-
-            score = total - 200;
-
-            // LOG.addAndShowLog("Straight Flush detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
-            output[1] = "Straight Flush";
-
-            return output;
         }
 
         // Rule: Four of a Kind
         // -300 score because it's the 3rd highest score possible.
-        if (pairValue(cardsCopy) == 4) {
-            int total = 0, score;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
-            }
-
-            score = total - 300;
-
-            // LOG.addAndShowLog("Four of a Kind detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
+        if (pairsCounter.contains(4)) {
+            output[0] = Integer.toString(total - 300);
             output[1] = "Four of a Kind";
 
             return output;
@@ -633,35 +512,8 @@ public class Score implements IScore {
 
         // Rule: Full House
         // -400 score because it's the 4th highest score possible.
-        if (pairValue(cardsCopy) == 3 && pairsCounter.get(1) == 2) {
-            int total = 0, score;
-            for (int i = 0, k = 0; i < pairsCounter.size(); i++) {
-                if (pairsCounter.get(i) >= 2 && total == 0) {
-                    for (int j = 0; j < pairsCounter.get(i); j++) {
-                        if (total == 0) {
-                            total = cardsCopy.get(j + k).getCardValue();
-                        } else {
-                            total += cardsCopy.get(j + k).getCardValue();
-                        }
-                    }
-                } else if (pairsCounter.get(i) >= 2) {
-                    for (int j = 0; j < pairsCounter.get(i); j++) {
-                        if (total == 0) {
-                            total = cardsCopy.get(j + k).getCardValue();
-                        } else {
-                            total += cardsCopy.get(j + k).getCardValue();
-                        }
-                    }
-                }
-
-                k += pairsCounter.get(i);
-            }
-
-            score = total - 400;
-
-            // LOG.addAndShowLog("Full House detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
+        if (pairsCounter.contains(3) && pairsCounter.contains(2)) {
+            output[0] = Integer.toString(total - 400);
             output[1] = "Full House";
 
             return output;
@@ -670,17 +522,8 @@ public class Score implements IScore {
 
         // Rule: Flush
         // -500 score because it's the 5th highest score possible.
-        if (sequenceValue(cardsCopy) == 0 && pairValue(cardsCopy) == 0 && highSet == 5) {
-            int total = 0, score;
-            for (ICard card : cardsCopy) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-            }
-
-            score = total - 500;
-
-            // LOG.addAndShowLog("Flush detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
+        if (highSet >= 5) {
+            output[0] = Integer.toString(total - 500);
             output[1] = "Flush";
 
             return output;
@@ -688,17 +531,8 @@ public class Score implements IScore {
 
         // Rule: Straight
         // -600 score because it's the 6th highest score possible.
-        if (sequenceValue(cardsCopy) == 4) {
-            int total = 0, score;
-            for (ICard card : cardsCopy) {
-                total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-            }
-
-            score = total - 600;
-
-            // LOG.addAndShowLog("Straight detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
+        if (sequenceOfCards.size() >= 5) {
+            output[0] = Integer.toString(total - 600);
             output[1] = "Straight";
 
             return output;
@@ -706,59 +540,26 @@ public class Score implements IScore {
 
         // Rule: Three of a Kind
         // -700 score because it's the 7th highest score possible.
-        if (pairValue(cardsCopy) == 3) {
-            int total = 0, score;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
-            }
-
-            score = total - 700;
-
-            // LOG.addAndShowLog("Three of a Kind detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
+        if (pairsCounter.contains(3)) {
+            output[0] = Integer.toString(total - 700);
             output[1] = "Three of a Kind";
 
             return output;
         }
 
-        // Rule: Two Pairs
-        // -800 score because it's the 8th highest score possible.
-        if (pairValue(cardsCopy) == 2) {
-            int total = 0, score;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
+        if (pairsCounter.contains(2)) {
+            // Rule: Two Pairs
+            // -800 score because it's the 8th highest score possible.
+            if (pairsCounter.indexOf(2) != pairsCounter.lastIndexOf(2)) {
+                output[0] = Integer.toString(total - 800);
+                output[1] = "Two Pairs";
+
+                return output;
             }
 
-            score = total - 800;
-
-            // LOG.addAndShowLog("Two Pairs detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
-            output[1] = "Two Pairs";
-
-            return output;
-        }
-
-        // Rule: One Pair
-        // -900 score because it's the 9th highest score possible.
-        if (pairValue(cardsCopy) == 1) {
-            int total = 0, score;
-            for (String key : cardSet.keySet()) {
-                for (ICard card : cardSet.get(key)) {
-                    total += (card.getCardValue() == 1 ? 14 : card.getCardValue());
-                }
-            }
-
-            score = total - 900;
-
-            // LOG.addAndShowLog("One Pairs detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
+            // Rule: One Pair
+            // -900 score because it's the 9th highest score possible.
+            output[0] = Integer.toString(total - 900);
             output[1] = "One Pairs";
 
             return output;
@@ -766,19 +567,11 @@ public class Score implements IScore {
 
         // Rule: High Card
         // -1000 score because it's the 10th highest score possible.
-        if (pairValue() == 0) {
-            int highCard = cardsCopy.get(cardsCopy.size() - 1).getCardValue();
-            int score = (highCard == 1 ? 14 : highCard) - 1000;
+        int highCard = cardsCopy.get(cardsCopy.size() - 1).getCardValue();
+        int score = (highCard == 1 ? 14 : highCard) - 1000;
+        output[0] = Integer.toString(score);
+        output[1] = "High Card";
 
-            // LOG.addAndShowLog("High Card detected!\t\t-\tScore: " + score);
-
-            output[0] = Integer.toString(score);
-            output[1] = "High Card";
-
-            return output;
-        }
-
-        // LOG.addAndShowLog("ERROR SCORING - Nothing was detected!");
         return output;
     }
 
@@ -791,16 +584,5 @@ public class Score implements IScore {
     public void addTableCard(ICard singleCard) {
         if (cards.size() < 5)
             cards.add(singleCard);
-    }
-
-    /**
-     * Function to add multiple cards to the card list.
-     *
-     * @param multipleCards {@link ICard} - List of cards.
-     */
-    @Override
-    public void addTableCard(List<ICard> multipleCards) {
-        if (cards.size() + multipleCards.size() < 4)
-            cards.addAll(multipleCards);
     }
 }
