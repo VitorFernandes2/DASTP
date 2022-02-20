@@ -169,4 +169,20 @@ public class ApplicationFacade {
     public void removeRanking(String commandLine) {
         commandManager.removeRanking(commandLine);
     }
+
+    public void createTournament(String commandLine) {
+        commandManager.createTournament(commandLine);
+    }
+
+    public void joinTournament(String commandLine) {
+        commandManager.joinTournament(commandLine);
+    }
+
+    public void startTournament(String commandLine) {
+        commandManager.startTournament(commandLine);
+    }
+
+    public void showTournamentsInfo() {
+        commandManager.showTournamentsInfo();
+    }
 }
