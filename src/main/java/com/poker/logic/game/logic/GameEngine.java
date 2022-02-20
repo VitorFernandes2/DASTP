@@ -26,6 +26,7 @@ public class GameEngine implements Serializable {
     private final Queue<String> queuePlayOrder;
     private final Map<String, Integer> playerBetsList;
     private final List<String> playerFoldList;
+    private final List<String> playerAllInList;
     private final List<ICard> tableCards;
     private final ETypeOfGame typeOfGame;
     private List<ICard> deck;
@@ -49,6 +50,7 @@ public class GameEngine implements Serializable {
         this.smallBlind = bigBlind / 2;
         this.playerBetsList = new HashMap<>();
         this.playerFoldList = new ArrayList<>();
+        this.playerAllInList = new ArrayList<>();
         this.increment = increment;
     }
 
@@ -112,6 +114,7 @@ public class GameEngine implements Serializable {
         higherBet = 0;
         playerBetsList.clear();
         playerFoldList.clear();
+        playerAllInList.clear();
         tableCards.clear();
         fillQueue();
     }
@@ -149,7 +152,7 @@ public class GameEngine implements Serializable {
         // Compare with the higher bet
         if (higherBet == null) {
             higherBet = betsAmount;
-        } else if (betsAmount < higherBet) { // need to call
+        } else if (players.get(playerName).getWallet().getPokerGameChips() > higherBet && betsAmount < higherBet) { // need to call (if the player have enough PCJs and the bet is lower)
             System.out.println("[Game] The player " + playerName +
                     " need to bet more! Value to call: " +
                     (playerBetsList.containsKey(playerName) ? higherBet - playerBetsList.get(playerName) : higherBet) +
@@ -163,7 +166,7 @@ public class GameEngine implements Serializable {
                     String key = e.getKey();
                     String playerNameAux = playersAux.remove(0);
                     if (key.equals(playerName)) break;
-                    if (!playerFoldList.contains(playerNameAux) && !queuePlayOrder.contains(playerNameAux)) {
+                    if (!playerFoldList.contains(playerNameAux) && !playerAllIn(playerNameAux) && !queuePlayOrder.contains(playerNameAux)) {
                         playersAux.add(playerNameAux);
                     }
                 }
@@ -176,6 +179,9 @@ public class GameEngine implements Serializable {
         // Don't have PCJs enough
         if (!players.get(playerName).getWallet().removePokerGameChips(amount)) {
             return false;
+        }
+        if (players.get(playerName).getWallet().getPokerGameChips() == 0) {
+            playerAllInList.add(playerName);
         }
         playerBetsList.put(playerName, playerBetsList.containsKey(playerName) ? playerBetsList.get(playerName) + amount : amount);
 
@@ -229,7 +235,9 @@ public class GameEngine implements Serializable {
 
     public void triggerShowdown() {
         fillQueue();
-        ScoreUtils.scoring(this.pot, this.tableCards, this.queuePlayOrder, this.players);
+        Queue<String> allPlayers = new ArrayDeque<>(queuePlayOrder);
+        allPlayers.addAll(playerAllInList);
+        ScoreUtils.scoring(this.pot, this.tableCards, allPlayers, this.players);
         clearPlayer();
         startRound();
     }
@@ -255,6 +263,11 @@ public class GameEngine implements Serializable {
     // Check if the player made fold
     private boolean playerGaveUp(String playerName) {
         return playerFoldList.contains(playerName);
+    }
+
+    // Check if the player made all-in
+    private boolean playerAllIn(String playerName) {
+        return playerAllInList.contains(playerName);
     }
 
     // Check if is the player turn
@@ -284,7 +297,7 @@ public class GameEngine implements Serializable {
             higherBet = 0;
 
             players.forEach((s, player) -> {
-                if (!playerGaveUp(player.getName())) {
+                if (!playerGaveUp(s) && !playerAllIn(s)) {
                     queuePlayOrder.add(s);
                 }
             });
