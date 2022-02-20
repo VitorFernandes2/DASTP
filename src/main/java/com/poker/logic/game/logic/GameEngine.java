@@ -34,8 +34,9 @@ public class GameEngine implements Serializable {
     private Integer higherBet;
     private Integer smallBlind; // TODO: apply small and big blind automatically
     private Integer bigBlind;
+    private Integer increment;
 
-    public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame) {
+    public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame, Integer increment) {
         this.players = players;
         this.queuePlayOrder = new ArrayDeque<>();
         this.dealer = null;
@@ -48,6 +49,7 @@ public class GameEngine implements Serializable {
         this.smallBlind = bigBlind / 2;
         this.playerBetsList = new HashMap<>();
         this.playerFoldList = new ArrayList<>();
+        this.increment = increment;
     }
 
     // TODO: [TBC] generalize this method for all games or validate in another place TBC
@@ -362,6 +364,18 @@ public class GameEngine implements Serializable {
 
     public ETypeOfGame getTypeOfGame() {
         return typeOfGame;
+    }
+
+    public Integer getBigBlind() {
+        return bigBlind;
+    }
+
+    public Integer getIncrement() {
+        return increment;
+    }
+
+    public void incrementBigBlind() {
+        this.bigBlind += this.increment;
     }
 
     //</editor-fold>
