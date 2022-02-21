@@ -94,6 +94,28 @@ public class DatabaseUtils {
         }
     }
 
+    public static Integer getPlayerRanking(String name) throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement statement = connection.createStatement();
+
+            Integer ranking = null;
+
+            String findUserSQL = "SELECT * FROM RANKING WHERE name='" + name + "'";
+            ResultSet rs = statement.executeQuery(findUserSQL);
+            while (rs.next()) {
+                ranking = rs.getInt("wins");
+            }
+            rs.close();
+            connection.close();
+
+            return ranking;
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public static Player getPlayerByName(String name) throws Exception {
         try {
             Class.forName("org.h2.Driver");
