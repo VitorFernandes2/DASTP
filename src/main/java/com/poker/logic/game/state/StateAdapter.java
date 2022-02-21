@@ -1,6 +1,9 @@
 package com.poker.logic.game.state;
 
 import com.poker.logic.game.logic.GameEngine;
+import com.poker.model.ranking.RankingLine;
+import com.poker.model.ranking.RankingProvider;
+import com.poker.utils.DatabaseUtils;
 
 import java.io.Serializable;
 
@@ -37,12 +40,23 @@ public class StateAdapter implements IGameState, Serializable {
     }
 
     protected IGameState isGameOver() {
-        // TODO: Verify if shutting down a occurring game brings bugs.
+        // TODO: [TBC] Verify if shutting down a occurring game brings bugs.
         getGameEngine().triggerShowdown();
         if (getGameEngine().isGameOver()) {
-            // TODO: refresh of rankings.
+            // TODO: [TBC] It needs to be tested.
+            try {
+                String winner = gameEngine.getWinner();
+                Integer wins = DatabaseUtils.getPlayerRanking(winner);
+                // TODO: [TBC] Verify if this doesn't goes against the coding pattern of the rankings.
+                if (wins != null) {
+                    RankingProvider.getInstance().registerUpdate(new RankingLine(winner, wins + 1));
+                    DatabaseUtils.updateWallet(winner, getGameEngine().getPlayers().get(winner).getWallet());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             getGameEngine().announceTableWinner();
-            return null; // TODO: [TBC] verify if the table ends and the winner was announce.
+            return null; // TODO: [TBC] Verify if the table ends and the winner was announce.
         } else {
             return new SetupState(getGameEngine());
         }
