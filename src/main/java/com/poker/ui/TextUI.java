@@ -151,7 +151,8 @@ public class TextUI {
                         appFacade.startTournament(commandLine);
                         break;
                     case START_FINAL_TOURNAMENT:
-                        //TODO: implement this method with the winning data
+                        //TODO: Test
+                        appFacade.startFinalGame(commandLine);
                         break;
                     case BET:
                         appFacade.bet(commandLine);
