@@ -9,19 +9,19 @@ import java.util.stream.Stream;
 
 public enum ECommand {
     // Common commands
-    LOGIN("login", "log", ""),
-    REGISTER("register", "reg", ""),
-    SHUTDOWN("shutdown", "std", ""),
+    LOGIN("login", "log", "login name=lj"),
+    REGISTER("register", "reg", "register name=lj"),
+    SHUTDOWN("shutdown", "std", "shutdown"),
     LOGOUT("logout", "lout", "logout name=joaquim"),
-    UNDO("undo", "u", ""),
-    REDO("redo", "r", ""),
+    UNDO("undo", "u", "undo"),
+    REDO("redo", "r", "redo"),
 
     // User commands
     SEND_MESSAGE("sendMessage", "sm", "sendMessage from=joaquim to=ana Olá, o meu nome é joaquim!"),
     ADD_FRIEND("addFriend", "af", "addFriend player=joaquim add=antonio"),
     BLOCK_PLAYER("blockPlayer", "bp", "blockPlayer player=joaquim block=antonio"),
     BUY_POKER_CHIPS("comprarPokerChips", "cpc", ""),
-    LIST_PLAYERS("listarJogadores", "lj", ""),
+    LIST_PLAYERS("listPlayers", "lp", "listPlayers"),
     LIST_FRIENDS("listFriend", "lf", "listFriend name=lj"),
     LIST_BLOCKED("listBlocked", "lb", "listBlocked"),
     LIST_FRIENDLY_GAMES("listFriendlyGames", "lfg", "listFriendlyGames"),

@@ -7,6 +7,7 @@ public class SetupState extends StateAdapter {
 
     public SetupState(GameEngine gameEngine) {
         super(gameEngine);
+        gameEngine.startRound();
     }
 
     @Override

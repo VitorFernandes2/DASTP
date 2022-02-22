@@ -204,7 +204,7 @@ public class CommandAdapter {
                         if (fee != null) {
                             feeValue = Integer.parseInt(fee);
                             if (feeValue < Constants.COMPETITIVE_DEFAULT_FEE) {
-                                System.out.println("Fee can't be smaller than " + Constants.COMPETITIVE_DEFAULT_FEE);
+                                System.out.println("[Game] Fee can't be smaller than " + Constants.COMPETITIVE_DEFAULT_FEE);
                                 return false;
                             }
                             gameCreationData.setFee(feeValue);
@@ -213,7 +213,7 @@ public class CommandAdapter {
                         if (bigBlind != null) {
                             bigBlindValue = Integer.parseInt(bigBlind);
                             if (bigBlindValue < Constants.DEFAULT_BIG_BLIND) {
-                                System.out.println("Big blind can't be smaller than " + Constants.DEFAULT_BIG_BLIND);
+                                System.out.println("[Game] Big blind can't be smaller than " + Constants.DEFAULT_BIG_BLIND);
                                 return false;
                             }
                             gameCreationData.setBigBlind(bigBlindValue);
@@ -228,8 +228,12 @@ public class CommandAdapter {
                     }
 
                     Game game = factory.createObject(gameCreationData);
-                    game.addPlayer(player, game.getConvertionTax());
 
+                    if (ETypeOfGame.COMPETITIVE.equals(game.getTypeOfGame()) && player.getWallet().getPokerChips() >= gameCreationData.getFee()) {
+                        System.out.println("[Game] The player " + player.getName() + " needs at least " + gameCreationData.getFee() + " PCs to play in this game");
+                        return false;
+                    }
+                    game.addPlayer(player);
                     return data.addGame(game);
                 }
             }
@@ -251,7 +255,7 @@ public class CommandAdapter {
                 if (!Objects.isNull(game) && !playerName.equals("")) {
                     Player player = playerList.get(playerName);
                     if (!Objects.isNull(player)) {
-                        return game.addPlayer(player, game.getMinimumAmount());
+                        return game.addPlayer(player);
                     }
                 }
             }
