@@ -28,6 +28,7 @@ public enum ECommand {
     LIST_COMPETITIVE_GAMES("listCompetitiveGames", "lcg", "listCompetitiveGames"),
     LIST_CHAMPIONSHIPS("listTour", "lt", "listTour"),
     LIST_RANKING("listRankings", "lr", "listRankings"),
+    LIST_PLAYERS_DETAILS("showPlayersDetails", "spd", "showPlayersDetails"),
     CREATE_FRIENDLY_GAME("createFriendlyGame", "cfg", "createFriendlyGame name=jogo1 creator=lj"),
     CREATE_COMPETITIVE_GAME("createCompetitiveGame", "ccg", "ccg name=jogo1 creator=lj fee=2 bigBlind=4 increment=2"),
     START_GAME("startGame", "sg", "startGame name=jogo1 player=lj"),

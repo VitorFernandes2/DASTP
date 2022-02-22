@@ -22,7 +22,7 @@ public class GameEngine implements Serializable {
     private static final long serialVersionUID = 2948663272030254773L;
 
     private final ServiceAdapter walletUtils = new ServiceAdapter(EServices.UNKNOWN);
-    private final Map<String, Player> players; // TODO: update this list when the dealer change, to be the first
+    private final Map<String, Player> players;
     private final Queue<String> queuePlayOrder;
     private final Queue<String> queueDealerOrder;
     private final Map<String, Integer> playerBetsList;
@@ -198,7 +198,7 @@ public class GameEngine implements Serializable {
                         playersAux.add(playerNameAux);
                     }
                 }
-                playersAux.removeAll(queuePlayOrder); // FIXME: check if can remove this line
+                playersAux.removeAll(queuePlayOrder);
                 queuePlayOrder.addAll(playersAux);
             }
             higherBet = betsAmount;

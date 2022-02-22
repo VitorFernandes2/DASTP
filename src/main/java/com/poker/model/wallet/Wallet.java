@@ -69,4 +69,13 @@ public class Wallet implements Serializable {
     public int resetPokerGameChips() {
         return pokerGameChips = 0;
     }
+
+    @Override
+    public String toString() {
+        return "Wallet{" +
+                "amount=" + amount +
+                ", pokerChips=" + pokerChips +
+                ", pokerGameChips=" + pokerGameChips +
+                '}';
+    }
 }

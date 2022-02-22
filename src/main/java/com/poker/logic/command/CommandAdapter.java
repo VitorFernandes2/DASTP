@@ -33,6 +33,7 @@ public class CommandAdapter {
     public static boolean addUser(String commandLine, Map<String, Player> playerList) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String name = command.get(Constants.NAME_PARAMETER);
+        Integer amount = Integer.parseInt(command.get(Constants.AMOUNT_PARAMETER) != null ? command.get(Constants.AMOUNT_PARAMETER) : "0");
 
         if (name != null) {
             boolean userExists;
@@ -45,13 +46,13 @@ public class CommandAdapter {
             if (!userExists) {
                 boolean userCreated;
                 try {
-                    userCreated = DatabaseUtils.createPlayer(name);
+                    userCreated = DatabaseUtils.createPlayer(name, amount);
                 } catch (Exception e) {
                     return false;
                 }
 
                 if (userCreated) {
-                    playerList.put(name, new Player(name));
+                    playerList.put(name, new Player(name, new Wallet(amount, 0, 0)));
                     LOG.addLog(commandLine);
                 } else {
                     return false;
@@ -112,24 +113,28 @@ public class CommandAdapter {
         String username = command.get(Constants.NAME_PARAMETER);
         String valueStr = command.get(Constants.VALUE_PARAMETER);
         String method = command.get(Constants.METHOD_PARAMETER);
-        double value;
+        double amount;
 
         if (username != null && valueStr != null && method != null) {
-            value = Double.parseDouble(valueStr);
+            amount = Double.parseDouble(valueStr);
 
-            if (value != 0 && !username.equals("") && !method.equals("")) {
+            if (amount != 0 && !username.equals("") && !method.equals("")) {
                 Player player = playerList.get(username);
                 if (player != null) {
                     EServices service = EServices.fromString(method);
                     if (!service.equals(EServices.UNKNOWN)) {
                         ServiceAdapter serviceAdapter = new ServiceAdapter(service);
                         Wallet playerWallet = player.getWallet();
-                        serviceAdapter.buy(value, playerWallet);
-                        try {
-                            DatabaseUtils.updateWallet(username, playerWallet);
-                            LOG.addLog(commandLine);
-                        } catch (Exception e) {
-                            LOG.addLog("Erro ao atualizar a carteira: " + e.getMessage());
+                        if (playerWallet.getAmount() >= amount) {
+                            serviceAdapter.buy(amount, playerWallet);
+                            try {
+                                DatabaseUtils.updateWallet(username, playerWallet);
+                                LOG.addLog(commandLine);
+                            } catch (Exception e) {
+                                LOG.addLog("Erro ao atualizar a carteira: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("Player has no money to buy that value of chips.");
                         }
                     }
                 }
@@ -193,7 +198,6 @@ public class CommandAdapter {
                     int incrementValue = 0;
                     int feeValue = 0;
 
-                    // TODO: deal with this minimumAmount, custom for competitive games, and the default value from Constants for friendly games
                     GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, Constants.GAME_MINIMUM_AMOUNT, typeOfGame, player);
 
                     if (typeOfGame != ETypeOfGame.FRIENDLY) {
@@ -224,7 +228,7 @@ public class CommandAdapter {
                     }
 
                     Game game = factory.createObject(gameCreationData);
-                    game.addPlayer(player, game.getConvertionTax()); // TODO: adapt this fee on the competitive game
+                    game.addPlayer(player, game.getConvertionTax());
 
                     return data.addGame(game);
                 }
@@ -370,7 +374,6 @@ public class CommandAdapter {
                 playerName.length() > 0 && playerNewName.length() > 0) {
             Player player = onlinePlayers.get(playerName);
             if (player != null) {
-                //FIXME: update this method to change all the player references
                 player.setName(playerNewName);
             }
         }
@@ -385,8 +388,6 @@ public class CommandAdapter {
             if (player != null) {
                 boolean containsKey = gamesList.entrySet().stream().anyMatch(stringGameEntry ->
                         stringGameEntry.getValue().getPlayersList().containsKey(playerName));
-
-                //FIXME: make possible to remove a player even if he is in a game
 
                 if (!containsKey) {
                     Player removedPlayer = onlinePlayers.remove(playerName);
@@ -479,14 +480,14 @@ public class CommandAdapter {
                                 iCard.getStringCardValue().equals(newCards[1].getStringCardValue()));
             });
 
-            //Validate if in the table
-            boolean inTable = game.getDeck().stream().anyMatch(iCard -> {
+            //Validate if in the deck
+            boolean inDeck = game.getDeck().stream().filter(iCard -> {
                 var value = iCard.getStringCardValue();
                 return value.equals(newCards[0].getStringCardValue()) ||
                         value.equals(newCards[1].getStringCardValue());
-            });
+            }).count() == 2;
 
-            return inTable && !inPlayersHand;
+            return inDeck && !inPlayersHand;
         }
         return true;
     }
@@ -666,5 +667,18 @@ public class CommandAdapter {
                 System.out.println("Can't find the tournament!");
             }
         }
+    }
+
+    public static void listPlayersDetails(Map<String, Player> onlinePlayers) {
+        StringBuilder str = new StringBuilder();
+
+        onlinePlayers.forEach((s, player) -> {
+            str.append("######\n")
+                    .append("Player Name: ").append(s).append("\n")
+                    .append("Wallet: ").append(player.getWallet().toString()).append("\n")
+                    .append("\n");
+        });
+
+        System.out.println(str);
     }
 }

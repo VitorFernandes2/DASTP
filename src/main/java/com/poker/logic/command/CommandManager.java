@@ -238,4 +238,8 @@ public class CommandManager {
     public void startFinalGame(String commandLine) {
         CommandAdapter.startFinalGame(commandLine, applicationData.getTournamentList(), getOnlinePlayers());
     }
+
+    public void listPlayersDetails() {
+        CommandAdapter.listPlayersDetails(getOnlinePlayers());
+    }
 }

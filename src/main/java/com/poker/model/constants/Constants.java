@@ -25,6 +25,7 @@ public class Constants {
     public static final String COMMAND = "command";
     public static final String COMMAND_LAST_DIVISION = "lastDivision";
     public static final String NAME_PARAMETER = "name";
+    public static final String AMOUNT_PARAMETER = "amount";
     public static final String VALUE_PARAMETER = "value";
     public static final String METHOD_PARAMETER = "payment";
     public static final String FROM_PARAMETER = "from";

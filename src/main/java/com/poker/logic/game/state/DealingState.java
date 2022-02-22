@@ -19,7 +19,7 @@ public class DealingState extends StateAdapter {
 //            if(!getGameEngine().turnCard()) {
 //                return this;
 //            } else {
-//                // TODO: Deal with end game ...
+//
 //            }
         }
         return this;
