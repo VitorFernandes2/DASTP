@@ -187,4 +187,8 @@ public class ApplicationFacade {
     public void startFinalGame(String commandLine) {
         commandManager.startFinalGame(commandLine);
     }
+
+    public void listPlayersDetails() {
+        commandManager.listPlayersDetails();
+    }
 }

@@ -33,7 +33,7 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = CREATE_TOURNAMENT; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = COMPETITIVE_GAME_WINNING; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
@@ -74,7 +74,6 @@ public class TextUI {
                         appFacade.seeGame(commandLine);
                         break;
                     case ADD_GAME:
-                        //TODO: Create competitive games with this command
                         appFacade.addGame(commandLine);
                         break;
                     case REMOVE_GAME:
@@ -95,6 +94,9 @@ public class TextUI {
                     // $$ Chat Functionalities $$
                     case LIST_PLAYERS:
                         appFacade.getOnlinePlayersToString(commandLine);
+                        break;
+                    case LIST_PLAYERS_DETAILS:
+                        appFacade.listPlayersDetails();
                         break;
                     case LIST_FRIENDS:
                         appFacade.listPlayerFriends(commandLine);
@@ -151,7 +153,7 @@ public class TextUI {
                         appFacade.startTournament(commandLine);
                         break;
                     case START_FINAL_TOURNAMENT:
-                        //TODO: Test
+                        //TODO: [TBC] Test
                         appFacade.startFinalGame(commandLine);
                         break;
                     case BET:

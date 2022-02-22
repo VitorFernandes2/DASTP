@@ -56,6 +56,7 @@ public class MockCommands {
             LIST_FRIENDLY_GAMES.getExample()
     ));
 
+    @Deprecated
     public static final List<String> CREATE_GAME_WINNING = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
@@ -243,5 +244,38 @@ public class MockCommands {
             "check game=jogo1 player=ana",
             "check game=jogo1 player=manel",
             "check game=jogo1 player=lj"
-            ));
+    ));
+
+    public static final List<String> COMPETITIVE_GAME_WINNING = new ArrayList<>(Arrays.asList(
+            "reg name=lj amount=100",
+            "log name=lj",
+            "cpc name=lj value=60 payment=Paypal",
+            "ccg name=jogo1 creator=lj",
+            "reg name=ana amount=100",
+            "log name=ana",
+            "cpc name=ana value=60 payment=Paypal",
+            "reg name=manel amount=100",
+            "log name=manel",
+            "cpc name=manel value=60 payment=Paypal",
+            "joinGame name=jogo1 player=ana",
+            "joinGame name=jogo1 player=manel",
+            "joinGame name=jogo1 player=lj",
+            "startGame name=jogo1 player=lj",
+            "bet game=jogo1 player=lj amount=50",
+            "bet game=jogo1 player=ana amount=48",
+            "bet game=jogo1 player=manel amount=46",
+            "setCards player=lj game=jogo1 c1=KS c2=KC",
+            "setCards player=ana game=jogo1 c1=10S c2=10C",
+            "setCards player=manel game=jogo1 c1=JS c2=JC",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj",
+            "check game=jogo1 player=ana",
+            "check game=jogo1 player=manel",
+            "check game=jogo1 player=lj"
+    ));
 }

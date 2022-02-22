@@ -54,7 +54,7 @@ public class DatabaseUtils {
         }
     }
 
-    public static boolean createPlayer(String name) throws Exception {
+    public static boolean createPlayer(String name, Integer amount) throws Exception {
         try {
             Class.forName("org.h2.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -63,7 +63,7 @@ public class DatabaseUtils {
             String createUserSQL = "INSERT INTO PLAYER(name) VALUES ('" + name + "')";
             statement.executeUpdate(createUserSQL);
 
-            String createUserWallet = "INSERT INTO WALLET(name, amount, pokerchips, pokergamechips) " + " VALUES ('" + name + "', 0, 0, 0)";
+            String createUserWallet = "INSERT INTO WALLET(name, amount, pokerchips, pokergamechips) " + " VALUES ('" + name + "', " + amount + ", 0, 0)";
             statement.executeUpdate(createUserWallet);
 
             statement.close();
