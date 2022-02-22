@@ -31,7 +31,7 @@ public class Game implements Serializable {
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
         this.convertionTax = convertionTax;
-        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment);
+        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment, convertionTax);
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -50,8 +50,8 @@ public class Game implements Serializable {
         return gameName;
     }
 
-    public boolean addPlayer(Player player, int fee) {
-        return this.gameEngine.addPlayer(player, fee);
+    public boolean addPlayer(Player player) {
+        return this.gameEngine.addPlayer(player);
     }
 
     public boolean removePlayer(String player) {
