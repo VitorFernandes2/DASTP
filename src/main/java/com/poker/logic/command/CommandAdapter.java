@@ -40,6 +40,7 @@ public class CommandAdapter {
             try {
                 userExists = DatabaseUtils.playerExistsByName(name);
             } catch (Exception e) {
+                System.out.println("[Register] Error while registering the user in database " + e.getMessage());
                 return false;
             }
 
@@ -48,15 +49,19 @@ public class CommandAdapter {
                 try {
                     userCreated = DatabaseUtils.createPlayer(name, amount);
                 } catch (Exception e) {
+                    System.out.println("[Register] Error while registering the user in database " + e.getMessage());
                     return false;
                 }
 
                 if (userCreated) {
                     playerList.put(name, new Player(name, new Wallet(amount, 0, 0)));
                     LOG.addLog(commandLine);
+                    System.out.println("[Register] User registered with success");
                 } else {
                     return false;
                 }
+            } else {
+                System.out.println("[Register] User already exists in the database!");
             }
             return !userExists;
         }
@@ -73,6 +78,7 @@ public class CommandAdapter {
             try {
                 player = DatabaseUtils.getPlayerByName(name);
             } catch (Exception e) {
+                System.out.println("[Login] Error while logging the user in database " + e.getMessage());
                 return false;
             }
 
@@ -82,6 +88,7 @@ public class CommandAdapter {
 
                 playerList.put(name, player);
                 LOG.addLog(commandLine);
+                System.out.println("[Login] User logged in with success!");
             }
             return !Objects.isNull(player);
         }
@@ -94,6 +101,7 @@ public class CommandAdapter {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
         onlinePlayers.remove(playerName);
+        System.out.println("[Login] User logged out with success!");
     }
 
     private static void notifyNewLogin(Map<String, Player> onlinePlayers, String name) {
@@ -130,11 +138,12 @@ public class CommandAdapter {
                             try {
                                 DatabaseUtils.updateWallet(username, playerWallet);
                                 LOG.addLog(commandLine);
+                                System.out.println("[System] Chips bought with success!");
                             } catch (Exception e) {
-                                LOG.addLog("Erro ao atualizar a carteira: " + e.getMessage());
+                                LOG.addLog("[System] Error while updating the wallet: " + e.getMessage());
                             }
                         } else {
-                            System.out.println("Player has no money to buy that value of chips.");
+                            System.out.println("[System] Player has no money to buy that value of chips.");
                         }
                     }
                 }
@@ -158,7 +167,7 @@ public class CommandAdapter {
                 return;
             }
         } catch (Exception e) {
-            System.out.println("Error trying to get players name!");
+            System.out.println("[System] Error trying to get players name!");
             return;
         }
 
@@ -191,6 +200,7 @@ public class CommandAdapter {
                 if (!Objects.isNull(player)) {
                     GameFactory factory = (GameFactory) FactoryProvider.getFactory(EFactory.GAMES);
                     if (factory == null) {
+                        System.out.println("[Game] Error creating the factory");
                         return false;
                     }
 
@@ -234,6 +244,7 @@ public class CommandAdapter {
                         return false;
                     }
                     game.addPlayer(player);
+                    System.out.println("[Game] Player created with success!");
                     return data.addGame(game);
                 }
             }
@@ -255,12 +266,12 @@ public class CommandAdapter {
                 if (!Objects.isNull(game) && !playerName.equals("")) {
                     Player player = playerList.get(playerName);
                     if (!Objects.isNull(player)) {
+                        System.out.println("[Game] The player has joined the game!");
                         return game.addPlayer(player);
                     }
                 }
             }
         }
-
         return false;
     }
 
@@ -278,6 +289,7 @@ public class CommandAdapter {
                 Player player = playerList.get(playerName);
                 if (!Objects.isNull(player)) {
                     game.startGame(player);
+                    System.out.println("[Game] The game has started!");
                     return;
                 }
             }
@@ -297,7 +309,7 @@ public class CommandAdapter {
         Player player = onlinePlayers.get(command.get(Constants.PLAYER_PARAMETER));
         player.addFriend(command.get(Constants.ADD_PARAMETER));
         player.removeBlockedPlayer(command.get(Constants.ADD_PARAMETER));
-        System.out.println("Player added with success");
+        System.out.println("[Add Friend] Player added with success");
     }
 
     public static void blockPlayer(String commandLine, Map<String, Player> onlinePlayers) {
@@ -306,7 +318,7 @@ public class CommandAdapter {
         Player player = onlinePlayers.get(command.get(Constants.PLAYER_PARAMETER));
         player.blockPlayer(command.get(Constants.BLOCK_PARAMETER));
         player.removeFriend(command.get(Constants.BLOCK_PARAMETER));
-        System.out.println("Player blocked with success");
+        System.out.println("[Block Player] Player blocked with success");
     }
 
     public static void showGameInfo(String commandLine, Map<String, Game> games) {
@@ -402,8 +414,9 @@ public class CommandAdapter {
 
                     try {
                         DatabaseUtils.removePlayerFromDB(playerName);
+                        System.out.println("[Admin] User kicked from the application!");
                     } catch (Exception e) {
-                        System.out.println("Error removing the player from the database");
+                        System.out.println("[Admin] Error removing the player from the database");
                     }
                 }
             }
@@ -438,7 +451,7 @@ public class CommandAdapter {
 
                 if (newCards[0] != null && newCards[1] != null) {
                     if (newCards[0].getStringCardValue().equals(newCards[1].getStringCardValue())) {
-                        System.out.println("Change one of the cards, they can't be the same");
+                        System.out.println("[System] Change one of the cards, they can't be the same");
                         return;
                     }
                 }
@@ -452,7 +465,7 @@ public class CommandAdapter {
                 if (playerGame.size() == 1) {
                     game = playerGame.get(0);
                 } else {
-                    System.out.println("The player isn't in the game");
+                    System.out.println("[System] The player isn't in the game");
                     return;
                 }
 
@@ -513,14 +526,16 @@ public class CommandAdapter {
 
         player.getGameCards()[0] = newCards[0];
         player.getGameCards()[1] = newCards[1];
+        System.out.println("[System] Cards added to the player hand!");
     }
 
     public static void getRankings(Map<String, RankingLine> rankings) {
         if (rankings.size() == 0) {
             try {
                 DatabaseUtils.setRankings(rankings);
+                System.out.println("[System] Rankings retrieved from the database!");
             } catch (Exception e) {
-                System.out.println("Error getting rankings from Database! " + e.getMessage());
+                System.out.println("[System] Error getting rankings from Database! " + e.getMessage());
             }
         }
 
@@ -537,7 +552,7 @@ public class CommandAdapter {
             });
             System.out.println(stringBuilder);
         } else {
-            System.out.println("There are no rankings available to show");
+            System.out.println("[System] There are no rankings available to show");
         }
     }
 
@@ -549,6 +564,7 @@ public class CommandAdapter {
             if (rankings.size() > 0) {
                 RankingLine line = rankings.remove(playerName);
                 RankingProvider.getInstance().registerDelete(line);
+                System.out.println("[System] Ranking removed from the system!");
             }
         }
     }
@@ -571,6 +587,7 @@ public class CommandAdapter {
                     } else {
                         rankingLine.setWins(winsValue);
                     }
+                    System.out.println("[System] Ranking added with success!");
                 }
             }
         }
@@ -586,8 +603,9 @@ public class CommandAdapter {
             if (player != null) {
                 if (tournamentList.get(tourName) == null) {
                     tournamentList.put(tourName, new Tournament(tourName, player));
+                    System.out.println("[Tournament] Tournament created with success!");
                 } else {
-                    System.out.println("Tournament already exists!");
+                    System.out.println("[Tournament] Tournament already exists!");
                 }
             }
         }
@@ -604,8 +622,9 @@ public class CommandAdapter {
             if (!playerInGame(gamesList, player)) {
                 if (tournament != null && player != null) {
                     tournament.addPlayer(player);
+                    System.out.println("[Tournament] Player joined the tournament wait room!");
                 } else {
-                    System.out.println("Error adding the player!");
+                    System.out.println("[Tournament] Error adding the player!");
                 }
             }
         }
@@ -628,9 +647,10 @@ public class CommandAdapter {
                 tournament.startTournament();
                 for (var game : tournament.getGameList()) {
                     gamesList.put(game.getGameName(), game);
+                    System.out.println("[Tournament] The tournament has started!! Good Luck!!!!");
                 }
             } else {
-                System.out.println("Error starting the game!");
+                System.out.println("[Tournament] Error starting the game!");
             }
         }
     }
@@ -666,9 +686,10 @@ public class CommandAdapter {
 
                 if (goToTheFinal) {
                     tournament.createFinal(winners);
+                    System.out.println("[Tournament] Final game created!");
                 }
             } else {
-                System.out.println("Can't find the tournament!");
+                System.out.println("[Tournament] Can't find the tournament!");
             }
         }
     }
