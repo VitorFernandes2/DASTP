@@ -92,6 +92,9 @@ public class TextUI {
                     case REMOVE_CUSTOM_RANKING:
                         appFacade.removeRanking(commandLine);
                         break;
+                    case SET_TABLE_CARDS:
+                        appFacade.setTableCards(commandLine);
+                        break;
 
                     // $$ Chat Functionalities $$
                     case LIST_PLAYERS:

@@ -65,7 +65,7 @@ public class CommandManager {
             applicationData.saveGames(Constants.GAME_NAME);
             RankingProvider.getInstance().commit();
         } catch (IOException e) {
-            Log.getInstance().addLog("Couldn't save the game " + e.getMessage());
+            Log.getInstance().addLog("[System] Couldn't save the game " + e.getMessage());
         }
     }
 
@@ -73,7 +73,7 @@ public class CommandManager {
         try {
             applicationData.loadGames(Constants.GAME_NAME);
         } catch (IOException | ClassNotFoundException e) {
-            Log.getInstance().addLog("Couldn't load the game " + e.getMessage());
+            Log.getInstance().addLog("[System] Couldn't load the game " + e.getMessage());
         }
     }
 
@@ -163,7 +163,7 @@ public class CommandManager {
                     game.removePlayer(Constants.ADMIN_NAME);
                 }
             } else {
-                System.out.println("Error creating the game!");
+                System.out.println("[System] Error creating the game!");
             }
         }
     }
@@ -203,7 +203,9 @@ public class CommandManager {
     }
 
     public void addCardsToUser(String commandLine) {
-        CommandAdapter.addCardsToUser(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+        if (isAdminUser()) {
+            CommandAdapter.addCardsToUser(commandLine, getOnlinePlayers(), applicationData.getGamesList());
+        }
     }
 
     public void getRankings() {
@@ -248,5 +250,11 @@ public class CommandManager {
 
     public void kickFromGame(String commandLine) {
         CommandAdapter.kickFromGame(commandLine, applicationData);
+    }
+
+    public void setTableCards(String commandLine) {
+        if (isAdminUser()) {
+            CommandAdapter.setTableCards(commandLine, applicationData.getGamesList());
+        }
     }
 }

@@ -22,27 +22,27 @@ public class Game implements Serializable {
     private final int minimumAmount;
     private final GameEngine gameEngine;
     private IGameState state;
-    private final int convertionTax;
+    private final int conversionTax;
 
-    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int convertionTax, int bigBlind, int increment) {
+    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int conversionTax, int bigBlind, int increment) {
         this.gameName = gameName;
         this.typeOfGame = typeOfGame;
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
-        this.convertionTax = convertionTax;
-        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment, convertionTax);
+        this.conversionTax = conversionTax;
+        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment, conversionTax);
         this.state = new BuyInState(this.gameEngine);
     }
 
-    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, int convertionTax, int bigBlind) {
+    private Game(String gameName, Player creator, ETypeOfGame typeOfGame, int minimumPlayers, int minimumAmount, GameEngine gameEngine, int conversionTax, int bigBlind) {
         this.gameName = gameName;
         this.creator = creator;
         this.typeOfGame = typeOfGame;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
         this.gameEngine = gameEngine;
-        this.convertionTax = convertionTax;
+        this.conversionTax = conversionTax;
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -52,6 +52,10 @@ public class Game implements Serializable {
 
     public boolean addPlayer(Player player) {
         return this.gameEngine.addPlayer(player);
+    }
+
+    public void setTableCards(List<ICard> tableCards) {
+        this.gameEngine.setTableCards(tableCards);
     }
 
     public boolean removePlayer(String player) {
@@ -193,8 +197,8 @@ public class Game implements Serializable {
         return gameEngine.getPlayers();
     }
 
-    public int getConvertionTax() {
-        return convertionTax;
+    public int getConversionTax() {
+        return conversionTax;
     }
 
     public int getBigBlind() {
@@ -226,7 +230,7 @@ public class Game implements Serializable {
                 .setTypeOfGame(this.typeOfGame)
                 .setCreator(this.creator)
                 .setBigBlind(this.getBigBlind())
-                .setConvertionTax(this.convertionTax)
+                .setConvertionTax(this.conversionTax)
                 .setIncrement(this.getIncrement())
                 .build();
     }

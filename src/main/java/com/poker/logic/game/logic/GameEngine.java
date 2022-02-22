@@ -521,5 +521,10 @@ public class GameEngine implements Serializable {
     private boolean isSmallBlind() {
         return isSmallBlind;
     }
+
+    public void setTableCards(List<ICard> tableCards) {
+        this.tableCards.clear();
+        this.tableCards.addAll(tableCards);
+    }
     //</editor-fold>
 }
