@@ -203,4 +203,8 @@ public class ApplicationFacade {
     public void kickFromGame(String commandLine) {
         commandManager.kickFromGame(commandLine);
     }
+
+    public void leaveGame(String commandLine) {
+        commandManager.leaveGame(commandLine);
+    }
 }

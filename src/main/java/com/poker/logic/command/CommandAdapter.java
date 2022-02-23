@@ -25,12 +25,15 @@ import com.poker.utils.DatabaseUtils;
 import com.poker.utils.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class CommandAdapter {
     private static final Log LOG = Log.getInstance();
 
     public static boolean addUser(String commandLine, Map<String, Player> playerList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String name = command.get(Constants.NAME_PARAMETER);
         int amount = Integer.parseInt(command.get(Constants.AMOUNT_PARAMETER) != null ? command.get(Constants.AMOUNT_PARAMETER) : "0");
@@ -55,13 +58,12 @@ public class CommandAdapter {
 
                 if (userCreated) {
                     playerList.put(name, new Player(name, new Wallet(amount, 0, 0)));
-                    LOG.addLog(commandLine);
-                    System.out.println("[Register] User registered with success");
+                    LOG.addAndShowLog("[Register] User registered with success");
                 } else {
                     return false;
                 }
             } else {
-                System.out.println("[Register] User already exists in the database!");
+                LOG.addAndShowLog("[Register] User already exists in the database!");
             }
             return !userExists;
         }
@@ -87,8 +89,7 @@ public class CommandAdapter {
                 notifyNewLogin(playerList, name);
 
                 playerList.put(name, player);
-                LOG.addLog(commandLine);
-                System.out.println("[Login] User logged in with success!");
+                LOG.addAndShowLog("[Login] User logged in with success!");
             }
             return !Objects.isNull(player);
         }
@@ -101,14 +102,14 @@ public class CommandAdapter {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
         onlinePlayers.remove(playerName);
-        System.out.println("[Login] User logged out with success!");
+        LOG.addAndShowLog("[Login] User logged out with success!");
     }
 
     private static void notifyNewLogin(Map<String, Player> onlinePlayers, String name) {
         // notify each online player if some of is friends logged in
         onlinePlayers.forEach((s, player) -> player.getFriends().forEach(friendName -> {
             if (name.equals(friendName))
-                System.out.println("[System][To:" + player.getName() + "] The player " + name + " logged in!");
+                LOG.addAndShowLog("[System][To:" + player.getName() + "] The player " + name + " logged in!");
         }));
     }
 
@@ -117,6 +118,7 @@ public class CommandAdapter {
     }
 
     public static void buyChips(String commandLine, Map<String, Player> playerList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String username = command.get(Constants.NAME_PARAMETER);
         String valueStr = command.get(Constants.VALUE_PARAMETER);
@@ -137,16 +139,15 @@ public class CommandAdapter {
                             serviceAdapter.buy(amount, playerWallet);
                             try {
                                 DatabaseUtils.updateWallet(username, playerWallet);
-                                LOG.addLog(commandLine);
-                                System.out.println("[System] Chips bought with success!");
+                                LOG.addAndShowLog("[System] Chips bought with success!");
                             } catch (Exception e) {
                                 LOG.addLog("[System] Error while updating the wallet: " + e.getMessage());
                             }
                         } else {
-                            System.out.println("[System] Player has no money to buy that value of chips.");
+                            LOG.addAndShowLog("[System] Player has no money to buy that value of chips.");
                         }
                     }
-                    System.out.println("[System] The player " + player.getName() + " now has " + player.getWallet().getPokerChips() + " PCs");
+                    LOG.addAndShowLog("[System] The player " + player.getName() + " now has " + player.getWallet().getPokerChips() + " PCs");
                 }
             }
         }
@@ -161,10 +162,10 @@ public class CommandAdapter {
         // check if the players exists on the BD
         try {
             if (!DatabaseUtils.playerExistsByName(senderName)) {
-                System.out.println("[System] " + senderName + " doesn't exist!");
+                LOG.addAndShowLog("[System] " + senderName + " doesn't exist!");
                 return;
             } else if (!DatabaseUtils.playerExistsByName(receiverName)) {
-                System.out.println("[System] " + receiverName + " doesn't exist!");
+                LOG.addAndShowLog("[System] " + receiverName + " doesn't exist!");
                 return;
             }
         } catch (Exception e) {
@@ -173,11 +174,11 @@ public class CommandAdapter {
         }
 
         if (playersInArray(onlinePlayers, senderName)) {
-            System.out.println("[System] " + senderName + " is offline!");
+            LOG.addAndShowLog("[System] " + senderName + " is offline!");
             return;
         }
 
-        System.out.println(playersInArray(onlinePlayers, receiverName) ?
+        LOG.addAndShowLog(playersInArray(onlinePlayers, receiverName) ?
                 "[System] " + receiverName + " is offline!" :
                 onlinePlayers.get(receiverName).getPlayersBlocked().contains(senderName) ?
                         "[System] You can't send messages to this user!" :
@@ -186,6 +187,7 @@ public class CommandAdapter {
     }
 
     public static boolean createGame(String commandLine, ApplicationData data, ETypeOfGame typeOfGame) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         Map<String, Player> playerList = data.getOnlinePlayers();
 
@@ -215,7 +217,7 @@ public class CommandAdapter {
                         if (fee != null) {
                             feeValue = Integer.parseInt(fee);
                             if (feeValue < Constants.COMPETITIVE_DEFAULT_FEE) {
-                                System.out.println("[Game] Fee can't be smaller than " + Constants.COMPETITIVE_DEFAULT_FEE);
+                                LOG.addAndShowLog("[Game] Fee can't be smaller than " + Constants.COMPETITIVE_DEFAULT_FEE);
                                 return false;
                             }
                             gameCreationData.setFee(feeValue);
@@ -224,7 +226,7 @@ public class CommandAdapter {
                         if (bigBlind != null) {
                             bigBlindValue = Integer.parseInt(bigBlind);
                             if (bigBlindValue < Constants.DEFAULT_BIG_BLIND) {
-                                System.out.println("[Game] Big blind can't be smaller than " + Constants.DEFAULT_BIG_BLIND);
+                                LOG.addAndShowLog("[Game] Big blind can't be smaller than " + Constants.DEFAULT_BIG_BLIND);
                                 return false;
                             }
                             gameCreationData.setBigBlind(bigBlindValue);
@@ -241,11 +243,11 @@ public class CommandAdapter {
                     Game game = factory.createObject(gameCreationData);
 
                     if (ETypeOfGame.COMPETITIVE.equals(game.getTypeOfGame()) && player.getWallet().getPokerChips() < gameCreationData.getFee()) {
-                        System.out.println("[Game] The player " + player.getName() + " needs at least " + gameCreationData.getFee() + " PCs to play in this game");
+                        LOG.addAndShowLog("[Game] The player " + player.getName() + " needs at least " + gameCreationData.getFee() + " PCs to play in this game");
                         return false;
                     }
                     game.addPlayer(player);
-                    System.out.println("[Game] Player created with success!");
+                    LOG.addAndShowLog("[Game] Game created with success!");
                     return data.addGame(game);
                 }
             }
@@ -254,6 +256,7 @@ public class CommandAdapter {
     }
 
     public static boolean joinGame(String commandLine, ApplicationData data) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.NAME_PARAMETER);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
@@ -267,9 +270,21 @@ public class CommandAdapter {
                 if (!Objects.isNull(game) && !playerName.equals("")) {
                     Player player = playerList.get(playerName);
                     if (!Objects.isNull(player)) {
-                        System.out.println("[Game] The player has joined the game!");
-                        return game.addPlayer(player);
+                        AtomicBoolean playerInGame = new AtomicBoolean(false);
+                        gameList.forEach((s, game1) -> {
+                            if (game1.playerInGame(playerName)) {
+                                playerInGame.set(true);
+                            }
+                        });
+                        if (!playerInGame.get()) {
+                            LOG.addAndShowLog("[Game] The player has joined the game!");
+                            return game.addPlayer(player);
+                        } else {
+                            LOG.addAndShowLog("[Game] The player " + playerName + " already are in another game");
+                        }
                     }
+                } else {
+                    LOG.addAndShowLog("[Game] The game " + gameName + " doesn't exists!");
                 }
             }
         }
@@ -277,6 +292,7 @@ public class CommandAdapter {
     }
 
     public static void startGame(String commandLine, ApplicationData data) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.NAME_PARAMETER);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
@@ -290,12 +306,11 @@ public class CommandAdapter {
                 Player player = playerList.get(playerName);
                 if (!Objects.isNull(player)) {
                     game.startGame(player);
-                    System.out.println("[Game] The game has started!");
                     return;
                 }
             }
         }
-        System.out.println("[Game] Game not started");
+        LOG.addAndShowLog("[Game] Game not started");
     }
 
     public static void getOnlinePlayersToString(Map<String, Player> onlinePlayers) {
@@ -310,7 +325,7 @@ public class CommandAdapter {
         Player player = onlinePlayers.get(command.get(Constants.PLAYER_PARAMETER));
         player.addFriend(command.get(Constants.ADD_PARAMETER));
         player.removeBlockedPlayer(command.get(Constants.ADD_PARAMETER));
-        System.out.println("[Add Friend] Player added with success");
+        LOG.addAndShowLog("[Add Friend] Player added with success");
     }
 
     public static void blockPlayer(String commandLine, Map<String, Player> onlinePlayers) {
@@ -319,11 +334,12 @@ public class CommandAdapter {
         Player player = onlinePlayers.get(command.get(Constants.PLAYER_PARAMETER));
         player.blockPlayer(command.get(Constants.BLOCK_PARAMETER));
         player.removeFriend(command.get(Constants.BLOCK_PARAMETER));
-        System.out.println("[Block Player] Player blocked with success");
+        LOG.addAndShowLog("[Block Player] Player blocked with success");
     }
 
     public static void showGameInfo(String commandLine, Map<String, Game> games) {
         LOG.addLog(commandLine);
+        boolean gameExists = false;
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.GAME_PARAMETER);
         for (Map.Entry<String, Game> entry : games.entrySet()) {
@@ -331,27 +347,34 @@ public class CommandAdapter {
             Game game = entry.getValue();
             if (name.equals(gameName) && !game.isNull()) {
                 System.out.println(game.showGameInfo(name));
+                gameExists = true;
                 break;
             }
+        }
+        if (!gameExists) {
+            LOG.addAndShowLog("[Game] The game with the name " + gameName + " doesn't exists!");
         }
     }
 
     public static void getGamesToString(Map<String, Game> gamesList, ETypeOfGame typeOfGame) {
         StringBuilder str = new StringBuilder();
-        str.append("NAME\t\tCREATOR\n");
+        AtomicReference<Boolean> existsGames = new AtomicReference<>(false);
+        str.append("NAME\t\tCREATOR");
         List<String> gamesToRemoved = new ArrayList<>();
         gamesList.forEach((s, game) -> {
             if (game.getTypeOfGame().equals(typeOfGame) && !game.isNull()) {
-                str.append(game.getGameName()).append("\t\t").append(game.getCreatorName()).append("\n");
+                str.append("\n").append(game.getGameName()).append("\t\t").append(game.getCreatorName());
+                existsGames.set(true);
             } else if (game.isNull()) {
                 gamesToRemoved.add(s);
             }
         });
         gamesToRemoved.forEach(gamesList::remove);
-        System.out.println(str);
+        LOG.addAndShowLog(existsGames.get() ? str.toString() : "[System] There are no " + typeOfGame.toString().toLowerCase() + " games!");
     }
 
     public static void showPlayerRelationList(String commandLine, Map<String, Player> onlinePlayers, EPlayerRelation relation) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String username = command.get(Constants.NAME_PARAMETER);
 
@@ -370,23 +393,24 @@ public class CommandAdapter {
                 StringBuilder strOut = new StringBuilder();
                 strOut.append("List of ").append(relation).append(" of ").append(username).append(":\n");
                 relatedPlayers.forEach(s -> strOut.append("> ").append(s).append("\n"));
-                System.out.println(strOut);
+                LOG.addAndShowLog(strOut.toString());
             }
         }
     }
 
     public static void removeGame(String commandLine, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.NAME_PARAMETER);
         if (gameName != null && gameName.length() > 0) {
             Game game = gamesList.remove(gameName);
-            game.getPlayersList().forEach((s, player) -> {
-                game.getGameEngine().removePlayer(player.getName());
-            });
+            game.getPlayersList().forEach((s, player) -> game.getGameEngine().removePlayer(player.getName()));
+            LOG.addAndShowLog("[Game] The game " + gameName + " has been removed with success!");
         }
     }
 
     public static void editUser(String commandLine, ApplicationData applicationData) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
         String playerNewName = command.get(Constants.NEW_NAME_PARAMETER);
@@ -394,10 +418,13 @@ public class CommandAdapter {
         if (playerNewName != null && playerName != null &&
                 playerName.length() > 0 && playerNewName.length() > 0) {
             applicationData.updatePlayerName(playerName, playerNewName);
+        } else {
+            LOG.addAndShowLog("[System] Names invalid!");
         }
     }
 
     public static void kickUser(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
 
@@ -416,16 +443,19 @@ public class CommandAdapter {
 
                     try {
                         DatabaseUtils.removePlayerFromDB(playerName);
-                        System.out.println("[Admin] User kicked from the application!");
+                        LOG.addAndShowLog("[Admin] The player " + playerName + " has been kicked from the application!");
                     } catch (Exception e) {
                         System.out.println("[Admin] Error removing the player from the database");
                     }
+                } else {
+                    LOG.addAndShowLog("[Admin] The player " + playerName + " cannot be kicked from the application because is in game!");
                 }
             }
         }
     }
 
     public static void checkUserActivities(String commandLine, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
 
@@ -439,6 +469,7 @@ public class CommandAdapter {
     }
 
     public static void addCardsToUser(String commandLine, Map<String, Player> onlinePlayers, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
         String cardOne = command.get(Constants.CARD_ONE_PARAMETER);
@@ -453,7 +484,7 @@ public class CommandAdapter {
 
                 if (newCards[0] != null && newCards[1] != null) {
                     if (newCards[0].getStringCardValue().equals(newCards[1].getStringCardValue())) {
-                        System.out.println("[System] Change one of the cards, they can't be the same");
+                        LOG.addAndShowLog("[System] Change one of the cards, they can't be the same");
                         return;
                     }
                 }
@@ -467,7 +498,7 @@ public class CommandAdapter {
                 if (playerGame.size() == 1) {
                     game = playerGame.get(0);
                 } else {
-                    System.out.println("[System] The player isn't in the game");
+                    LOG.addAndShowLog("[System] The player isn't in the game");
                     return;
                 }
 
@@ -479,7 +510,6 @@ public class CommandAdapter {
     }
 
     private static boolean cardsAreValid(ICard[] newCards, Game game, Player player) {
-
         if (newCards[0] != null && newCards[1] != null
                 && player.getGameCards()[0] != null && player.getGameCards()[0] != null) {
             //Validate Cards in player hands
@@ -559,6 +589,7 @@ public class CommandAdapter {
     }
 
     public static void removeRanking(String commandLine, Map<String, RankingLine> rankings) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
 
@@ -566,12 +597,13 @@ public class CommandAdapter {
             if (rankings.size() > 0) {
                 RankingLine line = rankings.remove(playerName);
                 RankingProvider.getInstance().registerDelete(line);
-                System.out.println("[System] Ranking removed from the system!");
+                LOG.addAndShowLog("[System] Ranking removed from the system!");
             }
         }
     }
 
     public static void addCustomRankings(String commandLine, Map<String, RankingLine> rankings, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
         String wins = command.get(Constants.WINS_TWO_PARAMETER);
@@ -589,13 +621,14 @@ public class CommandAdapter {
                     } else {
                         rankingLine.setWins(winsValue);
                     }
-                    System.out.println("[System] Ranking added with success!");
+                    LOG.addAndShowLog("[System] Ranking added with success!");
                 }
             }
         }
     }
 
     public static void createTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
         String tourName = command.get(Constants.NAME_PARAMETER);
@@ -605,15 +638,16 @@ public class CommandAdapter {
             if (player != null) {
                 if (tournamentList.get(tourName) == null) {
                     tournamentList.put(tourName, new Tournament(tourName, player));
-                    System.out.println("[Tournament] Tournament created with success!");
+                    LOG.addAndShowLog("[Tournament] Tournament created with success!");
                 } else {
-                    System.out.println("[Tournament] Tournament already exists!");
+                    LOG.addAndShowLog("[Tournament] Tournament already exists!");
                 }
             }
         }
     }
 
     public static void joinTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
         String tourName = command.get(Constants.NAME_PARAMETER);
@@ -624,9 +658,9 @@ public class CommandAdapter {
             if (!playerInGame(gamesList, player)) {
                 if (tournament != null && player != null) {
                     tournament.addPlayer(player);
-                    System.out.println("[Tournament] Player joined the tournament wait room!");
+                    LOG.addAndShowLog("[Tournament] Player joined the tournament wait room!");
                 } else {
-                    System.out.println("[Tournament] Error adding the player!");
+                    LOG.addAndShowLog("[Tournament] Error adding the player!");
                 }
             }
         }
@@ -637,6 +671,7 @@ public class CommandAdapter {
     }
 
     public static void startTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
         String tourName = command.get(Constants.NAME_PARAMETER);
@@ -649,10 +684,10 @@ public class CommandAdapter {
                 tournament.startTournament();
                 for (var game : tournament.getGameList()) {
                     gamesList.put(game.getGameName(), game);
-                    System.out.println("[Tournament] The tournament has started!! Good Luck!!!!");
+                    LOG.addAndShowLog("[Tournament] The tournament has started!! Good Luck!!!!");
                 }
             } else {
-                System.out.println("[Tournament] Error starting the game!");
+                LOG.addAndShowLog("[Tournament] Error starting the game!");
             }
         }
     }
@@ -668,6 +703,7 @@ public class CommandAdapter {
     }
 
     public static void startFinalGame(String commandLine, Map<String, Tournament> tournamentList, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String tourName = command.get(Constants.NAME_PARAMETER);
 
@@ -688,10 +724,10 @@ public class CommandAdapter {
 
                 if (goToTheFinal) {
                     tournament.createFinal(winners);
-                    System.out.println("[Tournament] Final game created!");
+                    LOG.addAndShowLog("[Tournament] Final game created!");
                 }
             } else {
-                System.out.println("[Tournament] Can't find the tournament!");
+                LOG.addAndShowLog("[Tournament] Can't find the tournament!");
             }
         }
     }
@@ -702,14 +738,14 @@ public class CommandAdapter {
         onlinePlayers.forEach((s, player) -> {
             str.append("######\n")
                     .append("Player Name: ").append(s).append("\n")
-                    .append("Wallet: ").append(player.getWallet().toString()).append("\n")
-                    .append("\n");
+                    .append("Wallet: ").append(player.getWallet().toString()).append("\n");
         });
 
         System.out.println(str);
     }
 
     public static void transferMoney(String commandLine, Map<String, Player> onlinePlayers) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
         double amount = Double.parseDouble(command.get(Constants.VALUE_PARAMETER));
@@ -723,14 +759,15 @@ public class CommandAdapter {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println("[Game] The player " + playerName + " received " + amount + "€ on his in-game account");
+            LOG.addAndShowLog("[Game] The player " + playerName + " received " + amount + "€ on his in-game account");
             return;
         }
-        System.out.println("[Game] Please login with the player " + playerName + " to add in-game cash!");
+        LOG.addAndShowLog("[Game] Please login with the player " + playerName + " to add in-game cash!");
     }
 
     public static void kickFromGame(String commandLine, ApplicationData applicationData) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
+        LOG.addLog(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
         String gameName = command.get(Constants.GAME_PARAMETER);
 
@@ -738,14 +775,15 @@ public class CommandAdapter {
         Game game = applicationData.getGame(gameName);
         if (player != null && game != null) {
             if (game.removePlayer(playerName)) {
-                System.out.println("[Game] The player " + playerName + " has been removed from the game "+ gameName);
+                LOG.addAndShowLog("[Game] The player " + playerName + " has been removed from the game " + gameName);
                 return;
             }
         }
-        System.out.println("[Game] The name of the " + (player == null ? "player" : "game") + " are invalid!");
+        LOG.addAndShowLog("[Game] The name of the " + (player == null ? "player" : "game") + " are invalid!");
     }
 
     public static void setTableCards(String commandLine, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String gameName = command.get(Constants.GAME_PARAMETER);
         String cardOne = command.get(Constants.CARD_ONE_PARAMETER);
@@ -783,7 +821,7 @@ public class CommandAdapter {
                     ).count();
 
                     if ((inDeck + inTable) != 5) {
-                        System.out.println("[System] One or more of the cards requested are being used by the players.");
+                        LOG.addAndShowLog("[System] One or more of the cards requested are being used by the players.");
                         return;
                     }
                 }
@@ -804,6 +842,29 @@ public class CommandAdapter {
                 deck.removeAll(removeDeck);
                 game.setTableCards(removeDeck);
             }
+        }
+    }
+
+    // leaveGame name=game1 player=ana
+    public static void leaveGame(String commandLine, Map<String, Game> gamesList) {
+        LOG.addLog(commandLine);
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String gameName = command.get(Constants.NAME_PARAMETER);
+        String playerName = command.get(Constants.PLAYER_PARAMETER);
+
+        Game game = gamesList.get(gameName);
+        if (game != null && game.playerInGame(playerName) && !game.isNull()) {
+            if (game.leaveGame(playerName)) {
+                LOG.addAndShowLog("[Game] The player " + playerName + " left the game " + gameName + "!");
+            }
+        } else {
+            LOG.addAndShowLog("[Game] " + (game == null ?
+                    "The game name are invalid!" :
+                    !game.playerInGame(playerName) ?
+                            "The player " + playerName + " aren't in this game!" :
+                            game.isNull() ?
+                                    "The selected game is over!" :
+                                    "Something went wrong! Please validate the input!"));
         }
     }
 }

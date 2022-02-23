@@ -40,7 +40,6 @@ public class Constants {
     public static final String CARD_FOU_PARAMETER = "c4";
     public static final String CARD_FIV_PARAMETER = "c5";
     public static final String WINS_TWO_PARAMETER = "wins";
-    public static final String GAME_PARAMETER = "game";
     public static final String FEE_PARAMETER = "fee";
     public static final String BIG_BLIND_PARAMETER = "bigBlind";
     public static final String INCREMENT_BLIND_PARAMETER = "increment";

@@ -98,6 +98,14 @@ public class Game implements Serializable {
         return getState() == null;
     }
 
+    public boolean playerInGame(String playerName) {
+        return gameEngine.playerInGame(playerName);
+    }
+
+    public boolean leaveGame(String playerName) {
+        return gameEngine.leaveGame(playerName, gameName, state);
+    }
+
     public static class Builder {
         private final String gameName;
         private Map<String, Player> players;
