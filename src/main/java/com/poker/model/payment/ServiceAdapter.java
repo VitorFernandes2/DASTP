@@ -81,7 +81,7 @@ public class ServiceAdapter implements IServiceAdapter, Serializable {
      * @return double - Transformed monetary value.
      */
     private double pokerChipsToMoney(int pokerChips) {
-        return pokerChips / Constants.MONEY_CONVERSION_RATE;
+        return (double) pokerChips / Constants.MONEY_CONVERSION_RATE;
     }
 
     /**

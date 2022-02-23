@@ -325,7 +325,7 @@ public class CommandAdapter {
     public static void showGameInfo(String commandLine, Map<String, Game> games) {
         LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
-        String gameName = command.get("game");
+        String gameName = command.get(Constants.GAME_PARAMETER);
         for (Map.Entry<String, Game> entry : games.entrySet()) {
             String name = entry.getKey();
             Game game = entry.getValue();
@@ -677,7 +677,7 @@ public class CommandAdapter {
                 var gamesList = tournament.getGameList();
                 Map<String, Player> winners = new HashMap<>();
                 boolean goToTheFinal = true;
-                for (var game: gamesList) {
+                for (var game : gamesList) {
                     if (game.getState() == null) {
                         Player player = onlinePlayers.get(game.getLastGameWinner());
                         winners.put(player.getName(), player);
@@ -743,5 +743,67 @@ public class CommandAdapter {
             }
         }
         System.out.println("[Game] The name of the " + (player == null ? "player" : "game") + " are invalid!");
+    }
+
+    public static void setTableCards(String commandLine, Map<String, Game> gamesList) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String gameName = command.get(Constants.GAME_PARAMETER);
+        String cardOne = command.get(Constants.CARD_ONE_PARAMETER);
+        String cardTwo = command.get(Constants.CARD_TWO_PARAMETER);
+        String cardThree = command.get(Constants.CARD_THR_PARAMETER);
+        String cardFour = command.get(Constants.CARD_FOU_PARAMETER);
+        String cardFive = command.get(Constants.CARD_FIV_PARAMETER);
+
+        if (gamesList != null && cardOne != null && cardTwo != null && cardThree != null && cardFour != null && cardFive != null) {
+            if (gamesList.get(gameName) != null) {
+                Game game = gamesList.get(gameName);
+                List<ICard> deck = game.getDeck();
+                ICard[] newCards = new ICard[5];
+                newCards[0] = CardsUtils.convertCardFromString(cardOne);
+                newCards[1] = CardsUtils.convertCardFromString(cardTwo);
+                newCards[2] = CardsUtils.convertCardFromString(cardThree);
+                newCards[3] = CardsUtils.convertCardFromString(cardFour);
+                newCards[4] = CardsUtils.convertCardFromString(cardFive);
+
+                if (newCards[0] != null && newCards[1] != null && newCards[2] != null && newCards[3] != null && newCards[4] != null) {
+                    long inDeck = deck.stream().filter(iCard ->
+                            iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[1].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[2].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[3].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[4].getStringCardValue())
+                    ).count();
+
+                    long inTable = game.getTableCards().stream().filter(iCard ->
+                            iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[1].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[2].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[3].getStringCardValue()) ||
+                                    iCard.getStringCardValue().equals(newCards[4].getStringCardValue())
+                    ).count();
+
+                    if ((inDeck + inTable) != 5) {
+                        System.out.println("[System] One or more of the cards requested are being used by the players.");
+                        return;
+                    }
+                }
+
+                deck.addAll(game.getTableCards());
+
+                List<ICard> removeDeck = new ArrayList<>();
+                deck.forEach(iCard -> {
+                    if (iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
+                            iCard.getStringCardValue().equals(newCards[1].getStringCardValue()) ||
+                            iCard.getStringCardValue().equals(newCards[2].getStringCardValue()) ||
+                            iCard.getStringCardValue().equals(newCards[3].getStringCardValue()) ||
+                            iCard.getStringCardValue().equals(newCards[4].getStringCardValue())) {
+                        removeDeck.add(iCard);
+                    }
+                });
+
+                deck.removeAll(removeDeck);
+                game.setTableCards(removeDeck);
+            }
+        }
     }
 }

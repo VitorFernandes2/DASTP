@@ -1,6 +1,7 @@
 package com.poker.logic.command;
 
 import com.poker.logic.ApplicationData;
+import com.poker.model.constants.Constants;
 import com.poker.utils.StringUtils;
 
 import java.util.Map;
@@ -18,8 +19,8 @@ public class BetCommand implements ICommand {
         if (command.size() < 5)
             throw new Exception("[Game] Invalid Bet Command!");
         else
-            this.commandAction = new CommandAction(command.get("game"), command.get("player"),
-                    Integer.parseInt(command.get("amount")));
+            this.commandAction = new CommandAction(command.get(Constants.GAME_NAME), command.get(Constants.PLAYER_PARAMETER),
+                    Integer.parseInt(command.get(Constants.AMOUNT_PARAMETER)));
     }
 
     @Override

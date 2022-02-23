@@ -30,26 +30,27 @@ public enum ECommand {
     LIST_CHAMPIONSHIPS("listTour", "lt", "listTour"),
     LIST_RANKING("listRankings", "lr", "listRankings"),
     LIST_PLAYERS_DETAILS("showPlayersDetails", "spd", "showPlayersDetails"),
-    CREATE_FRIENDLY_GAME("createFriendlyGame", "cfg", "createFriendlyGame name=jogo1 creator=lj"),
-    CREATE_COMPETITIVE_GAME("createCompetitiveGame", "ccg", "ccg name=jogo1 creator=lj fee=2 bigBlind=4 increment=2"),
-    START_GAME("startGame", "sg", "startGame name=jogo1 player=lj"),
-    JOIN_GAME("joinGame", "jg", "joinGame name=jogo1 player=ana"),
+    CREATE_FRIENDLY_GAME("createFriendlyGame", "cfg", "createFriendlyGame name=game1 creator=lj"),
+    CREATE_COMPETITIVE_GAME("createCompetitiveGame", "ccg", "createCompetitiveGame name=game1 creator=lj fee=2 bigBlind=4 increment=2"),
+    START_GAME("startGame", "sg", "startGame name=game1 player=lj"),
+    JOIN_GAME("joinGame", "jg", "joinGame name=game1 player=ana"),
     CREATE_TOURNAMENT("createTour", "ct", "createTournament name=tour1 player=ana"),
     JOIN_TOURNAMENT("joinTour", "jt", "joinTour name=tour1 player=ana"),
     START_TOURNAMENT("startTour", "sto", "startTour name=tour1 player=ana"),
     START_FINAL_TOURNAMENT("startTourFinal", "stf", "startTourFinal name=tour1"),
 
     //DEBUG COMMANDS
-    ADD_CARDS_TO_USER("setCards", "st", "setCards player=lj game=jogo1 c1=KS c2=KC"),
+    ADD_CARDS_TO_USER("setCards", "st", "setCards player=lj game=game1 c1=KS c2=KC"),
     ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
+    SET_TABLE_CARDS("setTableCards", "stc", "setTableCards game=game1 c1=AS c2=AC c3=AD c4=AH c5=KS"),
     REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),
 
     // TODO: [TBC] remove game when is finished (here + in the command list games)
     // In-Game commands
-    BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
-    CHECK("check", "c", "check game=jogo1 player=lj"),
-    FOLD("fold", "f", "fold game=jogo1 player=lj"),
-    SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=jogo1"),
+    BET("bet", "b", "bet game=game1 player=lj amount=5"),
+    CHECK("check", "c", "check game=game1 player=lj"),
+    FOLD("fold", "f", "fold game=game1 player=lj"),
+    SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=game1"),
 
     // Admin commands
     CREATE_USER("createPlayer", "cp", "cp name=vitor"),
@@ -57,9 +58,9 @@ public enum ECommand {
     KICK_USER("kick", "k", "k name=vitor"),
     KICK_FROM_GAME("kickFromGame", "kfg", "kfg name=lj game=jogo1"),
     CHECK_USER_ACTIVITIES("checkActivities", "ca", "ca name=vitor"),
-    SEE_GAME("seeGame", "sga", "sga game=jogo1"),
-    ADD_GAME("addGame", "ag", "ag name=jogo1"),
-    REMOVE_GAME("removeGame", "rg", "rg name=jogo1"),
+    SEE_GAME("seeGame", "sga", "sga game=game1"),
+    ADD_GAME("addGame", "ag", "ag name=game1"),
+    REMOVE_GAME("removeGame", "rg", "rg name=game1"),
 
     HELP("help", "h", "1"),
 

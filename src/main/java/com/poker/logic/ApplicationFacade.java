@@ -192,6 +192,10 @@ public class ApplicationFacade {
         commandManager.listPlayersDetails();
     }
 
+    public void setTableCards(String commandLine) {
+        commandManager.setTableCards(commandLine);
+    }
+
     public void transferMoney(String commandLine) {
         commandManager.transferMoney(commandLine);
     }

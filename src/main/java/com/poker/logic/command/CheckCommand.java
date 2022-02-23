@@ -1,6 +1,7 @@
 package com.poker.logic.command;
 
 import com.poker.logic.ApplicationData;
+import com.poker.model.constants.Constants;
 import com.poker.utils.StringUtils;
 
 import java.util.Map;
@@ -18,7 +19,7 @@ public class CheckCommand implements ICommand {
         if (command.size() < 4)
             throw new Exception("[Game] Invalid Check Command!");
         else
-            this.commandAction = new CommandAction(command.get("game"), command.get("player"), null);
+            this.commandAction = new CommandAction(command.get(Constants.GAME_PARAMETER), command.get(Constants.PLAYER_PARAMETER), null);
     }
 
     @Override
