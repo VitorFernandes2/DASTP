@@ -229,7 +229,7 @@ public class CommandManager {
     }
 
     public void startTournament(String commandLine) {
-        CommandAdapter.startTournament(commandLine, getOnlinePlayers(), applicationData.getTournamentList(), applicationData.getGamesList());
+        CommandAdapter.startTournament(commandLine, getOnlinePlayers(), applicationData.getTournamentList(), applicationData.getGamesList(), applicationData.getRankings());
     }
 
     public void showTournamentsInfo() {
@@ -237,7 +237,7 @@ public class CommandManager {
     }
 
     public void startFinalGame(String commandLine) {
-        CommandAdapter.startFinalGame(commandLine, applicationData.getTournamentList(), getOnlinePlayers());
+        CommandAdapter.startFinalGame(commandLine, applicationData.getTournamentList(), getOnlinePlayers(), applicationData.getRankings());
     }
 
     public void listPlayersDetails() {

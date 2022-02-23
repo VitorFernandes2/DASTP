@@ -49,8 +49,11 @@ public class StateAdapter implements IGameState, Serializable {
                 DatabaseUtils.updateWallet(winner, getGameEngine().getPlayers().get(winner).getWallet());
 
                 if (wins == null) {
-                    RankingProvider.getInstance().registerNew(new RankingLine(winner, 1));
+                    RankingLine newRankingLine = new RankingLine(winner, 1);
+                    getGameEngine().getRankings().put(winner, newRankingLine);
+                    RankingProvider.getInstance().registerNew(newRankingLine);
                 } else {
+                    getGameEngine().getRankings().get(winner).incWins();
                     RankingProvider.getInstance().registerUpdate(new RankingLine(winner, wins + 1));
                 }
             } catch (Exception e) {

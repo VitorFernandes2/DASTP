@@ -10,6 +10,7 @@ import com.poker.model.filter.Log;
 import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 import com.poker.utils.CardsUtils;
 import com.poker.utils.ScoreUtils;
 
@@ -37,6 +38,7 @@ public class GameEngine implements Serializable {
     private final Integer smallBlind;
     private final Integer increment;
     private final Integer fee;
+    private final Map<String, RankingLine> rankings;
     private List<ICard> deck;
     private String dealer;
     private Integer pot;
@@ -44,7 +46,7 @@ public class GameEngine implements Serializable {
     private Integer bigBlind;
     private boolean isSmallBlind;
 
-    public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame, Integer increment, Integer fee) {
+    public GameEngine(Map<String, Player> players, Integer bigBlind, ETypeOfGame typeOfGame, Integer increment, Integer fee, Map<String, RankingLine> rankings) {
         this.players = players;
         this.queuePlayOrder = new ArrayDeque<>();
         this.queueDealerOrder = new ArrayDeque<>();
@@ -61,6 +63,7 @@ public class GameEngine implements Serializable {
         this.playerAllInList = new ArrayList<>();
         this.increment = increment;
         this.fee = fee;
+        this.rankings = rankings;
     }
 
     // Add player to the game
@@ -452,6 +455,10 @@ public class GameEngine implements Serializable {
     public void setTableCards(List<ICard> tableCards) {
         this.tableCards.clear();
         this.tableCards.addAll(tableCards);
+    }
+
+    public Map<String, RankingLine> getRankings (){
+        return rankings;
     }
 
     public String getDealer() {

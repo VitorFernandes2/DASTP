@@ -6,6 +6,7 @@ import com.poker.logic.game.state.IGameState;
 import com.poker.model.card.ICard;
 import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,14 +25,14 @@ public class Game implements Serializable {
     private IGameState state;
     private final int conversionTax;
 
-    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int conversionTax, int bigBlind, int increment) {
+    private Game(String gameName, ETypeOfGame typeOfGame, Map<String, Player> players, Player creator, int minimumPlayers, int minimumAmount, int conversionTax, int bigBlind, int increment, Map<String, RankingLine> rankings) {
         this.gameName = gameName;
         this.typeOfGame = typeOfGame;
         this.creator = creator;
         this.minimumPlayers = minimumPlayers;
         this.minimumAmount = minimumAmount;
         this.conversionTax = conversionTax;
-        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment, conversionTax);
+        this.gameEngine = new GameEngine(players, bigBlind, typeOfGame, increment, conversionTax, rankings);
         this.state = new BuyInState(this.gameEngine);
     }
 
@@ -117,6 +118,7 @@ public class Game implements Serializable {
         private int convertionTax;
         private int bigBlind;
         private int increment;
+        private Map<String, RankingLine> rankings;
 
         public Builder(String gameName) {
             this.gameName = gameName;
@@ -155,6 +157,11 @@ public class Game implements Serializable {
             return this;
         }
 
+        public Builder setRankings(Map<String, RankingLine> rankings) {
+            this.rankings = rankings;
+            return this;
+        }
+
         private boolean isValid() {
             return (Objects.isNull(this.gameName) || Objects.isNull(this.creator)) && this.minimumPlayers > 1 && this.minimumAmount >= 0;
         }
@@ -182,7 +189,7 @@ public class Game implements Serializable {
             if (gameEngine != null) {
                 return new Game(this.gameName, this.creator, this.typeOfGame, this.minimumPlayers, this.minimumAmount, this.gameEngine, this.convertionTax, this.bigBlind);
             } else if (!Objects.isNull(this.players)) {
-                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount, this.convertionTax, this.bigBlind, this.increment);
+                return new Game(this.gameName, this.typeOfGame, this.players, this.creator, this.minimumPlayers, this.minimumAmount, this.convertionTax, this.bigBlind, this.increment, this.rankings);
             }
 
             return null;
@@ -240,6 +247,7 @@ public class Game implements Serializable {
                 .setBigBlind(this.getBigBlind())
                 .setConvertionTax(this.conversionTax)
                 .setIncrement(this.getIncrement())
+                .setRankings(this.gameEngine.getRankings())
                 .build();
     }
 

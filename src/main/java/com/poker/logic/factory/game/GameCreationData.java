@@ -3,6 +3,7 @@ package com.poker.logic.factory.game;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,8 +18,9 @@ public class GameCreationData {
     private int fee;
     private int bigBlind;
     private int increment;
+    private Map<String, RankingLine> rankings;
 
-    public GameCreationData(String gameName, Integer friendlyGameMinimumPlayers, int minimumAmount, ETypeOfGame typeOfGame, Player player) {
+    public GameCreationData(String gameName, Integer friendlyGameMinimumPlayers, int minimumAmount, ETypeOfGame typeOfGame, Player player, Map<String, RankingLine> rankings) {
         this.gameName = gameName;
         this.friendlyGameMinimumPlayers = friendlyGameMinimumPlayers;
         this.minimumAmount = minimumAmount;
@@ -35,6 +37,7 @@ public class GameCreationData {
         this.increment = Constants.DEFAULT_INCREMENT;
         this.players = new LinkedHashMap<>();
         this.player = player;
+        this.rankings = rankings;
     }
 
     public String getGameName() {
@@ -71,6 +74,10 @@ public class GameCreationData {
 
     public int getIncrement() {
         return increment;
+    }
+
+    public Map<String, RankingLine> getRankings() {
+        return rankings;
     }
 
     public void setBigBlind(int bigBlind) {
