@@ -42,14 +42,16 @@ public class StateAdapter implements IGameState, Serializable {
     protected IGameState isGameOver() {
         getGameEngine().triggerShowdown();
         if (getGameEngine().isGameOver()) {
-            // TODO: [TBC] It needs to be tested.
             try {
                 String winner = gameEngine.getWinner();
                 Integer wins = DatabaseUtils.getPlayerRanking(winner);
-                // TODO: [TBC] Verify if this doesn't goes against the coding pattern of the rankings.
-                if (wins != null) {
+
+                DatabaseUtils.updateWallet(winner, getGameEngine().getPlayers().get(winner).getWallet());
+
+                if (wins == null) {
+                    RankingProvider.getInstance().registerNew(new RankingLine(winner, 1));
+                } else {
                     RankingProvider.getInstance().registerUpdate(new RankingLine(winner, wins + 1));
-                    DatabaseUtils.updateWallet(winner, getGameEngine().getPlayers().get(winner).getWallet());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

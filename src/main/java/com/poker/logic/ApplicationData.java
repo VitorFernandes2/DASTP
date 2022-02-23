@@ -9,6 +9,7 @@ import com.poker.utils.CollectionUtils;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class ApplicationData {
     private final Map<String, Tournament> tournamentList;
 
     private ApplicationData() {
-        this.rankings = new HashMap<>();
+        this.rankings = new LinkedHashMap<>();
         this.onlinePlayers = new HashMap<>();
         this.gamesList = new HashMap<>();
         registeredPlayers = new HashMap<>();

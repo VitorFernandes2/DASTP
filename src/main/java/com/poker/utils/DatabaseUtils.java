@@ -1,8 +1,11 @@
 package com.poker.utils;
 
+import com.poker.model.constants.Constants;
+import com.poker.model.enums.ECommand;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingLine;
 import com.poker.model.wallet.Wallet;
+import org.h2.command.Command;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 import java.sql.*;
@@ -287,7 +290,7 @@ public class DatabaseUtils {
             String username = "";
             int wins = 0;
 
-            String findUserSQL = "SELECT * FROM RANKING";
+            String findUserSQL = "SELECT * FROM RANKING ORDER BY wins DESC";
             ResultSet rs = statement.executeQuery(findUserSQL);
             while (rs.next()) {
                 username = rs.getString("name");

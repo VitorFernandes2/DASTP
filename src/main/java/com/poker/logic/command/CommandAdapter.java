@@ -198,6 +198,11 @@ public class CommandAdapter {
             String bigBlind = command.get(Constants.BIG_BLIND_PARAMETER);
             String increment = command.get(Constants.INCREMENT_BLIND_PARAMETER);
 
+            // Remove a last game with this name
+            if (data.getGamesList().get(gameName) != null && data.getGamesList().get(gameName).isNull()) {
+                data.getGamesList().remove(gameName);
+            }
+
             if (!gameName.equals("") && !creator.equals("")) {
                 Player player = playerList.get(creator);
                 if (!Objects.isNull(player)) {
@@ -578,7 +583,7 @@ public class CommandAdapter {
             entry.forEach(stringRankingLineEntry -> {
                 RankingLine line = stringRankingLineEntry.getValue();
                 stringBuilder.append(line.getPlayerName())
-                        .append("\t\t\t\t")
+                        .append(line.getPlayerName().length() > 4 ? "\t\t\t" : line.getPlayerName().length() > 8 ? "\t\t" :  "\t\t\t\t")
                         .append(line.getWins())
                         .append("\n");
             });

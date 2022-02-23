@@ -282,6 +282,7 @@ public class MockCommands {
             "check game=game1 player=lj"
     ));
 
+    @Deprecated
     public static final List<String> COMPETITIVE_GAME_WINNING = new ArrayList<>(Arrays.asList(
             "reg name=lj amount=9000",
             "log name=lj",
@@ -358,6 +359,28 @@ public class MockCommands {
             "check game=game1 player=manel",
             "check game=game1 player=lj",
             "check game=game1 player=ana"
+    ));
+
+    public static final List<String> TEST_END_GAME_OF_A_COMPETITIVE = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "reg name=ana",
+            "log name=ana",
+            "reg name=manel",
+            "log name=manel",
+            "transferMoney name=lj value=20",
+            "transferMoney name=ana value=20",
+            "transferMoney name=manel value=20",
+            "buyPokerChips name=lj value=19 payment=Paypal",
+            "buyPokerChips name=ana value=19 payment=Paypal",
+            "buyPokerChips name=manel value=19 payment=Paypal",
+            "ccg name=game1 creator=lj fee=10 bigBlind=6",
+            "joinGame name=game1 player=ana",
+            "joinGame name=game1 player=manel",
+            "startGame name=game1 player=lj",
+            "bet game=game1 player=lj amount=500",
+            "bet game=game1 player=ana amount=497",
+            "bet game=game1 player=manel amount=494"
     ));
     //</editor-fold>
 
