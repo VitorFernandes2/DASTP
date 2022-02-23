@@ -7,8 +7,7 @@ public class Constants {
 
     // Game Settings
     public static final Integer GAME_MINIMUM_PLAYERS = 2;
-    public static final Integer FRIENDLY_GAME_MAXIMUM_PLAYERS = 3;
-    public static final Integer FRIENDLY_GAME_MINIMUM_PLAYERS = 2;
+    public static final Integer FRIENDLY_GAME_PLAYERS = 3;
     public static final String GAME_NAME = "savegame.txt";
     public static final String ADMIN_NAME = "admin";
     public static final int DEFAULT_BIG_BLIND = 4;
@@ -41,6 +40,7 @@ public class Constants {
     public static final String FEE_PARAMETER = "fee";
     public static final String BIG_BLIND_PARAMETER = "bigBlind";
     public static final String INCREMENT_BLIND_PARAMETER = "increment";
+    public static final String GAME_PARAMETER = "game";
 
     public static final int TOURNAMENT_MINIMUM_PLAYERS = 9;
     public static final int GAME_MINIMUM_AMOUNT = 50;

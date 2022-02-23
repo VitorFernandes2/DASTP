@@ -59,6 +59,11 @@ public class ServiceAdapter implements IServiceAdapter, Serializable {
         wallet.addAmount(returnedMoney);
     }
 
+    @Override
+    public boolean transferMoney(Wallet wallet, double amount) {
+        return service.transferMoney(amount);
+    }
+
     /**
      * Money to game currency conversion rate function.
      *

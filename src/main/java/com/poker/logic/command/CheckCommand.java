@@ -23,9 +23,11 @@ public class CheckCommand implements ICommand {
 
     @Override
     public void execute(ApplicationData applicationData) {
-        applicationData.getGamesList()
-                .get(commandAction.getGame())
-                .check(commandAction.getPlayerName());
+        if(!applicationData.getGamesList().get(commandAction.getGame()).isNull()) {
+            applicationData.getGamesList()
+                    .get(commandAction.getGame())
+                    .check(commandAction.getPlayerName());
+        }
     }
 
     @Override

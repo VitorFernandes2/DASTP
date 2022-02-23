@@ -23,9 +23,11 @@ public class FoldCommand implements ICommand {
 
     @Override
     public void execute(ApplicationData applicationData) {
-        applicationData.getGamesList()
-                .get(commandAction.getGame())
-                .fold(commandAction.getPlayerName());
+        if(!applicationData.getGamesList().get(commandAction.getGame()).isNull()) {
+            applicationData.getGamesList()
+                    .get(commandAction.getGame())
+                    .fold(commandAction.getPlayerName());
+        }
     }
 
     @Override

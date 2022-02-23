@@ -20,10 +20,11 @@ public enum ECommand {
     SEND_MESSAGE("sendMessage", "sm", "sendMessage from=joaquim to=ana Olá, o meu nome é joaquim!"),
     ADD_FRIEND("addFriend", "af", "addFriend player=joaquim add=antonio"),
     BLOCK_PLAYER("blockPlayer", "bp", "blockPlayer player=joaquim block=antonio"),
-    BUY_POKER_CHIPS("comprarPokerChips", "cpc", ""),
+    TRANSFER_MONEY("transferMoney", "tm", "transferMoney name=lj value=20"),
+    BUY_POKER_CHIPS("buyPokerChips", "bpc", "buyPokerChips name=lj value=60 payment=Paypal"),
     LIST_PLAYERS("listPlayers", "lp", "listPlayers"),
     LIST_FRIENDS("listFriend", "lf", "listFriend name=lj"),
-    LIST_BLOCKED("listBlocked", "lb", "listBlocked"),
+    LIST_BLOCKED("listBlocked", "lb", "listBlocked name=lj"),
     LIST_FRIENDLY_GAMES("listFriendlyGames", "lfg", "listFriendlyGames"),
     LIST_COMPETITIVE_GAMES("listCompetitiveGames", "lcg", "listCompetitiveGames"),
     LIST_CHAMPIONSHIPS("listTour", "lt", "listTour"),
@@ -43,6 +44,7 @@ public enum ECommand {
     ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
     REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),
 
+    // TODO: [TBC] remove game when is finished (here + in the command list games)
     // In-Game commands
     BET("bet", "b", "bet game=jogo1 player=lj amount=5"),
     CHECK("check", "c", "check game=jogo1 player=lj"),
@@ -52,7 +54,8 @@ public enum ECommand {
     // Admin commands
     CREATE_USER("createPlayer", "cp", "cp name=vitor"),
     EDIT_USER("editPlayer", "ep", "ep name=vitor newName=vh"),
-    KICK_USER("kick", "k", "kk name=vitor"),
+    KICK_USER("kick", "k", "k name=vitor"),
+    KICK_FROM_GAME("kickFromGame", "kfg", "kfg name=lj game=jogo1"),
     CHECK_USER_ACTIVITIES("checkActivities", "ca", "ca name=vitor"),
     SEE_GAME("seeGame", "sga", "sga game=jogo1"),
     ADD_GAME("addGame", "ag", "ag name=jogo1"),

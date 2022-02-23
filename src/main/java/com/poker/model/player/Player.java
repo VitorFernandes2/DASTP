@@ -10,10 +10,10 @@ import java.util.List;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 1503947119842473197L;
-    private String name;
     private final Wallet wallet;
     private final List<String> friends;
     private final List<String> playersBlocked;
+    private String name;
     private ICard[] gameCards;
 
     public Player(String name) {
@@ -88,8 +88,11 @@ public class Player implements Serializable {
         this.gameCards = gameCards;
     }
 
-    public void setName(String name) {
-        DatabaseUtils.updatePlayerName(this.name, name);
-        this.name = name;
+    public boolean setName(String name) {
+        if (DatabaseUtils.updatePlayerName(this.name, name)) {
+            this.name = name;
+            return true;
+        }
+        return false;
     }
 }

@@ -5,7 +5,6 @@ import com.poker.logic.factory.FactoryProvider;
 import com.poker.logic.factory.game.GameCreationData;
 import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
-import com.poker.logic.game.Game;
 import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
 

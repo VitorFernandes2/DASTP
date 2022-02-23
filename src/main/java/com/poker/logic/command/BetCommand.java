@@ -24,9 +24,11 @@ public class BetCommand implements ICommand {
 
     @Override
     public void execute(ApplicationData applicationData) {
-        applicationData.getGamesList()
-                .get(commandAction.getGame())
-                .bet(commandAction.getPlayerName(), commandAction.getAmount());
+        if(!applicationData.getGamesList().get(commandAction.getGame()).isNull()){
+            applicationData.getGamesList()
+                    .get(commandAction.getGame())
+                    .bet(commandAction.getPlayerName(), commandAction.getAmount());
+        }
     }
 
     @Override

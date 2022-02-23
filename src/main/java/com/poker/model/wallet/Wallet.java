@@ -66,8 +66,8 @@ public class Wallet implements Serializable {
         return false;
     }
 
-    public int resetPokerGameChips() {
-        return pokerGameChips = 0;
+    public void resetPokerGameChips() {
+        pokerGameChips = 0;
     }
 
     @Override

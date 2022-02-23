@@ -3,6 +3,7 @@ package com.poker.utils;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingLine;
 import com.poker.model.wallet.Wallet;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 import java.sql.*;
 import java.util.Map;
@@ -187,22 +188,27 @@ public class DatabaseUtils {
         }
     }
 
-    public static void updatePlayerName(String name, String newName) {
+    public static boolean updatePlayerName(String name, String newName) {
         try {
             Class.forName("org.h2.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement statement = connection.createStatement();
 
             String updateUserWalletSQL = "UPDATE PLAYER " +
-                    "SET name=" + newName + " " +
+                    "SET name='" + newName + "' " +
                     "WHERE name='" + name + "'";
             statement.executeUpdate(updateUserWalletSQL);
 
             statement.close();
             connection.close();
+        } catch (JdbcSQLIntegrityConstraintViolationException e) {
+            System.out.println("[System] This name already exists.. Try a new one!");
+            return false;
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Error updating user " + e.getMessage());
+            return false;
         }
+        return true;
     }
 
     public static void removePlayerFromDB(String playerName) throws Exception {

@@ -33,7 +33,7 @@ public class CommandAdapter {
     public static boolean addUser(String commandLine, Map<String, Player> playerList) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String name = command.get(Constants.NAME_PARAMETER);
-        Integer amount = Integer.parseInt(command.get(Constants.AMOUNT_PARAMETER) != null ? command.get(Constants.AMOUNT_PARAMETER) : "0");
+        int amount = Integer.parseInt(command.get(Constants.AMOUNT_PARAMETER) != null ? command.get(Constants.AMOUNT_PARAMETER) : "0");
 
         if (name != null) {
             boolean userExists;
@@ -146,6 +146,7 @@ public class CommandAdapter {
                             System.out.println("[System] Player has no money to buy that value of chips.");
                         }
                     }
+                    System.out.println("[System] The player " + player.getName() + " now has " + player.getWallet().getPokerChips() + " PCs");
                 }
             }
         }
@@ -208,7 +209,7 @@ public class CommandAdapter {
                     int incrementValue = 0;
                     int feeValue = 0;
 
-                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_MINIMUM_PLAYERS, Constants.GAME_MINIMUM_AMOUNT, typeOfGame, player);
+                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_PLAYERS, Constants.GAME_MINIMUM_AMOUNT, typeOfGame, player);
 
                     if (typeOfGame != ETypeOfGame.FRIENDLY) {
                         if (fee != null) {
@@ -239,7 +240,7 @@ public class CommandAdapter {
 
                     Game game = factory.createObject(gameCreationData);
 
-                    if (ETypeOfGame.COMPETITIVE.equals(game.getTypeOfGame()) && player.getWallet().getPokerChips() >= gameCreationData.getFee()) {
+                    if (ETypeOfGame.COMPETITIVE.equals(game.getTypeOfGame()) && player.getWallet().getPokerChips() < gameCreationData.getFee()) {
                         System.out.println("[Game] The player " + player.getName() + " needs at least " + gameCreationData.getFee() + " PCs to play in this game");
                         return false;
                     }
@@ -328,7 +329,7 @@ public class CommandAdapter {
         for (Map.Entry<String, Game> entry : games.entrySet()) {
             String name = entry.getKey();
             Game game = entry.getValue();
-            if (name.equals(gameName)) {
+            if (name.equals(gameName) && !game.isNull()) {
                 System.out.println(game.showGameInfo(name));
                 break;
             }
@@ -338,11 +339,15 @@ public class CommandAdapter {
     public static void getGamesToString(Map<String, Game> gamesList, ETypeOfGame typeOfGame) {
         StringBuilder str = new StringBuilder();
         str.append("NAME\t\tCREATOR\n");
+        List<String> gamesToRemoved = new ArrayList<>();
         gamesList.forEach((s, game) -> {
-            if (game.getTypeOfGame().equals(typeOfGame)) {
+            if (game.getTypeOfGame().equals(typeOfGame) && !game.isNull()) {
                 str.append(game.getGameName()).append("\t\t").append(game.getCreatorName()).append("\n");
+            } else if (game.isNull()) {
+                gamesToRemoved.add(s);
             }
         });
+        gamesToRemoved.forEach(gamesList::remove);
         System.out.println(str);
     }
 
@@ -381,17 +386,14 @@ public class CommandAdapter {
         }
     }
 
-    public static void editUser(String commandLine, Map<String, Player> onlinePlayers) {
+    public static void editUser(String commandLine, ApplicationData applicationData) {
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
         String playerNewName = command.get(Constants.NEW_NAME_PARAMETER);
 
         if (playerNewName != null && playerName != null &&
                 playerName.length() > 0 && playerNewName.length() > 0) {
-            Player player = onlinePlayers.get(playerName);
-            if (player != null) {
-                player.setName(playerNewName);
-            }
+            applicationData.updatePlayerName(playerName, playerNewName);
         }
     }
 
@@ -705,5 +707,41 @@ public class CommandAdapter {
         });
 
         System.out.println(str);
+    }
+
+    public static void transferMoney(String commandLine, Map<String, Player> onlinePlayers) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.NAME_PARAMETER);
+        double amount = Double.parseDouble(command.get(Constants.VALUE_PARAMETER));
+
+        Player player = onlinePlayers.get(playerName);
+        ServiceAdapter serviceAdapter = new ServiceAdapter(EServices.PAYPAL);
+        if (player != null && serviceAdapter.transferMoney(player.getWallet(), amount)) {
+            player.getWallet().addAmount(amount);
+            try {
+                DatabaseUtils.updateWallet(playerName, player.getWallet());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("[Game] The player " + playerName + " received " + amount + "€ on his in-game account");
+            return;
+        }
+        System.out.println("[Game] Please login with the player " + playerName + " to add in-game cash!");
+    }
+
+    public static void kickFromGame(String commandLine, ApplicationData applicationData) {
+        Map<String, String> command = StringUtils.mapCommand(commandLine);
+        String playerName = command.get(Constants.NAME_PARAMETER);
+        String gameName = command.get(Constants.GAME_PARAMETER);
+
+        Player player = applicationData.getOnlinePlayers().get(playerName);
+        Game game = applicationData.getGame(gameName);
+        if (player != null && game != null) {
+            if (game.removePlayer(playerName)) {
+                System.out.println("[Game] The player " + playerName + " has been removed from the game "+ gameName);
+                return;
+            }
+        }
+        System.out.println("[Game] The name of the " + (player == null ? "player" : "game") + " are invalid!");
     }
 }

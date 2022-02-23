@@ -4,7 +4,6 @@ import com.poker.utils.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class RankingProvider implements UnitOfWork<RankingLine> {
     private static RankingProvider provider;

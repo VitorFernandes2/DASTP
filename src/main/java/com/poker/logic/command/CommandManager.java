@@ -8,7 +8,6 @@ import com.poker.model.filter.Log;
 import com.poker.model.player.EPlayerRelation;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingProvider;
-import com.poker.model.ranking.UnitOfWork;
 import com.poker.utils.StringUtils;
 
 import java.io.IOException;
@@ -181,7 +180,7 @@ public class CommandManager {
 
     public void editUser(String commandLine) {
         if (isAdminUser()) {
-            CommandAdapter.editUser(commandLine, this.getOnlinePlayers());
+            CommandAdapter.editUser(commandLine, applicationData);
         }
     }
 
@@ -241,5 +240,13 @@ public class CommandManager {
 
     public void listPlayersDetails() {
         CommandAdapter.listPlayersDetails(getOnlinePlayers());
+    }
+
+    public void transferMoney(String commandLine) {
+        CommandAdapter.transferMoney(commandLine, getOnlinePlayers());
+    }
+
+    public void kickFromGame(String commandLine) {
+        CommandAdapter.kickFromGame(commandLine, applicationData);
     }
 }
