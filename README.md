@@ -1,11 +1,4 @@
-# DASTP
-Poker Game (_Texas Hold’em_) in Java
-
-# Java version 11  
-
-__Git behaviours:__
-- Branch naming:
-  - feature/name_continuation_of_name 
+WIP
   - fix/name_of_fix
 - Commit naming
   - "FEATURE: description" 
@@ -106,7 +99,7 @@ ____
     - [x] ~~System Money Aquisition~~ [DONE]
     - [x] ~~Receive Pot money in Friendly Games (PCJs)~~ [DONE]
     - [x] ~~Receive Pot money in Competitive Games (PCJs and Money)~~ [DONE]
-    - [ ] Receive Pot money in Championships Games (PCJs and Money) __[WIP]__
+    - [x] ~~Receive Pot money in Championships Games (PCJs and Money)~~ [DONE]
 
   - [x] __Utilization:__ [DONE]
     - [x] ~~Purchase of Services (ex: paid games creation)~~ [DONE]
