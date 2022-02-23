@@ -2,6 +2,8 @@ package com.poker.logic.game.logic;
 
 import com.poker.logic.factory.card.CardFactory;
 import com.poker.logic.game.ETypeOfGame;
+import com.poker.logic.game.state.BuyInState;
+import com.poker.logic.game.state.IGameState;
 import com.poker.model.card.ICard;
 import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
@@ -9,7 +11,6 @@ import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
 import com.poker.model.player.Player;
 import com.poker.utils.CardsUtils;
-import com.poker.utils.MapUtils;
 import com.poker.utils.ScoreUtils;
 
 import java.io.Serializable;
@@ -71,6 +72,16 @@ public class GameEngine implements Serializable {
         return false;
     }
 
+    // Leave game
+    public boolean leaveGame(String playerName, String gameName, IGameState gameState) {
+        if (gameState instanceof BuyInState) {
+            players.remove(playerName);
+            return true;
+        } else {
+            return removePlayer(playerName);
+        }
+    }
+
     // Remove player from the game and convert PCJs into PCs
     public boolean removePlayer(String playerName) {
         if (this.playerInGame(playerName)) {
@@ -110,7 +121,7 @@ public class GameEngine implements Serializable {
             playersToBeRemoved.forEach(players::remove);
 
             // Check if the game has enough players to start
-            if(players.size() < Constants.FRIENDLY_GAME_PLAYERS) {
+            if (players.size() < Constants.FRIENDLY_GAME_PLAYERS) {
                 System.out.println("[Game] The game cannot be started because don't have enough players!");
                 return false;
             }
@@ -169,22 +180,6 @@ public class GameEngine implements Serializable {
         bet(bigBlindPlayer, bigBlind);
         // Add big blind player to the end of the queue, he is the player that decides is turn the cards or will raise more
         queuePlayOrder.add(bigBlindPlayer);
-    }
-
-    // FIXME: maybe move this to a GameUtils or remove
-    private void chooseDealer(Player dealer) {
-        if (Objects.isNull(dealer)) {
-            Map.Entry<String, Player> newDealerSet = this.players.entrySet().iterator().next();
-            dealer = newDealerSet.getValue();
-        } else {
-            MapUtils<String, Player> mapUtils = new MapUtils<>();
-            int position = mapUtils.getMapPosition(this.players, dealer.getName());
-            if (position >= 0) {
-                int newDealerPosition = (position == (this.players.size() - 1)) ? 0 : position + 1;
-                Player newDealer = (new ArrayList<>(this.players.values())).get(newDealerPosition);
-                dealer = newDealer;
-            }
-        }
     }
 
     // Get the total amount bet in the actual state
@@ -351,7 +346,7 @@ public class GameEngine implements Serializable {
 
     // Check if is the end round by checking the number of players in the queue
     public boolean isRoundOver() {
-        System.out.println("[DEBUG] Number of player: " + queuePlayOrder.size()); // FIXME: To be removed
+//        System.out.println("[DEBUG] Number of player: " + queuePlayOrder.size()); // Used for debug
         return queuePlayOrder.size() <= 1;
     }
 
@@ -453,6 +448,11 @@ public class GameEngine implements Serializable {
         return tableCards;
     }
 
+    public void setTableCards(List<ICard> tableCards) {
+        this.tableCards.clear();
+        this.tableCards.addAll(tableCards);
+    }
+
     public String getDealer() {
         return dealer;
     }
@@ -520,11 +520,6 @@ public class GameEngine implements Serializable {
     // Return if is the actual bet is the small blind
     private boolean isSmallBlind() {
         return isSmallBlind;
-    }
-
-    public void setTableCards(List<ICard> tableCards) {
-        this.tableCards.clear();
-        this.tableCards.addAll(tableCards);
     }
     //</editor-fold>
 }

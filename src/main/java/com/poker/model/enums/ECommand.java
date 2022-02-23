@@ -1,11 +1,10 @@
 package com.poker.model.enums;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public enum ECommand {
     // Common commands
@@ -34,6 +33,7 @@ public enum ECommand {
     CREATE_COMPETITIVE_GAME("createCompetitiveGame", "ccg", "createCompetitiveGame name=game1 creator=lj fee=2 bigBlind=4 increment=2"),
     START_GAME("startGame", "sg", "startGame name=game1 player=lj"),
     JOIN_GAME("joinGame", "jg", "joinGame name=game1 player=ana"),
+    LEAVE_GAME("leaveGame", "lg", "leaveGame name=game1 player=ana"),
     CREATE_TOURNAMENT("createTour", "ct", "createTournament name=tour1 player=ana"),
     JOIN_TOURNAMENT("joinTour", "jt", "joinTour name=tour1 player=ana"),
     START_TOURNAMENT("startTour", "sto", "startTour name=tour1 player=ana"),
@@ -45,7 +45,6 @@ public enum ECommand {
     SET_TABLE_CARDS("setTableCards", "stc", "setTableCards game=game1 c1=AS c2=AC c3=AD c4=AH c5=KS"),
     REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),
 
-    // TODO: [TBC] remove game when is finished (here + in the command list games)
     // In-Game commands
     BET("bet", "b", "bet game=game1 player=lj amount=5"),
     CHECK("check", "c", "check game=game1 player=lj"),
@@ -53,35 +52,37 @@ public enum ECommand {
     SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=game1"),
 
     // Admin commands
-    CREATE_USER("createPlayer", "cp", "cp name=vitor"),
-    EDIT_USER("editPlayer", "ep", "ep name=vitor newName=vh"),
-    KICK_USER("kick", "k", "k name=vitor"),
-    KICK_FROM_GAME("kickFromGame", "kfg", "kfg name=lj game=jogo1"),
-    CHECK_USER_ACTIVITIES("checkActivities", "ca", "ca name=vitor"),
-    SEE_GAME("seeGame", "sga", "sga game=game1"),
-    ADD_GAME("addGame", "ag", "ag name=game1"),
-    REMOVE_GAME("removeGame", "rg", "rg name=game1"),
+    CREATE_USER("createPlayer", "cp", "createPlayer name=vitor"),
+    EDIT_USER("editPlayer", "ep", "editPlayer name=vitor newName=vh"),
+    KICK_USER("kick", "k", "kick name=vitor"),
+    KICK_FROM_GAME("kickFromGame", "kfg", "kickFromGame name=lj game=jogo1"),
+    CHECK_USER_ACTIVITIES("checkActivities", "ca", "checkActivities name=vitor"),
+    SEE_GAME("seeGame", "sga", "seeGame game=game1"),
+    ADD_GAME("addGame", "ag", "addGame name=game1"),
+    REMOVE_GAME("removeGame", "rg", "removeGame name=game1"),
 
-    HELP("help", "h", "1"),
+    HELP("help", "h", ""),
 
     // Debug commands
 
 
     // default value
-    UNKNOWN("Comando desconhecido ... tente outra vez", "UNKNOWN", "2");
+    UNKNOWN("Unknown command ... try again", "UNKNOWN", "");
 
     private static final Map<String, ECommand> ENUM_COMMANDS;
     private static final Map<String, ECommand> ENUM_SHORTCUTS;
-    private static final List<String> COMMANDS_EXAMPLE;
+    private static final Map<String, String> ENUM_COMMANDS_EXAMPLE = new LinkedHashMap<>();
 
     static {
         ENUM_COMMANDS = Arrays.stream(ECommand.values())
                 .collect(Collectors.toMap(ECommand::getCommand, Function.identity()));
         ENUM_SHORTCUTS = Arrays.stream(ECommand.values())
                 .collect(Collectors.toMap(ECommand::getShortCut, Function.identity()));
-        COMMANDS_EXAMPLE = Stream.of(ECommand.values())
-                .map(ECommand::getExample)
-                .collect(Collectors.toList());
+        for(ECommand e : ECommand.values()) {
+            ENUM_COMMANDS_EXAMPLE.put(e.getShortCut(), e.getExample());
+        }
+        ENUM_COMMANDS_EXAMPLE.remove(UNKNOWN.getShortCut());
+        ENUM_COMMANDS_EXAMPLE.remove(HELP.getShortCut());
     }
 
     private final String command;
@@ -118,8 +119,7 @@ public enum ECommand {
 
     public static void getCommandsExample() {
         StringBuilder str = new StringBuilder("# Commands example:");
-        COMMANDS_EXAMPLE.forEach((s) -> str.append("\n ").append(s));
-        str.setLength(str.length() - 4); // remove the last 4 characters
+        ENUM_COMMANDS_EXAMPLE.forEach((shortCut, example) -> str.append("\n ").append("[").append(shortCut).append("]\t").append(example));
         System.out.println(str);
     }
 

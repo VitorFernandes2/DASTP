@@ -257,4 +257,8 @@ public class CommandManager {
             CommandAdapter.setTableCards(commandLine, applicationData.getGamesList());
         }
     }
+
+    public void leaveGame(String commandLine) {
+        CommandAdapter.leaveGame(commandLine, applicationData.getGamesList());
+    }
 }

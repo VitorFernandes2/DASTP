@@ -148,6 +148,9 @@ public class TextUI {
                     case JOIN_GAME:
                         appFacade.joinGame(commandLine);
                         break;
+                    case LEAVE_GAME:
+                        appFacade.leaveGame(commandLine);
+                        break;
                     case START_GAME:
                         appFacade.startGame(commandLine);
                         break;
@@ -187,7 +190,6 @@ public class TextUI {
                         running = false;
                         break;
                     case HELP:
-                        // FIXME: It needs to return all the shortcuts / commands / examples.
                         ECommand.getCommandsExample();
                         break;
                     default:
@@ -196,5 +198,4 @@ public class TextUI {
             }
         }
     }
-
 }
