@@ -16,6 +16,6 @@ public class RegisterFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("register ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("reg ") || log.contains("register ")).collect(Collectors.toList());
     }
 }

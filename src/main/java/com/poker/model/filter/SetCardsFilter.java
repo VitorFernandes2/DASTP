@@ -16,6 +16,6 @@ public class SetCardsFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("setCards ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("sc ") || log.contains("setCards ")).collect(Collectors.toList());
     }
 }

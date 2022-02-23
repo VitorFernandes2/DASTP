@@ -6,7 +6,7 @@ public class RankingLine implements Serializable {
     private static final long serialVersionUID = -6131760770439565948L;
 
     private String playerName;
-    private int wins;
+    private int wins = 0;
 
     public RankingLine(String playerName) {
         this.playerName = playerName;

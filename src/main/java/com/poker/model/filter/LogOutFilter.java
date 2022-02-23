@@ -16,6 +16,6 @@ public class LogOutFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("logout ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("lout ") || log.contains("logout ")).collect(Collectors.toList());
     }
 }

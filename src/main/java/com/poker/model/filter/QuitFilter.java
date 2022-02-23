@@ -16,6 +16,6 @@ public class QuitFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("quit ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("fold ")).collect(Collectors.toList());
     }
 }

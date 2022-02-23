@@ -40,7 +40,7 @@ public enum ECommand {
     START_FINAL_TOURNAMENT("startTourFinal", "stf", "startTourFinal name=tour1"),
 
     // DEBUG COMMANDS
-    ADD_CARDS_TO_USER("setCards", "st", "setCards player=lj game=game1 c1=KS c2=KC"),
+    ADD_CARDS_TO_USER("setCards", "sc", "setCards player=lj game=game1 c1=KS c2=KC"),
     ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
     SET_TABLE_CARDS("setTableCards", "stc", "setTableCards game=game1 c1=AS c2=AC c3=AD c4=AH c5=KS"),
     REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),

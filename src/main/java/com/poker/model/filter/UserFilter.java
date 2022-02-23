@@ -31,8 +31,8 @@ public class UserFilter extends FilterDecorator {
     @Override
     public List<String> filter() {
         if (name != null) {
-            return super.filter().stream().filter(log -> (log.contains("user=" + name) || log.contains("host=" + name))).collect(Collectors.toList());
+            return super.filter().stream().filter(log -> (log.contains("player=" + name) || log.contains("name=" + name)) || log.contains("creator=" + name)).collect(Collectors.toList());
         }
-        return super.filter().stream().filter(log -> log.contains("user=")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("creator=") || log.contains("player=") || log.contains("name=")).collect(Collectors.toList());
     }
 }

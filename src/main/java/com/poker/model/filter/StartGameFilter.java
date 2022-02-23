@@ -16,6 +16,6 @@ public class StartGameFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("startGame ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("sg ") || log.contains("startGame ")).collect(Collectors.toList());
     }
 }

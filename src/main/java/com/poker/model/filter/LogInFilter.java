@@ -16,6 +16,6 @@ public class LogInFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("login ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("log ") || log.contains("login ")).collect(Collectors.toList());
     }
 }

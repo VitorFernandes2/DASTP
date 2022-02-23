@@ -31,7 +31,7 @@ public class BetFilter extends FilterDecorator {
     @Override
     public List<String> filter() {
         if (value != null) {
-            return super.filter().stream().filter(log -> (log.contains("bet ") && log.contains("value=" + value))).collect(Collectors.toList());
+            return super.filter().stream().filter(log -> (log.contains("bet ") && log.contains("amount=" + value))).collect(Collectors.toList());
         }
         return super.filter().stream().filter(log -> log.contains("bet ")).collect(Collectors.toList());
     }

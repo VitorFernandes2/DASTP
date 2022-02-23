@@ -16,6 +16,6 @@ public class JoinGameFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("joinGame ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("jg ") || log.contains("joinGame ")).collect(Collectors.toList());
     }
 }

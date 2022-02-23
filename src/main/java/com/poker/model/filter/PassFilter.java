@@ -16,6 +16,6 @@ public class PassFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("pass ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("check ")).collect(Collectors.toList());
     }
 }

@@ -30,8 +30,8 @@ public class GameFilter extends FilterDecorator {
     @Override
     public List<String> filter() {
         if (gameName != null) {
-            return super.filter().stream().filter(log -> log.contains("gameName=" + gameName)).collect(Collectors.toList());
+            return super.filter().stream().filter(log -> log.contains("game=" + gameName)).collect(Collectors.toList());
         }
-        return super.filter().stream().filter(log -> log.contains("gameName=")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("game=")).collect(Collectors.toList());
     }
 }

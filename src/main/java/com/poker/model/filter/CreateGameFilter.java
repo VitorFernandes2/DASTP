@@ -16,6 +16,6 @@ public class CreateGameFilter extends FilterDecorator {
 
     @Override
     public List<String> filter() {
-        return super.filter().stream().filter(log -> log.contains("createGame ")).collect(Collectors.toList());
+        return super.filter().stream().filter(log -> log.contains("cg ") || log.contains("createGame ")).collect(Collectors.toList());
     }
 }
