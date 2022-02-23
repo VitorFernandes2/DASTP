@@ -101,22 +101,6 @@ public enum ECommand {
                 ENUM_SHORTCUTS.getOrDefault(command, UNKNOWN);
     }
 
-    public static String commandsToString() {
-        StringBuilder commands = new StringBuilder();
-        commands.append("\n## Comandos:");
-        ENUM_COMMANDS.forEach((key, value) -> {
-            if (value != UNKNOWN) {
-                int shortCutLength = value.getShortCut().length();
-                commands.append("\n[").append(value.getShortCut())
-                        .append(shortCutLength == 1 ? "]    " :
-                                shortCutLength == 2 ? "]   " :
-                                        shortCutLength == 3 ? "]  " : "] ")
-                        .append(key);
-            }
-        });
-        return commands.toString();
-    }
-
     public static void getCommandsExample() {
         StringBuilder str = new StringBuilder("# Commands example:");
         ENUM_COMMANDS_EXAMPLE.forEach((shortCut, example) -> str.append("\n ").append("[").append(shortCut).append("]\t").append(example));

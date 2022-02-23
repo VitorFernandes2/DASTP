@@ -41,7 +41,8 @@ public class StringUtils {
      */
     public static Map<String, String> mapCommand(String commandLine) {
         List<String> originalSplit = new ArrayList<>((List.of(tokenizeString(commandLine, " "))));
-        Map<String, String> commandMapped = new HashMap<>();
+        // LinkedHashMap to have a map with the same order as inserted (necessary for setTableCards)
+        Map<String, String> commandMapped = new LinkedHashMap<>();
         StringBuilder aux = new StringBuilder();
         commandMapped.put(Constants.COMMAND, originalSplit.remove(0));
         originalSplit.stream()

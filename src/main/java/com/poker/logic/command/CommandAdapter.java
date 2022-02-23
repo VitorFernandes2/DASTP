@@ -792,56 +792,60 @@ public class CommandAdapter {
         String cardFour = command.get(Constants.CARD_FOU_PARAMETER);
         String cardFive = command.get(Constants.CARD_FIV_PARAMETER);
 
-        if (gamesList != null && cardOne != null && cardTwo != null && cardThree != null && cardFour != null && cardFive != null) {
-            if (gamesList.get(gameName) != null) {
-                Game game = gamesList.get(gameName);
-                List<ICard> deck = game.getDeck();
-                ICard[] newCards = new ICard[5];
-                newCards[0] = CardsUtils.convertCardFromString(cardOne);
-                newCards[1] = CardsUtils.convertCardFromString(cardTwo);
-                newCards[2] = CardsUtils.convertCardFromString(cardThree);
-                newCards[3] = CardsUtils.convertCardFromString(cardFour);
-                newCards[4] = CardsUtils.convertCardFromString(cardFive);
+        Game game = gamesList.get(gameName);
+        String lastCardKey = (String) command.keySet().toArray()[command.size() - 2];
 
-                if (newCards[0] != null && newCards[1] != null && newCards[2] != null && newCards[3] != null && newCards[4] != null) {
-                    long inDeck = deck.stream().filter(iCard ->
-                            iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[1].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[2].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[3].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[4].getStringCardValue())
-                    ).count();
+        int numberOfCards = Integer.parseInt(lastCardKey.replace("c", ""));
+        if (game != null && numberOfCards == game.getTableCards().size() && numberOfCards >= 3) {
+            List<ICard> deck = game.getDeck();
+            List<ICard> newCards = new ArrayList<>();
+            switch (lastCardKey) {
+                case Constants.CARD_FIV_PARAMETER: newCards.add(CardsUtils.convertCardFromString(cardFive));
+                case Constants.CARD_FOU_PARAMETER: newCards.add(CardsUtils.convertCardFromString(cardFour));
+                case Constants.CARD_THR_PARAMETER:
+                    newCards.add(CardsUtils.convertCardFromString(cardThree));
+                    newCards.add(CardsUtils.convertCardFromString(cardTwo));
+                    newCards.add(CardsUtils.convertCardFromString(cardOne));
+            }
 
-                    long inTable = game.getTableCards().stream().filter(iCard ->
-                            iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[1].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[2].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[3].getStringCardValue()) ||
-                                    iCard.getStringCardValue().equals(newCards[4].getStringCardValue())
-                    ).count();
+            // Validate received cards
+            for (ICard iCard : newCards) {
+                if (iCard == null) {
+                    LOG.addAndShowLog("[Game] Some card are invalid!");
+                    return;
+                }
+            }
 
-                    if ((inDeck + inTable) != 5) {
-                        LOG.addAndShowLog("[System] One or more of the cards requested are being used by the players.");
+            // Get player's cards
+            List<ICard> cardsInPlayersHands = new ArrayList<>();
+            game.getPlayersList().forEach((s, player) -> cardsInPlayersHands.addAll(List.of(player.getGameCards())));
+
+            // Check if any of the cards are in the player's hands
+            for (ICard playerCard : cardsInPlayersHands) {
+                for (ICard newCard : newCards) {
+                    if (playerCard.getStringCardValue().equals(newCard.getStringCardValue())) {
+                        LOG.addAndShowLog("[Game] You can't set cards to the table that are in the players hand!");
                         return;
                     }
                 }
+            }
+            deck.addAll(game.getTableCards());
 
-                deck.addAll(game.getTableCards());
-
-                List<ICard> removeDeck = new ArrayList<>();
-                deck.forEach(iCard -> {
-                    if (iCard.getStringCardValue().equals(newCards[0].getStringCardValue()) ||
-                            iCard.getStringCardValue().equals(newCards[1].getStringCardValue()) ||
-                            iCard.getStringCardValue().equals(newCards[2].getStringCardValue()) ||
-                            iCard.getStringCardValue().equals(newCards[3].getStringCardValue()) ||
-                            iCard.getStringCardValue().equals(newCards[4].getStringCardValue())) {
-                        removeDeck.add(iCard);
+            // Remove cards from deck and set them on the table
+            List<ICard> toBeRemoveFromDeck = new ArrayList<>();
+            deck.forEach(deckCard -> {
+                newCards.forEach(newCard -> {
+                    if (deckCard.getStringCardValue().equals(newCard.getStringCardValue())) {
+                        toBeRemoveFromDeck.add(deckCard);
                     }
                 });
+            });
+            deck.removeAll(toBeRemoveFromDeck);
+            game.setTableCards(toBeRemoveFromDeck);
 
-                deck.removeAll(removeDeck);
-                game.setTableCards(removeDeck);
-            }
+            LOG.addAndShowLog("[Game] The game " + gameName + " now have a new set of cards in the table!");
+        } else {
+            LOG.addAndShowLog("[Game] The number of cards in the table and in the input don't match!");
         }
     }
 
