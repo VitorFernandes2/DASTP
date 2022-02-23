@@ -558,7 +558,7 @@ public class CommandAdapter {
 
         player.getGameCards()[0] = newCards[0];
         player.getGameCards()[1] = newCards[1];
-        System.out.println("[System] Cards added to the player hand!");
+        System.out.println("[Game] Cards added to the player hand!");
     }
 
     public static void getRankings(Map<String, RankingLine> rankings) {
