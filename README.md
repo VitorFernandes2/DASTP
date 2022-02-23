@@ -250,10 +250,6 @@ ____
 
 ##### __Padrões Arquiteturais de Persistência__
   - [x] ~~Padrão de Registo Ativo / Active Record~~ [DONE]
-  - [ ] Padrão Table / Gateway
-  - [ ] Padrão Record Gateway
-  - [ ] Padrão Data Mapper
-  - [ ] Padrão Mapeamento
 
 ##### __Padrões de Desenho__
   - [x] ~~Estratégias~~ + ~~Padrão Máquina de Estados~~ -> __Regras do Jogo__ [DONE]
