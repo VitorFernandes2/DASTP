@@ -8,7 +8,7 @@ public class CommandsTest {
     public static void main(String[] args) {
 
         // List commands
-        System.out.println(ECommand.commandsToString());
+        ECommand.getCommandsExample();
 
         // Test commands for an specific state
         do {
