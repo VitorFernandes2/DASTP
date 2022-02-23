@@ -2,6 +2,7 @@ package com.poker.model.tournament;
 
 import com.poker.logic.game.Game;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,6 @@ public abstract class TournamentTemplate {
         return tournamentName;
     }
 
-    public abstract void startTournament();
-    public abstract void createFinal(Map<String, Player> winners);
+    public abstract void startTournament(Map<String, RankingLine> rankings);
+    public abstract void createFinal(Map<String, Player> winners, Map<String, RankingLine> rankings);
 }

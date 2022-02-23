@@ -7,6 +7,7 @@ import com.poker.logic.factory.game.GameFactory;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.model.constants.Constants;
 import com.poker.model.player.Player;
+import com.poker.model.ranking.RankingLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Tournament extends TournamentTemplate {
     }
 
     @Override
-    public void startTournament() {
+    public void startTournament(Map<String, RankingLine> rankings) {
         if (super.playersMap.size() >= Constants.TOURNAMENT_MINIMUM_PLAYERS) {
             GameFactory factory = (GameFactory) FactoryProvider.getFactory(EFactory.GAMES);
             if (factory == null) {
@@ -30,17 +31,20 @@ public class Tournament extends TournamentTemplate {
                     Constants.GAME_MINIMUM_PLAYERS,
                     Constants.GAME_MINIMUM_AMOUNT,
                     ETypeOfGame.COMPETITIVE,
-                    creator));
+                    creator,
+                    rankings));
             gameCreationDataList.add(new GameCreationData("game2" + tournamentName,
                     Constants.GAME_MINIMUM_PLAYERS,
                     Constants.GAME_MINIMUM_AMOUNT,
                     ETypeOfGame.COMPETITIVE,
-                    creator));
+                    creator,
+                    rankings));
             gameCreationDataList.add(new GameCreationData("game3" + tournamentName,
                     Constants.GAME_MINIMUM_PLAYERS,
                     Constants.GAME_MINIMUM_AMOUNT,
                     ETypeOfGame.COMPETITIVE,
-                    creator));
+                    creator,
+                    rankings));
 
             addPlayersToGames(gameCreationDataList, playersMap);
 
@@ -52,12 +56,13 @@ public class Tournament extends TournamentTemplate {
     }
 
     @Override
-    public void createFinal(Map<String, Player> winners) {
+    public void createFinal(Map<String, Player> winners, Map<String, RankingLine> rankings) {
         GameCreationData gameCreationData = new GameCreationData("game3" + tournamentName,
                 Constants.GAME_MINIMUM_PLAYERS,
                 Constants.GAME_MINIMUM_AMOUNT,
                 ETypeOfGame.COMPETITIVE,
-                creator);
+                creator,
+                rankings);
 
         gameCreationData.getPlayers().putAll(winners);
 

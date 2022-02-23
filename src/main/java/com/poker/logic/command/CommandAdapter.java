@@ -225,7 +225,7 @@ public class CommandAdapter {
                     int incrementValue = 0;
                     int feeValue = 0;
 
-                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_PLAYERS, Constants.GAME_MINIMUM_AMOUNT, typeOfGame, player);
+                    GameCreationData gameCreationData = new GameCreationData(gameName, Constants.FRIENDLY_GAME_PLAYERS, Constants.GAME_MINIMUM_AMOUNT, typeOfGame, player, data.getRankings());
 
                     if (typeOfGame != ETypeOfGame.FRIENDLY) {
                         if (fee != null) {
@@ -683,7 +683,7 @@ public class CommandAdapter {
         return gamesList.entrySet().stream().anyMatch(stringGameEntry -> stringGameEntry.getValue().getPlayersList().get(player.getName()) != null);
     }
 
-    public static void startTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList, Map<String, Game> gamesList) {
+    public static void startTournament(String commandLine, Map<String, Player> onlinePlayers, Map<String, Tournament> tournamentList, Map<String, Game> gamesList, Map<String, RankingLine> rankings) {
         LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.PLAYER_PARAMETER);
@@ -694,7 +694,7 @@ public class CommandAdapter {
             Tournament tournament = tournamentList.get(tourName);
 
             if (player != null && tournament != null) {
-                tournament.startTournament();
+                tournament.startTournament(rankings);
                 for (var game : tournament.getGameList()) {
                     gamesList.put(game.getGameName(), game);
                     LOG.addAndShowLog("[Tournament] The tournament has started!! Good Luck!!!!");
@@ -715,7 +715,7 @@ public class CommandAdapter {
         System.out.println(str);
     }
 
-    public static void startFinalGame(String commandLine, Map<String, Tournament> tournamentList, Map<String, Player> onlinePlayers) {
+    public static void startFinalGame(String commandLine, Map<String, Tournament> tournamentList, Map<String, Player> onlinePlayers, Map<String, RankingLine> rankings) {
         LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String tourName = command.get(Constants.NAME_PARAMETER);
@@ -736,7 +736,7 @@ public class CommandAdapter {
                 }
 
                 if (goToTheFinal) {
-                    tournament.createFinal(winners);
+                    tournament.createFinal(winners, rankings);
                     LOG.addAndShowLog("[Tournament] Final game created!");
                 }
             } else {

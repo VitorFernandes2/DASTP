@@ -15,6 +15,7 @@ public class GameFactory implements IFactory<Game, GameCreationData> {
                 .setBigBlind(object.getBigBlind())
                 .setConvertionTax(object.getFee())
                 .setIncrement(object.getIncrement())
+                .setRankings(object.getRankings())
                 .build();
     }
 }

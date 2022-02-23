@@ -33,4 +33,9 @@ public class RankingLine implements Serializable {
         this.wins = wins;
         RankingProvider.getInstance().registerUpdate(this);
     }
+
+    public void incWins() {
+        this.wins++;
+        RankingProvider.getInstance().registerUpdate(this);
+    }
 }
