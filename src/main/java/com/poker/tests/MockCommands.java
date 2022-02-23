@@ -405,10 +405,9 @@ public class MockCommands {
      * - MOCK_FRIENDLY_GAME - Create a friendly game with 3 players where shows the bet, check, call and fold logic
      * - MOCK_ALLIN_COMPETITIVE_GAME - Create a competitive game with 3 players where all 3 made all-in in the setup state (before the first 3 cards are turned up)
      * - MOCK_SET_TABLE_AND_PLAYER_CARDS_COMPETITIVE_GAME - Create a competitive game with 3 players where the cards are change on the table and on one player hand
-     * - MOCK_KICK_PLAYER_FROM_APP -
-     * - MOCK_KICK_PLAYER_FROM_GAME -
-     * - MOCK_LIST_GAMES_AND_PLAYERS -
-     * - MOCK_CHAT_MESSAGES -
+     * - MOCK_KICK_PLAYER_FROM_APP - Kick a player from the app
+     * - MOCK_KICK_PLAYER_FROM_GAME - Kick a player from the game
+     * - MOCK_CHAT_MESSAGES - Send message between players and alert when a friend logged in
      *
      */
 
@@ -497,20 +496,38 @@ public class MockCommands {
             "register name=admin",
             "log name=admin",
             "register name=jose",
-            "login name=jose"
-//            "kick name=jose"
+            "login name=jose",
+            "kick name=jose"
     ));
 
     public static final List<String> MOCK_KICK_PLAYER_FROM_GAME = new ArrayList<>(Arrays.asList(
-
-    ));
-
-    public static final List<String> MOCK_LIST_GAMES_AND_PLAYERS = new ArrayList<>(Arrays.asList(
-
+            "reg name=admin",
+            "log name=admin",
+            "register name=joao",
+            "login name=joao",
+            "createFriendlyGame name=game2 creator=joao",
+            "register name=henrique",
+            "login name=henrique",
+            "register name=anabela",
+            "login name=anabela",
+            "joinGame name=game2 player=henrique",
+            "joinGame name=game2 player=anabela",
+            "startGame name=game2 player=joao",
+            "kickFromGame name=henrique game=game2",
+            "showGameInfo game=game2"
     ));
 
     public static final List<String> MOCK_CHAT_MESSAGES = new ArrayList<>(Arrays.asList(
-
+            "register name=lj",
+            "login name=lj",
+            "register name=ana",
+            "login name=ana",
+            "addFriend player=lj add=ana",
+            "register name=manel",
+            "login name=manel",
+            "sendMessage from=lj to=manel Hello, my name is lj!",
+            "logout name=ana",
+            "login name=ana"
     ));
 
     //</editor-fold>

@@ -99,12 +99,19 @@ public class CommandAdapter {
         return false;
     }
 
-    public static void logoutUser(String commandLine, Map<String, Player> onlinePlayers) {
+    public static void logoutUser(String commandLine, ApplicationData applicationData) {
         LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String playerName = command.get(Constants.NAME_PARAMETER);
-        onlinePlayers.remove(playerName);
-        LOG.addAndShowLog("[Login] User logged out with success!");
+        Player player = applicationData.getOnlinePlayers().get(playerName);
+        if (player != null) {
+            if (!playerInGame(applicationData.getGamesList(), player)) {
+                applicationData.getOnlinePlayers().remove(playerName);
+                LOG.addAndShowLog("[System] User logged out with success!");
+                return;
+            }
+        }
+        LOG.addAndShowLog("[System] Logout was not successful!");
     }
 
     private static void notifyNewLogin(Map<String, Player> onlinePlayers, String name) {
@@ -254,7 +261,6 @@ public class CommandAdapter {
                         return false;
                     }
                     game.addPlayer(player);
-                    LOG.addAndShowLog("[Game] Game created with success!");
                     return data.addGame(game);
                 }
             }

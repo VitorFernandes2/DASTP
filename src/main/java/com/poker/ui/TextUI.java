@@ -33,7 +33,7 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = MOCK_KICK_PLAYER_FROM_APP; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = MOCK_CHAT_MESSAGES; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {

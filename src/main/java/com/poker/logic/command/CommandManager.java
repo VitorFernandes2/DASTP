@@ -90,7 +90,7 @@ public class CommandManager {
     }
 
     public void logoutUser(String commandLine) {
-        CommandAdapter.logoutUser(commandLine, this.getOnlinePlayers());
+        CommandAdapter.logoutUser(commandLine, applicationData);
     }
 
     public boolean addUser(String commandLine) {
