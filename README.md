@@ -47,7 +47,7 @@ ____
 | One Pair — two cards of the same rank. | __[10♥] [10♣] [9♥] [4♦] [2♦]__ |
 | High Card — five incomparable cards. | __[A♣] [J♦] [10♠] [5♣] [2♥]__ |
 
-<details><summary>Implemented Rules [PT]</summary>
+<details><summary><h3>Implemented Rules [PT]</h3></summary>
 <p>
 
 - [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [DONE]
@@ -63,6 +63,11 @@ ____
 
 </p>
 </details>
+
+____
+# Machine States
+
+![machine_states](https://user-images.githubusercontent.com/44380629/155400071-0b14a878-8033-4b5d-ad21-372d97597f3f.png)
 
 ____
 
@@ -86,12 +91,12 @@ ____
 
 ### Jogadores:
 
-  - [ ] Client (__normal user__)
+  - [x] Client (__normal user__) [DONE]
     - [x] ~~User registration~~ [DONE]
     - [x] ~~Create Friendly Games~~ [DONE]
-    - [ ] List of Games (only those games that the user can participate should appear) __[TBT]__
+    - [x] ~~List of Games (only those games that the user can participate should appear)~~ [DONE]
 
-  - [ ] Client (__paid out user__)(all normal user features + extras) __[TBT]__
+  - [x] Client (__paid out user__)(all normal user features + extras) [DONE]
     - [x] ~~System Services~~ [DONE]
 
 		
@@ -100,10 +105,10 @@ ____
   - [ ] __Acquisition:__
     - [x] ~~System Money Aquisition~~ [DONE]
     - [x] ~~Receive Pot money in Friendly Games (PCJs)~~ [DONE]
-    - [ ] Receive Pot money in Competitive Games (PCJs and Money) __[TBT: Money]__
+    - [x] ~~Receive Pot money in Competitive Games (PCJs and Money)~~ [DONE]
     - [ ] Receive Pot money in Championships Games (PCJs and Money) __[WIP]__
 
-  - [x] __Utilization:__
+  - [x] __Utilization:__ [DONE]
     - [x] ~~Purchase of Services (ex: paid games creation)~~ [DONE]
     - [x] ~~Games betting~~ [DONE]
     - [x] ~~Cash Conversion~~ [DONE]
@@ -112,29 +117,29 @@ ____
 	
 ### Games (settings depend on game scenario __(Game Type and Configuration)__):
 
-  - [ ] (dependent on the amount of user PCs)
-  - [ ] They all start with the same amount of PCJs
+  - [x] ~~(dependent on the amount of user PCs)~~ [DONE]
+  - [x] ~~They all start with the same amount of PCJs~~ [DONE]
   - [x] ~~PCJs are obtained after paying an amount of PCs (conversion rate A)~~ [DONE]
   - [x] ~~PCJs are converted to PCs after game completion (A conversion rate)~~ [DONE]
-  - [ ] Friendly Games (0 PCs == 50 PCJs) they have no return from PCJs to PCs at the end of the game __[TBT]__
+  - [x] ~~Friendly Games (0 PCs == 50 PCJs) they have no return from PCJs to PCs at the end of the game~~ [DONE]
   - [x] ~~Payment / transfer methods~~ [DONE]
   - [x] ~~(5% of the purchase price of PCs is acquired by the company)~~ [DONE]
   - [x] ~~After Min players present, host can start the game~~ [DONE]
-    - [ ] After the game starts, specified deposit is charged __[TBT]__
+    - [x] ~~After the game starts, specified deposit is charged~~ [DONE]
 
-  - [ ] Friendly Games __(not configurable)__:
-    - [ ] 0 PCs == 50 PCJs
-    - [ ] 3 players (Max)
-    - [ ] Bets of 4 PCJs (Fixed)
+  - [x] Friendly Games __(not configurable)__:
+    - [x] ~~0 PCs == 50 PCJs~~ [DONE]
+    - [x] ~~3 players (Max)~~ [DONE]
+    - [x] ~~Bets of 4 PCJs (Fixed)~~ [DONE]
 
-  - [ ] Competitive Games __(configurable)__:
-    - [ ] Host must own 50 PCs (Min)
-    - [ ] Deposit of 10 PCs (Min)
-    - [ ] Number of players (Min)
-    - [ ] Amount of Bets (Min)
-    - [ ] PC conversion rate for this game
+  - [x] Competitive Games __(configurable)__:
+    - [x] ~~Host must own 50 PCs (Min)~~ [DONE]
+    - [x] ~~Deposit of 10 PCs (Min)~~ [DONE]
+    - [x] ~~Number of players (Min)~~ [DONE]
+    - [x] ~~Amount of Bets (Min)~~ [DONE]
+    - [x] ~~PC conversion rate for this game~~ [DONE]
 
-  - [ ] Tournaments __(their format)__[^2] __[WIP]__
+  - [x] ~~Tournaments __(their format)__~~ [DONE]
 
 
 ### Communication between Players
@@ -164,69 +169,69 @@ ____
 
 ### User Interface
 
-  - [ ] CLI application
-    - [x] Functions to simulate user and administrator actions [DONE][^2]
+  - [x] CLI application
+    - [x] ~~Functions to simulate user and administrator actions~~ [DONE]
     - [x] ~~Registration and Log of user actions~~ [DONE]
-      - [ ] __Sintaxe:__[^1]
-        - [ ] `criaTreino nomeJogo=jogo1 criador=joao`
-        - [ ] `compraCreditos nome=ana valor=1000 pagamento=paypal`
-        - [ ] `juntaJogo nomeJogo=jogo1 utilizador=ana`
-        - [ ] `iniciaJogo nomeJogo=jogo1 utilizador=joao`
-        - [ ] `aposta nomeJogo=jogo1 utilizador=joao valor=10`
-        - [ ] `desiste nomeJogo=jogo1 utilizador=ana`
-        - [ ] `passa nomeJogo=jogo1 utilizador=ana`
-        - [ ] `passa nomeJogo=jogo1 utilizador=joao`
-        - [ ] `trocaCartas nomeJogo=jogo1 utilizador=ana quais=aleatório`
-        - [ ] `setCartas nomeJogo=jogo1 utilizador=mesa valor=10H,KH,KD,`
-        - [ ] `setCartas nomeJogo=jogo1 utilizador=ana valor= KS,KC`
-        - [ ] `setCartas nomeJogo=jogo1 utilizador=joao valor= 2S,2H`
-        - [ ] `aposta nomeJogo=jogo1 utilizador=ana valor=10`
-        - [x] `mensagem de=joao para=ana msg=boa!`
-        - [ ] `aposta nomeJogo=jogo1 utilizador=joao valor=20`
-        - [ ] `aposta nomeJogo=jogo1 utilizador=ana valor=40`
-        - [ ] `desiste nomeJogo=jogo1 utilizador=joao`
-        - [ ] `mostraDados`
-        - [ ] `undo`
-        - [ ] `mostraDados`
-        - [ ] `verificaLog utilizador=joao nomeJogo=jogo1`
-        - [x] `logout name`
-        - [x] `cfg` -> create friendly game
-        - [ ] `login` | `log` name -> login of a player
-        - [ ] `register` | `reg` name -> register of a new player
-        - [ ] `shutdown` | `std` -> shutdown of the game
-        - [ ] `logout` | `lout` -> exemplo: `logout name=joaquim` -> logout of player joaquim
-        - [ ] `undo` | `u` -> undo of command in game
-        - [ ] `redo` | `r` -> redo of command in game
-        - [ ] `sendMessage` | `sm` -> example: `sendMessage from=joaquim to=ana Olá, o meu nome é joaquim!` -> sending a mensage from joaquim to ana
-        - [ ] `addFriend` | `af` -> example: `addFriend player=joaquim add=antonio` -> adding a player to the friends list -> joaquim added antonio to the friends list
-        - [ ] `blockPlayer` | `bp` -> examplo: `blockPlayer player=joaquim block=antonio` -> adding a player to the blocked list -> joaquim added antonio to the blocked list
-        - [ ] `comprarPokerChips` | `cpc` -> buy PCs with Money
-        - [ ] `listarJogadores` | `lj` -> players list
-        - [ ] `listFriend` | `lf` -> friends list
-        - [ ] `listBlocked` | `lb` -> blocked list
-        - [ ] `listFriendlyGames` | `lfg` -> list of friendly games
-        - [ ] `listarJogosCompetitivos` | `ljc` -> list of competitive games
-        - [ ] `listarCampeonatos` | `lc` -> list championships games
-        - [ ] `listarPontuações` | `lp` -> list ranking
-        - [ ] `createFriendlyGame` | `cfg` -> example: `createFriendlyGame name=jogo1 creator=lj` -> create a friendly game
-        - [ ] `createCompetitiveGame` | `cjc` -> example: `cjc name=jogo1 creator=lj` -> create a competitive game
-        - [ ] `startGame` | `sg` -> example: `startGame name=jogo1 player=lj`
-        - [ ] `iniciarTurno` | `sg`
-        - [ ] `joinGame` | `jg` -> example: `joinGame name=jogo1 player=ana`
-        - [ ] `bet` | `b` -> example: `bet game=jogo1 player=lj amount=5`
-        - [ ] `check` | `c` -> example: `check game=jogo1 player=lj`
-        - [ ] `fold` | `f` -> example: `fold game=jogo1 player=lj`
-        - [ ] `showGameInfo` | `sgi` -> example: `showGameInfo game=jogo1`
-        - [ ] `criarJogador` | `cj`
-        - [ ] `editarJogador` | `ej`
-        - [ ] `expulsarJogador` | `exj`
-        - [ ] `verificarAtividadesJogador` | `vaj`
-        - [ ] `verJogo` | `vj`
-        - [ ] `adicionarJogo` | `aj`
-        - [ ] `removerJogo` | `rj`
-        - [ ] `help` | `h` -> see all the commands
-
     - [x] ~~"Mockups" (ex: structure and simulation of payment service launch)~~ -> __no__ need to create visual structures or documentation [DONE]
+
+____
+
+### Commands
+#### COMMON COMMANDS
+- [x] `login` | `log` name -> example: `login name=lj` -> login of a player
+- [x] `register` | `reg` name -> `register name=lj` || `register name=lj amount=1000` -> register of a new player || with some initial money on the wallet to buy in game currency
+- [x] `shutdown` | `std` -> shutdown of the game and commit of the database
+- [x] `logout` | `lout` -> exemplo: `logout name=joaquim` -> logout of player joaquim
+- [x] `undo` | `u` -> undo of command in game
+- [x] `redo` | `r` -> redo of command in game
+
+#### USER COMMANDS
+- [x] `sendMessage` | `sm` -> example: `sendMessage from=lj to=ana Hello, my name is lj!` -> sending a mensage from joaquim to ana
+- [x] `addFriend` | `af` -> example: `addFriend player=joaquim add=antonio` -> adding a player to the friends list -> joaquim added antonio to the friends list
+- [x] `blockPlayer` | `bp` -> example: `blockPlayer player=joaquim block=antonio` -> adding a player to the blocked list -> joaquim added antonio to the blocked list
+- [x] `transferMoney` | `tm` -> example: `transferMoney name=lj value=20` -> add real money to the wallet of the player
+- [x] `buyPokerChips` | `bpc` -> example: `buyPokerChips name=lj value=60 payment=Paypal` -> buy PCs with a value of 60 of the player's money using a specific payment service
+- [x] `listPlayers` | `lp` -> example: `listPlayers` -> players list
+- [x] `listFriend` | `lf` -> example: `listFriend name=lj` -> friends list of a player
+- [x] `listBlocked` | `lb` -> example: `listBlocked name=lj` -> blocked list of a player
+- [x] `listFriendlyGames` | `lfg` -> list of friendly games
+- [x] `listCompetitiveGames` | `lcg` -> list of competitive games
+- [x] `listTour` | `lt` -> list championships games
+- [x] `listRankings` | `lr` -> list of players rankings
+- [x] `showPlayersDetails` | `spd` -> show list of all online players details
+- [x] `createFriendlyGame` | `cfg` -> example: `createFriendlyGame name=game1 creator=lj` -> create a friendly game
+- [x] `createCompetitiveGame` | `ccg` -> example: `createCompetitiveGame name=game1 creator=lj fee=2 bigBlind=4 increment=2` -> create a competitive game (set its fee and bigBlind)
+- [x] `startGame` | `sg` -> example: `startGame name=game1 player=lj` -> the host start the game he has created
+- [x] `joinGame` | `jg` -> example: `joinGame name=game1 player=ana` -> join a player to a specific game
+- [x] `leaveGame` | `lg` -> example: `leaveGame name=game1 player=ana` -> takeout a player from a specific game
+- [x] `createTour` | `ct` -> example: `createTournament name=tour1 player=ana` -> a player creates a tournament
+- [x] `joinTour` | `jt` -> example: `joinTour name=tour1 player=ana` -> a player joins in a free space of the tournament
+- [x] `startTour` | `sto` `startTour name=tour1 player=ana` -> the creator of the tournament starts all the initial qualification games
+- [x] `startTourFinal` | `stf` -> example: `startTourFinal name=tour1` -> the creator of the tournament starts the final showdown
+
+#### DEBUG COMMANDS
+- [x] `setCards` | `st` -> example: `setCards player=lj game=game1 c1=KS c2=KC` -> set player hand cards for debugging
+- [x] `setNewRanking` | `snr` -> example: `setNewRanking player=lj wins=5` -> set player's ranking for debugging
+- [x] `setTableCards` | `stc` -> example: `setTableCards game=game1 c1=AS c2=AC c3=AD c4=AH c5=KS` -> set table cards for debugging (`c4` and `c5` can be ommited deppending on the number of cards at the moment in the table)
+- [x] `removeRanking` | `rr` -> example: `removeRanking player=lj` -> remove a player's ranking for debugging
+
+#### IN-GAME COMMANDS
+- [x] `bet` | `b` -> example: `bet game=game1 player=lj amount=5` -> a player makes a bet
+- [x] `check` | `c` -> example: `check game=game1 player=lj` -> a player give check order
+- [x] `fold` | `f` -> example: `fold game=game1 player=lj` -> a player gives up this round
+- [x] `showGameInfo` | `sgi` -> example: `showGameInfo game=game1` -> show all the games information (players, cards, hands cards, big blind, small blind, next player to play, ...)
+
+#### ADMIN COMMANDS
+- [x] `createPlayer` | `cj` -> example: `createPlayer name=vitor` -> create a new player
+- [x] `editPlayer` | `ej` -> example: `editPlayer name=vitor newName=vh` -> edit an existing player
+- [x] `kick` | `k` -> example: `kick name=vitor` -> kick a player
+- [x] `kickFromGame` | `kfg` -> example: `kickFromGame name=lj game=game1` -> kick a player from a game
+- [x] `checkActivities` | `ca` -> example: `checkActivities name=vitor` -> show activity logs from this player
+- [x] `seeGame` | `vg` -> example: `seeGame game=game1` -> see the game info of a specific game
+- [x] `addGame` | `ag` -> example: `addGame name=game1` -> create a new game
+- [x] `removeGame` | `rg` -> example: `removeGame name=game1` -> remove an existing game
+
+- [x] `help` | `h` -> see all the commands / shortcuts / descriptions
 
 ____
 
@@ -244,7 +249,7 @@ ____
   - [x] ~~Identity Map~~ -> __Application Data__ [DONE]
 
 ##### __Padrões Arquiteturais de Persistência__
-  - [ ] Padrão de Registo Ativo / Active Record
+  - [x] ~~Padrão de Registo Ativo / Active Record~~ [DONE]
   - [ ] Padrão Table / Gateway
   - [ ] Padrão Record Gateway
   - [ ] Padrão Data Mapper
@@ -255,7 +260,7 @@ ____
   - [x] ~~Padrão de Decoradores~~ -> __Filtragem de acesso ao logs__ [DONE]
   - [x] ~~Padrão de Adaptadores~~ -> __Ligação com os Sistemas "Externos" de Pagamento__ [DONE]
   - [x] ~~Facedes~~ -> __A utilização de uma ou mais fachadas para acesso à lógica__ [DONE]
-  - [x] ~~Padrão Template~~ -> __Torneios, ...__ [WIP]
+  - [x] ~~Padrão Template~~ -> __Torneios__ [DONE]
   - [x] ~~Padrão Comando~~ -> __Comandos da "Aplicação" CLI__ [DONE]
 
 ____
