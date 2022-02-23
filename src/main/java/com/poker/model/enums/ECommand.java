@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum ECommand {
-    // Common commands
+    // COMMON COMMANDS
     LOGIN("login", "log", "login name=lj"),
     REGISTER("register", "reg", "register name=lj"),
     SHUTDOWN("shutdown", "std", "shutdown"),
@@ -15,7 +15,7 @@ public enum ECommand {
     UNDO("undo", "u", "undo"),
     REDO("redo", "r", "redo"),
 
-    // User commands
+    // USER COMMANDS
     SEND_MESSAGE("sendMessage", "sm", "sendMessage from=joaquim to=ana Hello, my name is lj!"),
     ADD_FRIEND("addFriend", "af", "addFriend player=joaquim add=antonio"),
     BLOCK_PLAYER("blockPlayer", "bp", "blockPlayer player=joaquim block=antonio"),
@@ -39,19 +39,19 @@ public enum ECommand {
     START_TOURNAMENT("startTour", "sto", "startTour name=tour1 player=ana"),
     START_FINAL_TOURNAMENT("startTourFinal", "stf", "startTourFinal name=tour1"),
 
-    //DEBUG COMMANDS
+    // DEBUG COMMANDS
     ADD_CARDS_TO_USER("setCards", "st", "setCards player=lj game=game1 c1=KS c2=KC"),
     ADD_CUSTOM_RANKINGS("setNewRanking", "snr", "setNewRanking player=lj wins=5"),
     SET_TABLE_CARDS("setTableCards", "stc", "setTableCards game=game1 c1=AS c2=AC c3=AD c4=AH c5=KS"),
     REMOVE_CUSTOM_RANKING("removeRanking", "rr", "removeRanking player=lj"),
 
-    // In-Game commands
+    // IN-GAME COMMANDS
     BET("bet", "b", "bet game=game1 player=lj amount=5"),
     CHECK("check", "c", "check game=game1 player=lj"),
     FOLD("fold", "f", "fold game=game1 player=lj"),
     SHOW_GAME_INFO("showGameInfo", "sgi", "showGameInfo game=game1"),
 
-    // Admin commands
+    // ADMIN COMMANDS
     CREATE_USER("createPlayer", "cp", "createPlayer name=vitor"),
     EDIT_USER("editPlayer", "ep", "editPlayer name=vitor newName=vh"),
     KICK_USER("kick", "k", "kick name=vitor"),
@@ -63,10 +63,7 @@ public enum ECommand {
 
     HELP("help", "h", ""),
 
-    // Debug commands
-
-
-    // default value
+    // DEFAULT COMMANDS VALUE
     UNKNOWN("Unknown command ... try again", "UNKNOWN", "");
 
     private static final Map<String, ECommand> ENUM_COMMANDS;
