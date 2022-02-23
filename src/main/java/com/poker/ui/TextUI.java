@@ -33,7 +33,7 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = TEST_END_GAME_OF_A_COMPETITIVE; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = MOCK_KICK_PLAYER_FROM_APP; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
@@ -164,7 +164,6 @@ public class TextUI {
                         appFacade.startTournament(commandLine);
                         break;
                     case START_FINAL_TOURNAMENT:
-                        //TODO: [TBC] Test
                         appFacade.startFinalGame(commandLine);
                         break;
                     case BET:

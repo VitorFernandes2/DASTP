@@ -71,7 +71,7 @@ public class CommandAdapter {
         return false;
     }
 
-    public static boolean loginUser(String commandLine, Map<String, Player> playerList) {
+    public static boolean loginUser(String commandLine, Map<String, Player> onlinePlayers) {
         LOG.addLog(commandLine);
         Map<String, String> command = StringUtils.mapCommand(commandLine);
         String name = command.get(Constants.NAME_PARAMETER);
@@ -79,21 +79,23 @@ public class CommandAdapter {
             Player player;
             try {
                 player = DatabaseUtils.getPlayerByName(name);
+                if (player == null) {
+                    LOG.addAndShowLog("[Login] The player " + name + " needs to registered first before logging in!");
+                }
             } catch (Exception e) {
                 System.out.println("[Login] Error while logging the user in database " + e.getMessage());
                 return false;
             }
 
-            if (!Objects.isNull(player) && playersInArray(playerList, name)) {
+            if (!Objects.isNull(player) && !playersInArray(onlinePlayers, name)) {
                 // Notify other players
-                notifyNewLogin(playerList, name);
+                notifyNewLogin(onlinePlayers, name);
 
-                playerList.put(name, player);
+                onlinePlayers.put(name, player);
                 LOG.addAndShowLog("[Login] User logged in with success!");
             }
             return !Objects.isNull(player);
         }
-
         return false;
     }
 
@@ -114,7 +116,7 @@ public class CommandAdapter {
     }
 
     private static boolean playersInArray(Map<String, Player> playerList, String name) {
-        return playerList.get(name) == null;
+        return playerList.get(name) != null;
     }
 
     public static void buyChips(String commandLine, Map<String, Player> playerList) {
@@ -173,12 +175,12 @@ public class CommandAdapter {
             return;
         }
 
-        if (playersInArray(onlinePlayers, senderName)) {
+        if (!playersInArray(onlinePlayers, senderName)) {
             LOG.addAndShowLog("[System] " + senderName + " is offline!");
             return;
         }
 
-        LOG.addAndShowLog(playersInArray(onlinePlayers, receiverName) ?
+        LOG.addAndShowLog(!playersInArray(onlinePlayers, receiverName) ?
                 "[System] " + receiverName + " is offline!" :
                 onlinePlayers.get(receiverName).getPlayersBlocked().contains(senderName) ?
                         "[System] You can't send messages to this user!" :

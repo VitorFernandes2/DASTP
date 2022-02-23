@@ -94,7 +94,7 @@ public class CommandManager {
     }
 
     public boolean addUser(String commandLine) {
-        return CommandAdapter.addUser(commandLine, this.getOnlinePlayers());
+        return CommandAdapter.addUser(commandLine, applicationData.getRegisteredPlayers());
     }
 
     public void buyChips(String commandLine) {

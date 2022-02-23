@@ -29,6 +29,7 @@ public class MockCommands {
 //            "bet game=game1 player=manel amount=46"
     ));
 
+    @Deprecated
     public static final List<String> CREATE_COMPETITIVE_GAME_2 = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
@@ -55,6 +56,7 @@ public class MockCommands {
 //            "bet game=game1 player=manel amount=46"
     ));
 
+    @Deprecated
     public static final List<String> CREATE_COMPETITIVE_GAME = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
@@ -75,15 +77,18 @@ public class MockCommands {
             "redo"
     ));
 
+    @Deprecated
     public static final List<String> CREATE_PLAYER = new ArrayList<>(Arrays.asList(
             "reg name=lj12",
             "log name=lj"
     ));
 
+    @Deprecated
     public static final List<String> LOGIN_PLAYER = new ArrayList<>(Arrays.asList(
             "log name=lj"
     ));
 
+    @Deprecated
     public static final List<String> LIST_GAMES = new ArrayList<>(Arrays.asList(
             "log name=lj",
             "log name=ana",
@@ -118,6 +123,7 @@ public class MockCommands {
             "check game=game1 player=manel"
     ));
 
+    @Deprecated
     public static final List<String> CREATE_FRIEND_REQUEST = new ArrayList<>(Arrays.asList(
             "log name=lj",
             "log name=ana",
@@ -125,6 +131,7 @@ public class MockCommands {
             LIST_FRIENDS.getExample()
     ));
 
+    @Deprecated
     public static final List<String> DEBUG_COMMAND_TEST = new ArrayList<>(Arrays.asList(
             "reg name=ana",
             "reg name=lj",
@@ -138,6 +145,7 @@ public class MockCommands {
             "setCards player=lj game=game1 c1=KS c2=8C"
     ));
 
+    @Deprecated
     public static final List<String> SEE_GAME_COMMAND_TEST = new ArrayList<>(Arrays.asList(
             "reg name=ana",
             "reg name=lj",
@@ -151,6 +159,7 @@ public class MockCommands {
             "sga game=game1"
     ));
 
+    @Deprecated
     public static final List<String> ADD_GAME_COMMAND_TEST = new ArrayList<>(Arrays.asList(
             "reg name=ana",
             "reg name=lj",
@@ -167,6 +176,7 @@ public class MockCommands {
             "listFriendlyGames"
     ));
 
+    @Deprecated
     public static final List<String> RANKING_COMMAND_TEST = new ArrayList<>(Arrays.asList(
             "reg name=ana",
             "reg name=lj",
@@ -185,6 +195,7 @@ public class MockCommands {
             "std"
     ));
 
+    @Deprecated
     public static final List<String> KICK_COMMAND_TEST = new ArrayList<>(Arrays.asList(
             "reg name=ana",
             "reg name=lj",
@@ -197,6 +208,7 @@ public class MockCommands {
             "listarJogadores"
     ));
 
+    @Deprecated
     public static final List<String> CREATE_GAME_BETTING = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
@@ -222,6 +234,7 @@ public class MockCommands {
             "bet game=game1 player=manel amount=5"
     ));
 
+    @Deprecated
     public static final List<String> CREATE_TOURNAMENT = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
@@ -257,6 +270,7 @@ public class MockCommands {
             "listCompetitiveGames"
     ));
 
+    @Deprecated
     public static final List<String> GAME_TO_FINNISH = new ArrayList<>(Arrays.asList(
             "reg name=lj",
             "log name=lj",
@@ -391,7 +405,10 @@ public class MockCommands {
      * - MOCK_FRIENDLY_GAME - Create a friendly game with 3 players where shows the bet, check, call and fold logic
      * - MOCK_ALLIN_COMPETITIVE_GAME - Create a competitive game with 3 players where all 3 made all-in in the setup state (before the first 3 cards are turned up)
      * - MOCK_SET_TABLE_AND_PLAYER_CARDS_COMPETITIVE_GAME - Create a competitive game with 3 players where the cards are change on the table and on one player hand
-     * -
+     * - MOCK_KICK_PLAYER_FROM_APP -
+     * - MOCK_KICK_PLAYER_FROM_GAME -
+     * - MOCK_LIST_GAMES_AND_PLAYERS -
+     * - MOCK_CHAT_MESSAGES -
      *
      */
 
@@ -474,6 +491,26 @@ public class MockCommands {
             "showGameInfo game=game1",
             "setCards player=lj game=game1 c1=KS c2=KC",
             "showGameInfo game=game1"
+    ));
+
+    public static final List<String> MOCK_KICK_PLAYER_FROM_APP = new ArrayList<>(Arrays.asList(
+            "register name=admin",
+            "log name=admin",
+            "register name=jose",
+            "login name=jose"
+//            "kick name=jose"
+    ));
+
+    public static final List<String> MOCK_KICK_PLAYER_FROM_GAME = new ArrayList<>(Arrays.asList(
+
+    ));
+
+    public static final List<String> MOCK_LIST_GAMES_AND_PLAYERS = new ArrayList<>(Arrays.asList(
+
+    ));
+
+    public static final List<String> MOCK_CHAT_MESSAGES = new ArrayList<>(Arrays.asList(
+
     ));
 
     //</editor-fold>

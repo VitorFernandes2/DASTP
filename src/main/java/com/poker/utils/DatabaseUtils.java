@@ -223,6 +223,9 @@ public class DatabaseUtils {
             String deleteUserSQL = "DELETE FROM PLAYER WHERE name='" + playerName + "'";
             statement.executeUpdate(deleteUserSQL);
 
+            String deleteUserWalletSQL = "DELETE FROM WALLET WHERE name='" + playerName + "'";
+            statement.executeUpdate(deleteUserWalletSQL);
+
             statement.close();
             connection.close();
         } catch (SQLException | ClassNotFoundException e) {
