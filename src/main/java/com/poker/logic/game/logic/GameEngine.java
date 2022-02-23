@@ -113,7 +113,7 @@ public class GameEngine implements Serializable {
                     player.getWallet().setPokerGameChips(walletUtils.chipsToGame(fee));
                     player.getWallet().removePokerChips(fee);
                 } else {
-                    System.out.println("[Game] The player " + s + " doesn't have PCs enough to play in this game");
+                    LOG.addAndShowLog("[Game] The player " + s + " doesn't have PCs enough to play in this game");
                     playersToBeRemoved.add(s);
                 }
             });
@@ -122,17 +122,17 @@ public class GameEngine implements Serializable {
 
             // Check if the game has enough players to start
             if (players.size() < Constants.FRIENDLY_GAME_PLAYERS) {
-                System.out.println("[Game] The game cannot be started because don't have enough players!");
+                LOG.addAndShowLog("[Game] The game cannot be started because don't have enough players!");
                 return false;
             }
 
             // fill queues of play and dealer order
             players.forEach((s, player) -> queueDealerOrder.add(s));
             players.forEach((s, player) -> queuePlayOrder.add(s));
-            System.out.println("[Game] Let's Poker. Good luck!");
+            LOG.addAndShowLog("[Game] Let's Poker. Good luck!");
             return true;
         }
-        System.out.println(!creatorName.equals(playerName)
+        LOG.addAndShowLog(!creatorName.equals(playerName)
                 ? "[Game] The player " + creatorName + " needs to started this game!"
                 : "[Game] You don't have the minimum players to start! minimum: " + minPlayers + " players.");
         return false;
@@ -160,7 +160,7 @@ public class GameEngine implements Serializable {
         // dealer goes to the end of the queues
         queueDealerOrder.add(dealer = queueDealerOrder.poll());
         queuePlayOrder.add(queuePlayOrder.poll());
-        System.out.println("[Game] The player " + dealer + " is the dealer");
+        LOG.addAndShowLog("[Game] The player " + dealer + " is the dealer");
         distributeSmallAndBigBlind();
     }
 
@@ -168,7 +168,7 @@ public class GameEngine implements Serializable {
     private void distributeSmallAndBigBlind() {
         // Small Blind implementation
         String smallBlindPlayer = queuePlayOrder.peek();
-        System.out.println("[Game] Small blind removed automatically form the player " + smallBlindPlayer);
+        LOG.addAndShowLog("[Game] Small blind removed automatically form the player " + smallBlindPlayer);
         bet(smallBlindPlayer, smallBlind);
         isSmallBlind = false;
         // Add small blind player to the end of the queue
@@ -176,7 +176,7 @@ public class GameEngine implements Serializable {
 
         // Big Blind implementation
         String bigBlindPlayer = queuePlayOrder.peek();
-        System.out.println("[Game] Big blind removed automatically form the player " + bigBlindPlayer);
+        LOG.addAndShowLog("[Game] Big blind removed automatically form the player " + bigBlindPlayer);
         bet(bigBlindPlayer, bigBlind);
         // Add big blind player to the end of the queue, he is the player that decides is turn the cards or will raise more
         queuePlayOrder.add(bigBlindPlayer);
@@ -193,7 +193,7 @@ public class GameEngine implements Serializable {
 
         int betsAmount = getBetsAmount(playerName, amount);
         if (betsAmount < bigBlind && !isSmallBlind()) {
-            System.out.println("[Game] The player " + playerName + " needs to bet at least " + bigBlind + " PCJs");
+            LOG.addAndShowLog("[Game] The player " + playerName + " needs to bet at least " + bigBlind + " PCJs");
             return false;
         }
 
@@ -201,7 +201,7 @@ public class GameEngine implements Serializable {
         if (higherBet == null) {
             higherBet = betsAmount;
         } else if (players.get(playerName).getWallet().getPokerGameChips() > higherBet && betsAmount < higherBet) { // need to call (if the player have enough PCJs and the bet is lower)
-            System.out.println("[Game] The player " + playerName +
+            LOG.addAndShowLog("[Game] The player " + playerName +
                     " need to bet more! Value to call: " +
                     (playerBetsList.containsKey(playerName) ? higherBet - playerBetsList.get(playerName) : higherBet) +
                     " PCJs");
@@ -233,7 +233,7 @@ public class GameEngine implements Serializable {
         playerBetsList.put(playerName, playerBetsList.containsKey(playerName) ? playerBetsList.get(playerName) + amount : amount);
 
         addToPot(amount);
-        System.out.println("[Game] The player " + playerName + " made a bet of " + amount + " PCJs");
+        LOG.addAndShowLog("[Game] The player " + playerName + " made a bet of " + amount + " PCJs");
         queuePlayOrder.remove(playerName);
         return queuePlayOrder.size() == 0;
     }
@@ -241,12 +241,12 @@ public class GameEngine implements Serializable {
     // Check logic
     public boolean check(String playerName) {
         if (!playerName.equals(queuePlayOrder.peek())) {
-            System.out.println("[Game] The player " + queuePlayOrder.peek() + " needs to play first!");
+            LOG.addAndShowLog("[Game] The player " + queuePlayOrder.peek() + " needs to play first!");
             return false;
         }
 
         if (higherBet != 0 && !higherBet.equals(playerBetsList.get(playerName))) {
-            System.out.println("[Game] The player " + playerName + " needs to bet or fold! Value to call: " +
+            LOG.addAndShowLog("[Game] The player " + playerName + " needs to bet or fold! Value to call: " +
                     (playerBetsList.containsKey(playerName) ? higherBet - playerBetsList.get(playerName) : higherBet));
             return false;
         }
@@ -262,13 +262,14 @@ public class GameEngine implements Serializable {
 
         queuePlayOrder.remove(playerName);
         playerFoldList.add(playerName);
+        LOG.addAndShowLog("[Game] The player " + playerName + " Fold!");
         return queuePlayOrder.size() == 0;
     }
 
     // Trigger The Flop - turn 3 cards up
     public boolean triggerTheFlop() {
         tableCards.addAll(Objects.requireNonNull(CardsUtils.withdrawMoreThanOne(3, deck)));
-        System.out.println("[Game] 3 cards has been turn up");
+        LOG.addAndShowLog("[Game] 3 cards has been turn up");
         printDeck();
         fillQueue();
         printCardsPerPlayer();
@@ -278,7 +279,7 @@ public class GameEngine implements Serializable {
     // Trigger next card - used when a card is turned in The Turn and The River state
     public boolean triggerNextCard() {
         withdrawCardToTable();
-        System.out.println("[Game] 1 card has been turn up");
+        LOG.addAndShowLog("[Game] 1 card has been turn up");
         printDeck();
         fillQueue();
         printCardsPerPlayer();
@@ -369,7 +370,7 @@ public class GameEngine implements Serializable {
 
         if (ETypeOfGame.COMPETITIVE.equals(typeOfGame)) {
             removePlayer(getWinner());
-            str.append("\n[Game] This players as won ").append(walletUtils.chipsToPocket(amount)).append(" PCs.\n");
+            str.append("\n[Game] This players won ").append(walletUtils.chipsToPocket(amount)).append(" PCs.\n");
         }
 
         LOG.addAndShowLog(str.toString());

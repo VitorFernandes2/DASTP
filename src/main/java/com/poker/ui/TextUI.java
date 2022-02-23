@@ -33,7 +33,7 @@ public class TextUI {
         while (running) {
             System.out.print("♠ POKER  $ ");
             String commandLine;
-            List<String> commandsList = COMPETITIVE_GAME_WINNING; // DEBUG: change this Command List to change the mocked commands
+            List<String> commandsList = MOCK_FRIENDLY_GAME; // DEBUG: change this Command List to change the mocked commands
             if (commandsList.isEmpty()) {
                 commandLine = StringUtils.readString();
             } else {
@@ -140,7 +140,7 @@ public class TextUI {
                         break;
                     case CREATE_FRIENDLY_GAME:
                         boolean gameCreated = appFacade.createFriendlyGame(commandLine);
-                        System.out.println("[Game] " + (gameCreated ? "Game created with success" : "Game was not created!"));
+                        System.out.println("[Game] " + (gameCreated ? "Game created with success!" : "Command invalid! Game was not created! Insert 'h' for help"));
                         break;
                     case CREATE_COMPETITIVE_GAME:
                         appFacade.createCompetitiveGame(commandLine);
