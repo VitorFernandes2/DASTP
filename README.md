@@ -47,7 +47,7 @@ ____
 | One Pair — two cards of the same rank. | __[10♥] [10♣] [9♥] [4♦] [2♦]__ |
 | High Card — five incomparable cards. | __[A♣] [J♦] [10♠] [5♣] [2♥]__ |
 
-<details><summary><h3>Implemented Rules [PT]</h3></summary>
+<details><summary><h4>Implemented Rules [PT]</h4></summary>
 <p>
 
 - [x] Royal Flush — cinco cartas do mesmo naipe, de ás a dez; Exemplo: __[A♥] [K♥] [Q♥] [J♥] [10♥]__ [DONE]
