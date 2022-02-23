@@ -290,7 +290,7 @@ public class DatabaseUtils {
             String username = "";
             int wins = 0;
 
-            String findUserSQL = "SELECT * FROM RANKING";
+            String findUserSQL = "SELECT * FROM RANKING ORDER BY wins DESC";
             ResultSet rs = statement.executeQuery(findUserSQL);
             while (rs.next()) {
                 username = rs.getString("name");
