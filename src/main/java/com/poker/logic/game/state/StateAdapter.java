@@ -40,7 +40,6 @@ public class StateAdapter implements IGameState, Serializable {
     }
 
     protected IGameState isGameOver() {
-        // TODO: [TBC] Verify if shutting down a occurring game brings bugs.
         getGameEngine().triggerShowdown();
         if (getGameEngine().isGameOver()) {
             // TODO: [TBC] It needs to be tested.
@@ -56,7 +55,7 @@ public class StateAdapter implements IGameState, Serializable {
                 e.printStackTrace();
             }
             getGameEngine().announceTableWinner();
-            return null; // TODO: [TBC] Verify if the table ends and the winner was announce.
+            return null;
         } else {
             return new SetupState(getGameEngine());
         }

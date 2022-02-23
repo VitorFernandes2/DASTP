@@ -24,4 +24,9 @@ public class Paypal implements IService {
     public boolean transfer(double amount) {
         return true;
     }
+
+    @Override
+    public boolean transferMoney(double amount) {
+        return true;
+    }
 }

@@ -19,6 +19,13 @@ public interface IServiceAdapter {
     void transfer(Wallet wallet);
 
     /**
+     * Function to simulate the transfer from external payment entity into in-game cash from a Service.
+     *
+     * @param wallet {@link Wallet} - Player's wallet.
+     */
+    boolean transferMoney(Wallet wallet, double amount);
+
+    /**
      * Function to turn game coins into poker chips.
      *
      * @param pokerChips int - Value of game coins to be converted into poker chips.

@@ -16,4 +16,12 @@ public interface IService {
      * @return boolean - It always returns a true value.
      */
     boolean transfer(double amount);
+
+    /**
+     * Function to only simulate a money transfer from an external Service.
+     *
+     * @param amount
+     * @return
+     */
+    boolean transferMoney(double amount);
 }

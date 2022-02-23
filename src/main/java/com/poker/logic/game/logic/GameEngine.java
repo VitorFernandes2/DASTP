@@ -3,6 +3,7 @@ package com.poker.logic.game.logic;
 import com.poker.logic.factory.card.CardFactory;
 import com.poker.logic.game.ETypeOfGame;
 import com.poker.model.card.ICard;
+import com.poker.model.constants.Constants;
 import com.poker.model.filter.Log;
 import com.poker.model.payment.EServices;
 import com.poker.model.payment.ServiceAdapter;
@@ -13,6 +14,8 @@ import com.poker.utils.ScoreUtils;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * In this class must be all the components that can simplify the logic functions
@@ -72,9 +75,10 @@ public class GameEngine implements Serializable {
     public boolean removePlayer(String playerName) {
         if (this.playerInGame(playerName)) {
             Player player = players.get(playerName);
-            // TODO: [TBC] validate if is a friendly game and convert game money to wallet
             if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame)) {
-                player.getWallet().addPokerChips(walletUtils.chipsToPocket(players.remove(playerName).getWallet().resetPokerGameChips()));
+                int amount = players.remove(playerName).getWallet().getPokerGameChips();
+                player.getWallet().resetPokerGameChips();
+                player.getWallet().addPokerChips(walletUtils.chipsToPocket(amount));
             } else {
                 players.remove(playerName).getWallet().resetPokerGameChips();
             }
@@ -92,7 +96,6 @@ public class GameEngine implements Serializable {
 
             // Give each player PCJs
             players.forEach((s, player) -> {
-                //TODO: [TBC] convert PCs into PCJs in a competitive game
                 if (Objects.equals(ETypeOfGame.FRIENDLY, typeOfGame)) {
                     player.getWallet().setPokerGameChips(walletUtils.chipsToGame(1));
                 } else if (Objects.equals(ETypeOfGame.COMPETITIVE, typeOfGame) && player.getWallet().getPokerChips() >= fee) {
@@ -106,10 +109,15 @@ public class GameEngine implements Serializable {
             // Remove players that doesn't have enough PCs
             playersToBeRemoved.forEach(players::remove);
 
+            // Check if the game has enough players to start
+            if(players.size() < Constants.FRIENDLY_GAME_PLAYERS) {
+                System.out.println("[Game] The game cannot be started because don't have enough players!");
+                return false;
+            }
+
             // fill queues of play and dealer order
             players.forEach((s, player) -> queueDealerOrder.add(s));
             players.forEach((s, player) -> queuePlayOrder.add(s));
-            startRound();
             System.out.println("[Game] Let's Poker. Good luck!");
             return true;
         }
@@ -365,7 +373,7 @@ public class GameEngine implements Serializable {
         str.append("\n[Game] The table winner was ").append(getWinner()).append(" with ").append(amount).append(" PCJs.");
 
         if (ETypeOfGame.COMPETITIVE.equals(typeOfGame)) {
-            players.get(getWinner()).getWallet().addPokerChips(walletUtils.chipsToPocket(amount));
+            removePlayer(getWinner());
             str.append("\n[Game] This players as won ").append(walletUtils.chipsToPocket(amount)).append(" PCs.\n");
         }
 
@@ -413,7 +421,8 @@ public class GameEngine implements Serializable {
         StringBuilder str = new StringBuilder();
         str.append("[");
         players.forEach((s) -> str.append(s).append(", "));
-        str.setLength(str.length() - 2); // remove the last 2 characters
+        if (players.size() != 0)
+            str.setLength(str.length() - 2); // remove the last 2 characters
         str.append("]");
         return str.toString();
     }
@@ -425,7 +434,9 @@ public class GameEngine implements Serializable {
         str.append("\n## Players in game: ").append(printPlayers(new ArrayList<>(queueDealerOrder)));
         str.append("\n## Table cards: ").append(CardsUtils.cardsToString(tableCards.toArray(ICard[]::new)));
         str.append("\n## Pot value: ").append(pot).append(" PCJs\n");
-        str.append(CardsUtils.cardsPerPlayerToString(new ArrayList<>(queuePlayOrder), players));
+        str.append(CardsUtils.cardsPerPlayerToString(Stream.of(queuePlayOrder, playerAllInList)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()), players));
         str.append("\n## Next turn: ").append(queuePlayOrder.peek());
         str.append("\n## Blinds: ").append("S: ").append(smallBlind).append(" | B: ").append(bigBlind);
         str.append("\n## Higher bet: ").append(higherBet == null ? 0 : higherBet);
@@ -480,6 +491,26 @@ public class GameEngine implements Serializable {
 
     public Integer getIncrement() {
         return increment;
+    }
+
+    public Queue<String> getQueuePlayOrder() {
+        return queuePlayOrder;
+    }
+
+    public Queue<String> getQueueDealerOrder() {
+        return queueDealerOrder;
+    }
+
+    public Map<String, Integer> getPlayerBetsList() {
+        return playerBetsList;
+    }
+
+    public List<String> getPlayerFoldList() {
+        return playerFoldList;
+    }
+
+    public List<String> getPlayerAllInList() {
+        return playerAllInList;
     }
 
     public void incrementBigBlind() {

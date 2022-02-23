@@ -191,4 +191,12 @@ public class ApplicationFacade {
     public void listPlayersDetails() {
         commandManager.listPlayersDetails();
     }
+
+    public void transferMoney(String commandLine) {
+        commandManager.transferMoney(commandLine);
+    }
+
+    public void kickFromGame(String commandLine) {
+        commandManager.kickFromGame(commandLine);
+    }
 }

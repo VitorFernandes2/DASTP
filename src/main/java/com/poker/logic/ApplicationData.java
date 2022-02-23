@@ -1,12 +1,17 @@
 package com.poker.logic;
 
 import com.poker.logic.game.Game;
+import com.poker.logic.game.logic.GameEngine;
 import com.poker.model.player.Player;
 import com.poker.model.ranking.RankingLine;
 import com.poker.model.tournament.Tournament;
+import com.poker.utils.CollectionUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ApplicationData {
     private static final ApplicationData applicationData = new ApplicationData();
@@ -84,5 +89,63 @@ public class ApplicationData {
         FileInputStream fi = new FileInputStream(new File(gameName));
         ObjectInputStream oi = new ObjectInputStream(fi);
         this.gamesList = (Map<String, Game>) oi.readObject();
+    }
+
+    public void updatePlayerName(String oldPlayerName, String newPlayerName) {
+        Player player = getOnlinePlayers().get(oldPlayerName);
+        if (player != null) {
+            if (!player.setName(newPlayerName)) {
+                return;
+            }
+        }
+
+        // Update lists of friends and blocked players
+        getRegisteredPlayers().forEach((name, p) -> {
+            if (p.getFriends().contains(oldPlayerName)) {
+                p.removeFriend(oldPlayerName);
+                p.addFriend(newPlayerName);
+            }
+            if (p.getPlayersBlocked().contains(oldPlayerName)) {
+                p.removeBlockedPlayer(oldPlayerName);
+                p.blockPlayer(newPlayerName);
+            }
+        });
+
+        // Update ranks
+        RankingLine rankingLine = getRankings().get(oldPlayerName);
+        if(rankingLine != null) {
+            rankings.put(newPlayerName, rankings.remove(oldPlayerName));
+            rankingLine.setPlayerName(newPlayerName);
+        }
+
+        // Update games
+        updateNameInMapOfGames(getGamesList(), oldPlayerName, newPlayerName);
+
+        // Update games in the tournaments
+        getTournamentList().forEach((s, tournament) -> updateNameInListOfGames(tournament.getGameList(), oldPlayerName, newPlayerName));
+        System.out.println("[System] The player " + oldPlayerName + " now has a new name: " + newPlayerName);
+    }
+
+    private void updateNameInListOfGames(List<Game> listOfGames, String oldName, String newName) {
+        listOfGames.forEach((game) -> updateNameInGame(game, oldName, newName));
+    }
+
+    private void updateNameInMapOfGames(Map<String, Game> mapOfGames, String oldName, String newName) {
+        mapOfGames.forEach((gameName, game) -> updateNameInGame(game, oldName, newName));
+    }
+
+    public void updateNameInGame(Game game, String oldName, String newName) {
+        GameEngine gameEngine = game.getGameEngine();
+        if (game.getPlayersList().get(oldName) != null) {
+            game.getPlayersList().put(newName, game.getPlayersList().remove(oldName));
+            CollectionUtils.changeNameInCollection(gameEngine.getQueueDealerOrder(), oldName, newName);
+            CollectionUtils.changeNameInCollection(gameEngine.getQueuePlayOrder(), oldName, newName);
+            CollectionUtils.changeNameInCollection(gameEngine.getPlayerFoldList(), oldName, newName);
+            CollectionUtils.changeNameInCollection(gameEngine.getPlayerAllInList(), oldName, newName);
+            Map<String, Integer> bets = gameEngine.getPlayerBetsList();
+            if (bets.get(oldName) != null) {
+                bets.put(newName, bets.remove(oldName));
+            }
+        }
     }
 }

@@ -61,11 +61,13 @@ public class TextUI {
                         appFacade.createUser(commandLine);
                         break;
                     case EDIT_USER:
-                        //FIXME: Possibly it will be removed
-                        //appFacade.editUser(commandLine);
+                        appFacade.editUser(commandLine);
                         break;
                     case KICK_USER:
                         appFacade.kickUser(commandLine);
+                        break;
+                    case KICK_FROM_GAME:
+                        appFacade.kickFromGame(commandLine);
                         break;
                     case CHECK_USER_ACTIVITIES:
                         appFacade.checkUserActivities(commandLine);
@@ -127,6 +129,9 @@ public class TextUI {
                     case LIST_FRIENDLY_GAMES:
                         appFacade.listFriendlyGames();
                         break;
+                    case TRANSFER_MONEY:
+                        appFacade.transferMoney(commandLine);
+                        break;
                     case BUY_POKER_CHIPS:
                         appFacade.buyChips(commandLine);
                         break;
@@ -179,6 +184,7 @@ public class TextUI {
                         running = false;
                         break;
                     case HELP:
+                        // FIXME: It needs to return all the shortcuts / commands / examples.
                         ECommand.getCommandsExample();
                         break;
                     default:

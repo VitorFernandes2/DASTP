@@ -18,7 +18,39 @@ public class MockCommands {
             "log name=manel",
             "joinGame name=jogo1 player=ana",
             "joinGame name=jogo1 player=manel",
-            "startGame name=jogo1 player=lj"
+            "startGame name=jogo1 player=lj",
+            "bet game=jogo1 player=lj amount=5",
+            "bet game=jogo1 player=ana amount=3",
+            "check game=jogo1 player=manel"
+//            "bet game=jogo1 player=lj amount=50",
+//            "bet game=jogo1 player=ana amount=48",
+//            "bet game=jogo1 player=manel amount=46"
+    ));
+
+    public static final List<String> CREATE_COMPETITIVE_GAME_2 = new ArrayList<>(Arrays.asList(
+            "reg name=lj",
+            "log name=lj",
+            "ccg name=jogo1 creator=lj fee=10 bigBlind=5",
+            "reg name=ana",
+            "log name=ana",
+            "reg name=manel",
+            "log name=manel",
+            "joinGame name=jogo1 player=ana",
+            "joinGame name=jogo1 player=manel",
+            "transferMoney name=lj value=20",
+            "transferMoney name=ana value=20",
+            "transferMoney name=manel value=20",
+            "startGame name=jogo1 player=lj",
+            "log name=admin"
+//            "bet game=jogo1 player=lj amount=500",
+//            "bet game=jogo1 player=ana amount=498",
+//            "bet game=jogo1 player=manel amount=495"
+//            "bet game=jogo1 player=lj amount=5",
+//            "bet game=jogo1 player=ana amount=3",
+//            "check game=jogo1 player=manel"
+//            "bet game=jogo1 player=lj amount=50",
+//            "bet game=jogo1 player=ana amount=48",
+//            "bet game=jogo1 player=manel amount=46"
     ));
 
     public static final List<String> CREATE_COMPETITIVE_GAME = new ArrayList<>(Arrays.asList(
@@ -249,16 +281,16 @@ public class MockCommands {
     public static final List<String> COMPETITIVE_GAME_WINNING = new ArrayList<>(Arrays.asList(
             "reg name=lj amount=100",
             "log name=lj",
-            "cpc name=lj value=60 payment=Paypal",
+            "bpc name=lj value=60 payment=Paypal",
             "ccg name=jogo1 creator=lj",
             "reg name=ana amount=100",
             "log name=ana",
-            "cpc name=ana value=60 payment=Paypal",
+            "bpc name=ana value=60 payment=Paypal",
             "reg name=manel amount=100",
             "log name=manel",
+            "bpc name=manel value=60 payment=Paypal",
             "reg name=manel1 amount=100",
             "log name=manel1",
-            "cpc name=manel value=60 payment=Paypal",
             "joinGame name=jogo1 player=ana",
             "joinGame name=jogo1 player=manel",
             "joinGame name=jogo1 player=lj",
