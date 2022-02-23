@@ -16,7 +16,7 @@ public enum ECommand {
     REDO("redo", "r", "redo"),
 
     // User commands
-    SEND_MESSAGE("sendMessage", "sm", "sendMessage from=joaquim to=ana Olá, o meu nome é joaquim!"),
+    SEND_MESSAGE("sendMessage", "sm", "sendMessage from=joaquim to=ana Hello, my name is lj!"),
     ADD_FRIEND("addFriend", "af", "addFriend player=joaquim add=antonio"),
     BLOCK_PLAYER("blockPlayer", "bp", "blockPlayer player=joaquim block=antonio"),
     TRANSFER_MONEY("transferMoney", "tm", "transferMoney name=lj value=20"),
